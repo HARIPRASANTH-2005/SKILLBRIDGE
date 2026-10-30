@@ -1,0 +1,13 @@
+<%- include('partials/head', { title: '404 — Page Not Found' }) %>
+<%- include('partials/navbar') %>
+
+<section class="error-page" aria-labelledby="errHeading">
+  <div class="error-container">
+    <div class="error-code" aria-hidden="true">404</div>
+    <h1 id="errHeading">Page Not Found</h1>
+    <p>The page you are looking for doesn't exist or has been moved.</p>
+    <a href="/" class="btn btn-primary">← Back to Home</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

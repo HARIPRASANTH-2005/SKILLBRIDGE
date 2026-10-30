@@ -1,0 +1,430 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     STUDENT REGISTRATION PAGE
+     UI-only in Phase 2. Form submission wired in Phase 4.
+══════════════════════════════════════════════════════════ -->
+
+<section class="auth-page" aria-labelledby="regHeading">
+  <div class="auth-layout">
+
+    <!-- ── Left panel (branding) ─────────────────────────── -->
+    <aside class="auth-panel" aria-hidden="true">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-logo">
+          <span>🎓</span>
+          <span>Skill<strong>Bridge</strong></span>
+        </div>
+        <h2>Start Your Real-World Journey</h2>
+        <p>Register as a PSG Tech MCA student and collaborate on alumni-led projects to build skills that matter.</p>
+
+        <ul class="auth-panel-perks" role="list">
+          <li>
+            <span class="perk-icon">🔐</span>
+            <div>
+              <strong>Admin Verified</strong>
+              <span>Every student is verified by the SkillBridge admin team.</span>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">📂</span>
+            <div>
+              <strong>Real Projects</strong>
+              <span>Work on actual projects posted by MCA alumni.</span>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">⭐</span>
+            <div>
+              <strong>Build Your Portfolio</strong>
+              <span>Earn feedback, ratings, and verifiable experience.</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="auth-panel-note">
+          <span>🏛️</span>
+          <span>PSG College of Technology · Department of Computer Applications · MCA Programme</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Right panel (form) ─────────────────────────────── -->
+    <main class="auth-form-panel">
+      <div class="auth-form-card">
+
+        <!-- Progress steps -->
+        <div class="reg-steps" aria-label="Registration steps">
+          <div class="reg-step active" aria-current="step">
+            <span class="step-dot">1</span>
+            <span class="step-label">Personal</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">2</span>
+            <span class="step-label">Academic</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">3</span>
+            <span class="step-label">Documents</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">4</span>
+            <span class="step-label">Security</span>
+          </div>
+        </div>
+
+        <div class="auth-form-header">
+          <h1 id="regHeading">Student Registration</h1>
+          <p>Create your SkillBridge student account. All fields marked <span class="req-star">*</span> are required.</p>
+        </div>
+
+        <!-- Admin approval notice -->
+        <div class="approval-notice" role="note" aria-label="Approval notice">
+          <span class="notice-icon">⏳</span>
+          <div>
+            <strong>Admin Approval Required</strong>
+            <p>After you submit this form, our admin team will review your details and uploaded document. You will be able to log in only after your account is approved. This usually takes 1–2 working days.</p>
+          </div>
+        </div>
+
+        <!-- ── Success message ── -->
+        <% if (typeof success !== 'undefined' && success) { %>
+          <div class="flash flash-success" role="alert">
+            <span>✅</span>
+            <div><strong>Registration Submitted!</strong><br /><%= success %></div>
+          </div>
+        <% } %>
+
+        <!-- ── Validation error block ── -->
+        <% if (errors && errors.length > 0) { %>
+          <div class="flash flash-error" role="alert">
+            <span>⚠️</span>
+            <ul>
+              <% errors.forEach(e => { %><li><%= e.msg %></li><% }); %>
+            </ul>
+          </div>
+        <% } %>
+
+        <!-- ═══════════════════════════════════════════════════
+             REGISTRATION FORM
+             action="" and method="POST" wired in Phase 4.
+        ═══════════════════════════════════════════════════ -->
+        <form
+          id="studentRegForm"
+          action="/student/register"
+          method="POST"
+          enctype="multipart/form-data"
+          novalidate
+          aria-label="Student registration form"
+        >
+
+          <!-- ── SECTION 1 · Personal Information ──────────── -->
+          <fieldset class="form-section" id="section-personal">
+            <legend class="form-section-title">
+              <span class="section-num">1</span> Personal Information
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="fullName">
+                  Full Name <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  class="form-control"
+                  placeholder="e.g. Hari Prasanth M"
+                  value="<%= formData.fullName || '' %>"
+                  required
+                  autocomplete="name"
+                  aria-required="true"
+                  aria-describedby="fullName-error"
+                />
+                <span class="form-error" id="fullName-error" role="alert"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="email">
+                  Email Address <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="form-control"
+                  placeholder="your@email.com"
+                  value="<%= formData.email || '' %>"
+                  required
+                  autocomplete="email"
+                  aria-required="true"
+                  aria-describedby="email-error"
+                />
+                <span class="form-error" id="email-error" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mobile">
+                Mobile Number
+                <span class="form-optional">(optional)</span>
+              </label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">+91</span>
+                <input
+                  type="tel"
+                  id="mobile"
+                  name="mobile"
+                  class="form-control with-prefix"
+                  placeholder="9876543210"
+                  value="<%= formData.mobile || '' %>"
+                  maxlength="10"
+                  pattern="[6-9][0-9]{9}"
+                  autocomplete="tel"
+                  aria-describedby="mobile-error mobile-hint"
+                />
+              </div>
+              <span class="form-hint" id="mobile-hint">10-digit Indian mobile number.</span>
+              <span class="form-error" id="mobile-error" role="alert"></span>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 2 · Academic Information ──────────── -->
+          <fieldset class="form-section" id="section-academic">
+            <legend class="form-section-title">
+              <span class="section-num">2</span> Academic Information
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="rollNumber">
+                  MCA Roll Number <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="rollNumber"
+                  name="rollNumber"
+                  class="form-control"
+                  placeholder="e.g. 23MCA001"
+                  value="<%= formData.rollNumber || '' %>"
+                  required
+                  aria-required="true"
+                  aria-describedby="rollNumber-error rollNumber-hint"
+                />
+                <span class="form-hint" id="rollNumber-hint">Your PSG Tech MCA roll number as issued by the college.</span>
+                <span class="form-error" id="rollNumber-error" role="alert"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="currentYear">
+                  Current Year of Study <span class="required" aria-hidden="true">*</span>
+                </label>
+                <select
+                  id="currentYear"
+                  name="currentYear"
+                  class="form-control"
+                  required
+                  aria-required="true"
+                  aria-describedby="currentYear-error"
+                >
+                  <option value="" disabled <%= !formData.currentYear ? 'selected' : '' %>>— Select year —</option>
+                  <option value="1" <%= formData.currentYear === '1' ? 'selected' : '' %>>First Year (MCA I)</option>
+                  <option value="2" <%= formData.currentYear === '2' ? 'selected' : '' %>>Second Year (MCA II)</option>
+                </select>
+                <span class="form-error" id="currentYear-error" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="admissionBatch">
+                  Admission Batch <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="admissionBatch"
+                  name="admissionBatch"
+                  class="form-control"
+                  placeholder="e.g. 2023"
+                  value="<%= formData.admissionBatch || '' %>"
+                  required
+                  maxlength="4"
+                  pattern="[0-9]{4}"
+                  aria-required="true"
+                  aria-describedby="admissionBatch-error"
+                />
+                <span class="form-error" id="admissionBatch-error" role="alert"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="expectedGradYear">
+                  Expected Graduation Year <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="expectedGradYear"
+                  name="expectedGradYear"
+                  class="form-control"
+                  placeholder="e.g. 2025"
+                  value="<%= formData.expectedGradYear || '' %>"
+                  required
+                  maxlength="4"
+                  pattern="[0-9]{4}"
+                  aria-required="true"
+                  aria-describedby="expectedGradYear-error"
+                />
+                <span class="form-error" id="expectedGradYear-error" role="alert"></span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 3 · Document Upload ───────────────── -->
+          <fieldset class="form-section" id="section-document">
+            <legend class="form-section-title">
+              <span class="section-num">3</span> Identity Document
+            </legend>
+
+            <div class="form-group">
+              <label class="form-label" for="document">
+                Student ID Card or Bonafide Certificate <span class="required" aria-hidden="true">*</span>
+              </label>
+
+              <!-- Custom file upload drop zone -->
+              <div class="file-drop-zone" id="fileDropZone" tabindex="0" role="button"
+                   aria-label="Upload your student document — click or drag and drop"
+                   aria-describedby="doc-hint doc-error">
+                <div class="file-drop-content" id="fileDropContent">
+                  <span class="file-drop-icon">📎</span>
+                  <p class="file-drop-title">Click to upload or drag &amp; drop</p>
+                  <p class="file-drop-sub">PDF, JPG or PNG · Max 5 MB</p>
+                </div>
+                <div class="file-selected-info" id="fileSelectedInfo" style="display:none;">
+                  <span class="file-check-icon">✅</span>
+                  <span id="selectedFileName">No file chosen</span>
+                  <button type="button" class="file-remove-btn" id="fileRemoveBtn" aria-label="Remove file">✕</button>
+                </div>
+                <input
+                  type="file"
+                  id="document"
+                  name="document"
+                  class="file-input-hidden"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <span class="form-hint" id="doc-hint">
+                Upload a clear scan or photo of your current PSG Tech student ID card or a bonafide certificate issued by the college.
+              </span>
+              <span class="form-error" id="doc-error" role="alert"></span>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 4 · Security ───────────────────────── -->
+          <fieldset class="form-section" id="section-security">
+            <legend class="form-section-title">
+              <span class="section-num">4</span> Account Security
+            </legend>
+
+            <div class="form-group">
+              <label class="form-label" for="password">
+                Password <span class="required" aria-hidden="true">*</span>
+              </label>
+              <div class="password-wrap">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Create a strong password"
+                  required
+                  minlength="8"
+                  autocomplete="new-password"
+                  aria-required="true"
+                  aria-describedby="password-error password-hint"
+                />
+                <button type="button" class="password-toggle" aria-label="Show password" data-target="password">👁</button>
+              </div>
+              <!-- Strength bar -->
+              <div class="password-strength-bar" aria-hidden="true">
+                <div class="strength-fill" id="strengthFill"></div>
+              </div>
+              <span class="strength-label" id="strengthLabel"></span>
+              <span class="form-hint" id="password-hint">Minimum 8 characters with at least one letter and one number.</span>
+              <span class="form-error" id="password-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirmPassword">
+                Confirm Password <span class="required" aria-hidden="true">*</span>
+              </label>
+              <div class="password-wrap">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  class="form-control"
+                  placeholder="Repeat your password"
+                  required
+                  autocomplete="new-password"
+                  aria-required="true"
+                  aria-describedby="confirmPassword-error"
+                />
+                <button type="button" class="password-toggle" aria-label="Show confirm password" data-target="confirmPassword">👁</button>
+              </div>
+              <span class="form-error" id="confirmPassword-error" role="alert"></span>
+            </div>
+          </fieldset>
+
+          <!-- ── Terms & Conditions ─────────────────────────── -->
+          <div class="form-group form-check-group">
+            <label class="form-check-label" for="terms">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                class="form-check-input"
+                required
+                aria-required="true"
+                aria-describedby="terms-error"
+              />
+              <span>
+                I agree to the <a href="#" class="link">Terms and Conditions</a> and
+                <a href="#" class="link">Privacy Policy</a>. I confirm that I am currently enrolled
+                as an MCA student at PSG College of Technology and all information provided is accurate.
+              </span>
+            </label>
+            <span class="form-error" id="terms-error" role="alert"></span>
+          </div>
+
+          <!-- ── Submit ──────────────────────────────────────── -->
+          <button type="submit" class="btn btn-primary btn-submit w-100" id="submitBtn">
+            <span class="btn-text">Submit Registration</span>
+            <span class="btn-spinner" aria-hidden="true" style="display:none;">⏳</span>
+          </button>
+
+          <p class="auth-switch-text">
+            Already registered?
+            <a href="/login" class="link">Login here →</a>
+          </p>
+          <p class="auth-switch-text">
+            Are you an alumnus?
+            <a href="/alumni/register" class="link">Register as Alumni →</a>
+          </p>
+
+        </form><!-- end #studentRegForm -->
+
+      </div><!-- end .auth-form-card -->
+    </main><!-- end .auth-form-panel -->
+
+  </div><!-- end .auth-layout -->
+</section>
+
+<!-- ── Page-specific JS (inline, keeps it self-contained) ── -->
+<script src="/js/register-validation.js"></script>
+
+<%- include('../partials/footer') %>

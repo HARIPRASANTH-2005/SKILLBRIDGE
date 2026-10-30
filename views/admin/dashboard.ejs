@@ -1,0 +1,209 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN DASHBOARD — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Administration</div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="/admin/dashboard" class="sidebar-link active">
+          <span>🛡️</span> Overview
+        </a>
+        <a href="/admin/verifications" class="sidebar-link">
+          <span>⏳</span> Verifications Queue
+          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+        </a>
+        <a href="/admin/users" class="sidebar-link">
+          <span>👥</span> User Directory
+        </a>
+        <a href="/admin/projects" class="sidebar-link">
+          <span>📁</span> Moderation &amp; Projects
+        </a>
+      </nav>
+    </div>
+
+    <div>
+      <div class="sidebar-heading">System Status</div>
+      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
+        <div>
+          <strong style="font-size: var(--fs-xs);">Department Admin Cell</strong>
+          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
+            PSG Tech MCA Platform<br />Production Node Active
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Admin Content ─────────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/admin/dashboard">Admin</a>
+      <span>/</span>
+      <span>Dashboard</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Department Administration Overview</h1>
+        <p>Institutional oversight for MCA student credentials, alumni verifications, and project integrity.</p>
+      </div>
+      <div>
+        <a href="/admin/verifications" class="btn btn-primary">Review Verification Queue (3) →</a>
+      </div>
+    </div>
+
+    <!-- Administrative Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-title">Pending Verifications</div>
+        <div class="metric-value" style="color: var(--clr-warning-text);">3</div>
+        <div class="metric-sub">2 Students · 1 Alumni</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Verified Students</div>
+        <div class="metric-value">124</div>
+        <div class="metric-sub">Current MCA I &amp; II Batches</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Verified Alumni</div>
+        <div class="metric-value">86</div>
+        <div class="metric-sub">Active mentors across batches</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Active Projects</div>
+        <div class="metric-value">48</div>
+        <div class="metric-sub">Milestone collaboration in progress</div>
+      </div>
+    </div>
+
+    <!-- Pending Verification Table Preview -->
+    <div class="card mb-8">
+      <div class="d-flex justify-between align-center mb-4">
+        <div>
+          <h3 style="font-size: var(--fs-lg);">Priority Verification Requests</h3>
+          <p class="text-secondary" style="font-size: var(--fs-xs);">Review institutional ID cards and degree provisional certificates</p>
+        </div>
+        <a href="/admin/verifications" class="btn btn-sm btn-secondary">Open Full Queue</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Applicant Name</th>
+              <th>Role</th>
+              <th>Roll Number</th>
+              <th>Proof Document</th>
+              <th>Submitted Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Kavitha Murugan</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">kavitha.m@psgtech.ac.in</div>
+              </td>
+              <td><span class="tag">Student</span></td>
+              <td>24MCA031</td>
+              <td>
+                <span class="text-secondary" style="font-size: var(--fs-xs);">ID_Card_24MCA031.pdf</span>
+              </td>
+              <td>Today, 09:15 AM</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
+                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Venkatesh Narayanan</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">venkatesh.n@gmail.com</div>
+              </td>
+              <td><span class="tag">Alumni</span></td>
+              <td>16MCA014 (Class of 2019)</td>
+              <td>
+                <span class="text-secondary" style="font-size: var(--fs-xs);">PSG_MCA_Provisional.pdf</span>
+              </td>
+              <td>Yesterday</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
+                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Prashanth Balaji</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">prashanth.b@psgtech.ac.in</div>
+              </td>
+              <td><span class="tag">Student</span></td>
+              <td>24MCA042</td>
+              <td>
+                <span class="text-secondary" style="font-size: var(--fs-xs);">Bonafide_Certificate.pdf</span>
+              </td>
+              <td>2 days ago</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
+                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Quick Navigation to Admin Modules -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-6);">
+      
+      <div class="card">
+        <div class="d-flex align-center gap-3 mb-3">
+          <div style="font-size: 1.5rem;">👥</div>
+          <div>
+            <h3 style="font-size: var(--fs-base);">User Management</h3>
+            <div class="text-muted" style="font-size: var(--fs-xs);">210 Registered Institutional Users</div>
+          </div>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
+          Manage accounts, view roll number records, inspect submitted documents, and toggle user active/suspended states.
+        </p>
+        <a href="/admin/users" class="btn btn-sm btn-secondary w-100">Access User Directory →</a>
+      </div>
+
+      <div class="card">
+        <div class="d-flex align-center gap-3 mb-3">
+          <div style="font-size: 1.5rem;">📁</div>
+          <div>
+            <h3 style="font-size: var(--fs-base);">Project Oversight</h3>
+            <div class="text-muted" style="font-size: var(--fs-xs);">48 Published Projects</div>
+          </div>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
+          Moderate alumni postings, verify compliance with academic guidelines, and monitor student completion progress.
+        </p>
+        <a href="/admin/projects" class="btn btn-sm btn-secondary w-100">Manage Projects →</a>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

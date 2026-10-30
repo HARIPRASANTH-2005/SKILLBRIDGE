@@ -1,0 +1,300 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     APPLICANT VERIFICATION DETAIL — SkillBridge Admin
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Administration</div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="/admin/dashboard" class="sidebar-link">
+          <span>🛡️</span> Overview
+        </a>
+        <a href="/admin/verifications" class="sidebar-link active">
+          <span>⏳</span> Verifications Queue
+        </a>
+        <a href="/admin/users" class="sidebar-link">
+          <span>👥</span> User Directory
+        </a>
+        <a href="/admin/projects" class="sidebar-link">
+          <span>📁</span> Moderation &amp; Projects
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ───────────────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/admin/dashboard">Admin</a>
+      <span>/</span>
+      <a href="/admin/verifications">Verifications</a>
+      <span>/</span>
+      <span><%= applicant.fullName %></span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <div class="d-flex align-center gap-2 mb-2">
+          <%- include('../partials/trust-badge', { status: applicant.status }) %>
+          <span class="tag"><%= applicant.role === 'student' ? 'Current MCA Student' : 'MCA Alumni' %></span>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Applied <%= new Date(applicant.createdAt).toLocaleDateString() %></span>
+        </div>
+        <h1 style="font-size: var(--fs-2xl);"><%= applicant.fullName %></h1>
+        <p>Institutional Verification Review &amp; Academic Identity Audit</p>
+      </div>
+      <div>
+        <a href="/admin/verifications" class="btn btn-secondary">← Back to Queue</a>
+      </div>
+    </div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="doc-info-box mb-6" style="border-color: var(--clr-danger-border); background: var(--clr-danger-bg); color: var(--clr-danger-text);">
+        <span>✕</span>
+        <div>
+          <strong>Action Required:</strong>
+          <p style="font-size: var(--fs-xs); margin: 0;"><%= error %></p>
+        </div>
+      </div>
+    <% } %>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-6);">
+
+      <!-- Left Column: Details & Document Preview -->
+      <div>
+
+        <!-- Academic & Identity Profile -->
+        <div class="card mb-6">
+          <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">Academic &amp; Contact Credentials</h2>
+
+          <div class="form-row mb-4">
+            <div>
+              <span class="text-muted" style="font-size: var(--fs-xs);">MCA Roll Number:</span>
+              <div style="font-size: var(--fs-base); font-weight: 700; color: var(--clr-text); font-family: monospace;">
+                <%= applicant.rollNumber %>
+              </div>
+            </div>
+            <div>
+              <span class="text-muted" style="font-size: var(--fs-xs);">Institutional Email:</span>
+              <div style="font-size: var(--fs-sm); font-weight: 500; color: var(--clr-text);">
+                <%= applicant.email %>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row mb-4">
+            <div>
+              <span class="text-muted" style="font-size: var(--fs-xs);">Contact Phone:</span>
+              <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                <%= applicant.mobile || 'Not provided' %>
+              </div>
+            </div>
+            <div>
+              <span class="text-muted" style="font-size: var(--fs-xs);">Admission Batch:</span>
+              <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                <%= applicant.admissionBatch || '—' %>
+              </div>
+            </div>
+          </div>
+
+          <% if (applicant.role === 'student') { %>
+            <div class="form-row">
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Current Year:</span>
+                <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                  <%= applicant.currentYear === '1' ? 'First Year (MCA I)' : (applicant.currentYear === '2' ? 'Second Year (MCA II)' : applicant.currentYear) %>
+                </div>
+              </div>
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Expected Graduation:</span>
+                <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                  <%= applicant.expectedGradYear || '—' %>
+                </div>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="form-row mb-4">
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Graduation Year:</span>
+                <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                  Class of <%= applicant.graduationYear || '—' %>
+                </div>
+              </div>
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Current Profession:</span>
+                <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                  <%= applicant.profession || '—' %>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Organization / Company:</span>
+                <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                  <%= applicant.company || '—' %>
+                </div>
+              </div>
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">LinkedIn / Portfolio:</span>
+                <div style="font-size: var(--fs-sm); color: var(--clr-text);">
+                  <% if (applicant.linkedin) { %>
+                    <a href="<%= applicant.linkedin %>" target="_blank" rel="noopener" class="link">View Profile ↗</a>
+                  <% } else { %>
+                    —
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Document Verification Box -->
+        <div class="card mb-6">
+          <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Uploaded Verification Document</h2>
+
+          <% if (applicant.documentFilename) { %>
+            <div class="d-flex justify-between align-center flex-wrap gap-4" style="background: var(--clr-bg-subtle); padding: var(--sp-4); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+              <div class="d-flex align-center gap-3">
+                <span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                </span>
+                <div>
+                  <strong style="font-size: var(--fs-sm); color: var(--clr-text);">
+                    <%= applicant.documentOriginalName || applicant.documentFilename %>
+                  </strong>
+                  <div class="text-muted" style="font-size: var(--fs-xs);">
+                    Stored in private document vault · <%= applicant.documentMimeType || 'Document' %>
+                    <% if (applicant.documentSizeBytes) { %>
+                      · <%= (applicant.documentSizeBytes / 1024 / 1024).toFixed(2) %> MB
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <a href="/admin/documents/<%= applicant.documentFilename %>" target="_blank" rel="noopener" class="btn btn-secondary">
+                  Open Secure Document ↗
+                </a>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="doc-info-box">
+              <span>ℹ</span>
+              <div>
+                <strong>No Document Uploaded</strong>
+                <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">This applicant registered without attaching an ID document.</p>
+              </div>
+            </div>
+          <% } %>
+        </div>
+
+        <!-- Verification History / Audit Trail -->
+        <div class="card">
+          <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Audit Trail &amp; Verification History</h2>
+
+          <% if (applicant.verificationHistory && applicant.verificationHistory.length > 0) { %>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Decision</th>
+                    <th>Reviewer</th>
+                    <th>Reason / Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% applicant.verificationHistory.forEach(h => { %>
+                    <tr>
+                      <td style="font-size: var(--fs-xs); white-space: nowrap;"><%= new Date(h.timestamp).toLocaleString() %></td>
+                      <td>
+                        <%- include('../partials/trust-badge', { status: h.decision }) %>
+                      </td>
+                      <td style="font-size: var(--fs-xs); font-weight: 600;"><%= h.reviewerName %></td>
+                      <td style="font-size: var(--fs-xs); color: var(--clr-text-secondary);"><%= h.reason || '—' %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } else { %>
+            <p class="text-secondary" style="font-size: var(--fs-sm); margin: 0;">No prior audit decisions recorded for this account. Initial review pending.</p>
+          <% } %>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Verification Action Panel -->
+      <div>
+        <div class="card mb-6">
+          <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: var(--sp-3);">Verification Decision</h3>
+          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
+            Approving this account grants verified status, allowing the member to post projects (alumni) or apply with technical proposals (student).
+          </p>
+
+          <!-- Form 1: Approve -->
+          <form action="/admin/verifications/<%= applicant._id %>/approve" method="POST" class="mb-4">
+            <button type="submit" class="btn btn-primary w-100" style="padding: 0.75rem;">
+              ✓ Approve &amp; Verify Account
+            </button>
+          </form>
+
+          <hr style="border: none; border-top: 1px solid var(--clr-border-subtle); margin: var(--sp-5) 0;" />
+
+          <!-- Form 2: Reject with Mandatory Reason -->
+          <h4 style="font-size: var(--fs-sm); font-weight: 600; margin-bottom: var(--sp-2); color: var(--clr-danger-text);">Decline Verification</h4>
+          <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
+            Provide a clear institutional explanation for rejection (e.g., mismatched roll number, unreadable document). This reason will be recorded and shown to the applicant.
+          </p>
+
+          <form action="/admin/verifications/<%= applicant._id %>/reject" method="POST">
+            <div class="form-group mb-3">
+              <label class="form-label" for="rejectionReason" style="font-size: var(--fs-xs);">
+                Rejection Reason <span class="required">*</span>
+              </label>
+              <textarea
+                id="rejectionReason"
+                name="reason"
+                rows="4"
+                class="form-control"
+                placeholder="Specify the verification issue (minimum 10 characters)..."
+                required
+              ><%= applicant.rejectionReason || '' %></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100">
+              ✕ Decline Application
+            </button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h4 style="font-size: var(--fs-sm); font-weight: 600; margin-bottom: var(--sp-2);">Verification Checklist</h4>
+          <ul class="role-features" style="font-size: var(--fs-xs);">
+            <li><span>✓</span> Roll format matches PSG Tech MCA schema (e.g., 24MCA001)</li>
+            <li><span>✓</span> Name matches ID card or provisional degree certificate</li>
+            <li><span>✓</span> Institutional email domain verified</li>
+            <li><span>✓</span> Uploaded document is legible and unexpired</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

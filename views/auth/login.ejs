@@ -1,0 +1,239 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     LOGIN PAGE — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Authentication
+══════════════════════════════════════════════════════════ -->
+
+<section class="auth-page login-page" aria-labelledby="loginHeading">
+  <div class="login-layout">
+
+    <!-- ── Left branding panel ───────────────────────────── -->
+    <aside class="auth-panel login-panel" aria-hidden="true">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-logo">
+          <span>🎓</span>
+          <span>Skill<strong style="color: var(--clr-text-secondary);">Bridge</strong></span>
+        </div>
+        <h2>Sign In to SkillBridge</h2>
+        <p>Access your personalized dashboard to browse technical projects, track proposals, or manage student mentees.</p>
+
+        <div class="login-roles">
+          <div class="login-role-item">
+            <span>🎒</span>
+            <div>
+              <strong>MCA Students</strong>
+              <span>Browse projects, submit proposals, complete tasks</span>
+            </div>
+          </div>
+          <div class="login-role-item">
+            <span>🏆</span>
+            <div>
+              <strong>MCA Alumni</strong>
+              <span>Post projects, review applicants, mentor talent</span>
+            </div>
+          </div>
+          <div class="login-role-item">
+            <span>🛡️</span>
+            <div>
+              <strong>Department Admin</strong>
+              <span>Verify credentials and oversee platform activities</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-panel-note">
+          <span>ℹ️</span>
+          <span>Only verified PSG Tech MCA accounts can access active projects.</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Login form panel ──────────────────────────────── -->
+    <main class="auth-form-panel">
+      <div class="auth-form-card login-card">
+
+        <div class="auth-form-header">
+          <div class="login-icon" aria-hidden="true">🔒</div>
+          <h1 id="loginHeading">Sign In</h1>
+          <p>Enter your verified email and password to access your workspace.</p>
+        </div>
+
+        <!-- Validation errors -->
+        <% if (errors && errors.length > 0) { %>
+          <div class="flash flash-error" role="alert">
+            <span>⚠️</span>
+            <div>
+              <% errors.forEach(e => { %><div><%= e.msg %></div><% }); %>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Login Form -->
+        <form
+          id="loginForm"
+          action="/login"
+          method="POST"
+          novalidate
+          aria-label="Login form"
+        >
+
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">
+              Email Address <span class="required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="email"
+              id="loginEmail"
+              name="email"
+              class="form-control"
+              placeholder="e.g. 23mca001@psgtech.ac.in"
+              value="<%= formData && formData.email ? formData.email : '' %>"
+              required
+              autocomplete="email"
+              aria-required="true"
+              aria-describedby="loginEmail-error"
+            />
+            <span class="form-error" id="loginEmail-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <div class="label-row">
+              <label class="form-label" for="loginPassword">
+                Password <span class="required" aria-hidden="true">*</span>
+              </label>
+              <a href="/forgot-password" class="link label-link">Forgot password?</a>
+            </div>
+            <div class="password-wrap">
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                class="form-control"
+                placeholder="Enter your account password"
+                required
+                autocomplete="current-password"
+                aria-required="true"
+                aria-describedby="loginPassword-error"
+              />
+              <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="loginPassword">👁</button>
+            </div>
+            <span class="form-error" id="loginPassword-error" role="alert"></span>
+          </div>
+
+          <div class="form-group form-check-group">
+            <label class="form-check-label" for="rememberMe">
+              <input type="checkbox" id="rememberMe" name="rememberMe" class="form-check-input" />
+              <span>Keep me signed in for 24 hours on this device</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-submit w-100" id="loginBtn">
+            Sign In to SkillBridge
+          </button>
+
+        </form><!-- end #loginForm -->
+
+        <!-- Divider -->
+        <div class="auth-divider" aria-hidden="true">
+          <span>Need an account?</span>
+        </div>
+
+        <!-- Register & Status links -->
+        <div class="login-register-links">
+          <a href="/student/register" class="btn btn-secondary w-100" id="loginToStudentBtn">
+            Register as MCA Student
+          </a>
+          <a href="/alumni/register" class="btn btn-secondary w-100" id="loginToAlumniBtn">
+            Register as MCA Alumni
+          </a>
+          <a href="/status" class="btn btn-ghost w-100" id="checkStatusBtn">
+            Check Registration Status →
+          </a>
+        </div>
+
+        <!-- Status information box -->
+        <div class="login-status-info" role="note">
+          <h4>Institutional Account Status</h4>
+          <ul>
+            <li><span class="badge badge-pending">PENDING</span> <span>Registration is being reviewed by the department admin.</span></li>
+            <li><span class="badge badge-approved">APPROVED</span> <span>Account active; proceed with full access to projects.</span></li>
+            <li><span class="badge badge-rejected">REJECTED</span> <span>Document or credential mismatch; contact department.</span></li>
+          </ul>
+        </div>
+
+      </div><!-- end .login-card -->
+    </main><!-- end .auth-form-panel -->
+
+  </div><!-- end .login-layout -->
+</section>
+
+<script>
+/* ── Login form client-side validation ──────────────── */
+(function () {
+  const form     = document.getElementById('loginForm');
+  const emailEl  = document.getElementById('loginEmail');
+  const passEl   = document.getElementById('loginPassword');
+
+  function showError(input, msg) {
+    input.classList.add('is-invalid');
+    const errEl = document.getElementById(input.id + '-error');
+    if (errEl) errEl.textContent = msg;
+  }
+  function clearError(input) {
+    input.classList.remove('is-invalid');
+    const errEl = document.getElementById(input.id + '-error');
+    if (errEl) errEl.textContent = '';
+  }
+
+  [emailEl, passEl].forEach(el => {
+    if (el) {
+      el.addEventListener('input', () => clearError(el));
+    }
+  });
+
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      let valid = true;
+
+      if (!emailEl.value.trim()) {
+        showError(emailEl, 'Email address is required.');
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        showError(emailEl, 'Enter a valid email address.');
+        valid = false;
+      }
+
+      if (!passEl.value) {
+        showError(passEl, 'Password is required.');
+        valid = false;
+      }
+
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  /* ── Password show/hide toggle ── */
+  document.querySelectorAll('.password-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.dataset.target;
+      const input    = document.getElementById(targetId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = '🙈';
+        btn.setAttribute('aria-label', 'Hide password');
+      } else {
+        input.type = 'password';
+        btn.textContent = '👁';
+        btn.setAttribute('aria-label', 'Show password');
+      }
+    });
+  });
+})();
+</script>
+
+<%- include('../partials/footer') %>

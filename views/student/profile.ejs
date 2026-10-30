@@ -1,0 +1,209 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     STUDENT PROFILE — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Workspace</div>
+      <nav class="sidebar-nav" aria-label="Student navigation">
+        <a href="/student/dashboard" class="sidebar-link">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects" class="sidebar-link">
+          <span>🔍</span> Browse Projects
+        </a>
+        <a href="/student/tasks" class="sidebar-link">
+          <span>✅</span> Assigned Tasks
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Project Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Feedback &amp; Ratings
+        </a>
+        <a href="/student/profile" class="sidebar-link active">
+          <span>👤</span> Student Profile
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Profile Content ───────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/student/dashboard">Student</a>
+      <span>/</span>
+      <span>Profile &amp; Skills</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Student Profile</h1>
+        <p>Manage your academic credentials, verified skills, and portfolio presence.</p>
+      </div>
+      <div>
+        <span class="badge badge-approved" style="padding: 0.35rem 0.85rem; font-size: var(--fs-xs);">
+          ✓ VERIFIED PSG TECH MCA STUDENT
+        </span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 320px 1fr; gap: var(--sp-6);">
+      
+      <!-- Left Column: Personal & Academic Info -->
+      <div class="card" style="height: fit-content;">
+        <div class="text-center mb-4">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--clr-surface-elevated); border: 2px solid var(--clr-border); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto var(--sp-3);">
+            🎓
+          </div>
+          <h2 style="font-size: var(--fs-xl); font-weight: 700;"><%= currentUser && currentUser.fullName ? currentUser.fullName : 'Hari Prasanth M' %></h2>
+          <div class="text-secondary" style="font-size: var(--fs-xs); margin-top: 2px;">
+            Roll Number: <strong style="color: var(--clr-text);"><%= currentUser && currentUser.rollNumber ? currentUser.rollNumber : '24MCA018' %></strong>
+          </div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            PSG College of Technology · Dept of CA
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4); margin-bottom: var(--sp-4);">
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Degree:</span>
+            <span>Master of Computer Applications</span>
+          </div>
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Current Year:</span>
+            <span>First Year (MCA I)</span>
+          </div>
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Batch:</span>
+            <span>2024 – 2026</span>
+          </div>
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Email:</span>
+            <span class="text-secondary"><%= currentUser && currentUser.email ? currentUser.email : '24mca018@psgtech.ac.in' %></span>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4);">
+          <div class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">Verification Document</div>
+          <div class="doc-info-box" style="margin: 0; padding: var(--sp-2) var(--sp-3);">
+            <span>📄</span>
+            <div style="font-size: var(--fs-xs);">
+              <strong>Student_ID_Card.pdf</strong>
+              <div class="text-muted" style="font-size: 0.65rem;">Approved by Department Admin</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Skills, Bio, & Portfolio -->
+      <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+
+        <!-- Technical Skills -->
+        <div class="card">
+          <div class="d-flex justify-between align-center mb-4">
+            <div>
+              <h3 style="font-size: var(--fs-lg);">Technical Skills Inventory</h3>
+              <p class="text-secondary" style="font-size: var(--fs-xs);">Used by alumni to evaluate proposal match</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary">+ Add Skill</button>
+          </div>
+
+          <div class="mb-4">
+            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Languages</div>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="tag">JavaScript (ES6+)</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">Python</span>
+              <span class="tag">Java</span>
+              <span class="tag">SQL</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Frameworks &amp; Backend</div>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="tag">Node.js</span>
+              <span class="tag">Express.js</span>
+              <span class="tag">React.js</span>
+              <span class="tag">GraphQL</span>
+              <span class="tag">FastAPI</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Databases &amp; Tools</div>
+            <div class="d-flex flex-wrap gap-2">
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Git &amp; GitHub</span>
+              <span class="tag">Linux</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- External Profiles -->
+        <div class="card">
+          <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">External Profiles &amp; Repositories</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="profileGithub">GitHub Username / URL</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">github.com/</span>
+                <input type="text" id="profileGithub" class="form-control with-prefix" value="hariprasanth-m" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileLinkedin">LinkedIn URL</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">linkedin.com/in/</span>
+                <input type="text" id="profileLinkedin" class="form-control with-prefix" value="hari-prasanth" />
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary">Save Profile Links</button>
+        </div>
+
+        <!-- Verified Collaboration History -->
+        <div class="card">
+          <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Completed Collaborations</h3>
+          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-2">
+              <strong>College Attendance Management API</strong>
+              <span class="badge badge-approved">VERIFIED COMPLETE</span>
+            </div>
+            <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
+              Built RESTful microservice with Express.js and PostgreSQL. Designed JWT auth, role validation for professors, and CSV bulk upload parser.
+            </p>
+            <div class="doc-info-box" style="margin: 0;">
+              <span>💬</span>
+              <div>
+                <strong style="font-size: var(--fs-xs);">Mentor Endorsement — Arvind Ramanathan (Class of 2017):</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">
+                  "Demonstrated exceptional commitment to unit test coverage and clean API documentation. Code ready for production."
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

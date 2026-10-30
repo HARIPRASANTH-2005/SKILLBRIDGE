@@ -1,0 +1,179 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN USER DIRECTORY — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Administration</div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="/admin/dashboard" class="sidebar-link">
+          <span>🛡️</span> Overview
+        </a>
+        <a href="/admin/verifications" class="sidebar-link">
+          <span>⏳</span> Verifications Queue
+          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+        </a>
+        <a href="/admin/users" class="sidebar-link active">
+          <span>👥</span> User Directory
+        </a>
+        <a href="/admin/projects" class="sidebar-link">
+          <span>📁</span> Moderation &amp; Projects
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main User Management Content ───────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/admin/dashboard">Admin</a>
+      <span>/</span>
+      <span>User Directory</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Institutional User Directory</h1>
+        <p>Monitor verified students and alumni members across the PSG Tech MCA network.</p>
+      </div>
+      <div>
+        <a href="/admin/verifications" class="btn btn-secondary">Review Pending (3)</a>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="card mb-6">
+      <div class="d-flex flex-wrap gap-4 align-center">
+        <div style="flex: 2; min-width: 240px;">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search by name, roll number, or institutional email..."
+          />
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+          <select class="form-control">
+            <option value="">All Roles</option>
+            <option value="student">MCA Students</option>
+            <option value="alumni">MCA Alumni</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+          <select class="form-control">
+            <option value="">All Statuses</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary">Filter</button>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>User Details</th>
+            <th>Role</th>
+            <th>Roll Number</th>
+            <th>Batch / Year</th>
+            <th>Verification</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Hari Prasanth M</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">24mca018@psgtech.ac.in</div>
+            </td>
+            <td><span class="tag">Student</span></td>
+            <td><code>24MCA018</code></td>
+            <td>MCA I (2024–2026)</td>
+            <td><span class="badge badge-approved">APPROVED</span></td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/student/profile" class="btn btn-sm btn-secondary">View Profile</a>
+                <button type="button" class="btn btn-sm btn-ghost">Suspend</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Karthik Subramaniam</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">karthik.s@alumni.psgtech.ac.in</div>
+            </td>
+            <td><span class="tag">Alumni</span></td>
+            <td><code>17MCA042</code></td>
+            <td>Class of 2019</td>
+            <td><span class="badge badge-approved">APPROVED</span></td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/alumni/profile" class="btn btn-sm btn-secondary">View Profile</a>
+                <button type="button" class="btn btn-sm btn-ghost">Suspend</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Kavitha Murugan</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">kavitha.m@psgtech.ac.in</div>
+            </td>
+            <td><span class="tag">Student</span></td>
+            <td><code>24MCA031</code></td>
+            <td>MCA I (2024–2026)</td>
+            <td><span class="badge badge-pending">PENDING</span></td>
+            <td>
+              <a href="/admin/verifications" class="btn btn-sm btn-primary">Verify Application</a>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Divya Swaminathan</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">divya.s@alumni.psgtech.ac.in</div>
+            </td>
+            <td><span class="tag">Alumni</span></td>
+            <td><code>13MCA021</code></td>
+            <td>Class of 2016</td>
+            <td><span class="badge badge-approved">APPROVED</span></td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/alumni/profile" class="btn btn-sm btn-secondary">View Profile</a>
+                <button type="button" class="btn btn-sm btn-ghost">Suspend</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Venkatesh Narayanan</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">venkatesh.n@gmail.com</div>
+            </td>
+            <td><span class="tag">Alumni</span></td>
+            <td><code>16MCA014</code></td>
+            <td>Class of 2019</td>
+            <td><span class="badge badge-pending">PENDING</span></td>
+            <td>
+              <a href="/admin/verifications" class="btn btn-sm btn-primary">Verify Application</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

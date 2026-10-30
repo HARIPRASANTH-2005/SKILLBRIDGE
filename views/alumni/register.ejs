@@ -1,0 +1,481 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ALUMNI REGISTRATION PAGE
+     UI-only in Phase 2. Form submission wired in Phase 4.
+══════════════════════════════════════════════════════════ -->
+
+<section class="auth-page" aria-labelledby="alumniRegHeading">
+  <div class="auth-layout">
+
+    <!-- ── Left panel (branding) ─────────────────────────── -->
+    <aside class="auth-panel auth-panel-alumni" aria-hidden="true">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-logo">
+          <span>🎓</span>
+          <span>Skill<strong>Bridge</strong></span>
+        </div>
+        <h2>Give Back. Mentor. Lead.</h2>
+        <p>As a PSG Tech MCA alumnus, you can post real projects and shape the next generation of software professionals.</p>
+
+        <ul class="auth-panel-perks" role="list">
+          <li>
+            <span class="perk-icon">🏆</span>
+            <div>
+              <strong>Post Real Projects</strong>
+              <span>Share projects from your professional work experience.</span>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">🔍</span>
+            <div>
+              <strong>Select the Best Students</strong>
+              <span>Review proposals and handpick students who fit your needs.</span>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">🌐</span>
+            <div>
+              <strong>Grow Your Network</strong>
+              <span>Stay connected with PSG Tech's MCA community.</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="auth-panel-note">
+          <span>🏛️</span>
+          <span>PSG College of Technology · Department of Computer Applications · MCA Alumni</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Right panel (form) ─────────────────────────────── -->
+    <main class="auth-form-panel">
+      <div class="auth-form-card">
+
+        <!-- Progress steps -->
+        <div class="reg-steps" aria-label="Registration steps">
+          <div class="reg-step active" aria-current="step">
+            <span class="step-dot">1</span>
+            <span class="step-label">Personal</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">2</span>
+            <span class="step-label">Academic</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">3</span>
+            <span class="step-label">Professional</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">4</span>
+            <span class="step-label">Documents</span>
+          </div>
+          <div class="reg-step-line"></div>
+          <div class="reg-step">
+            <span class="step-dot">5</span>
+            <span class="step-label">Security</span>
+          </div>
+        </div>
+
+        <div class="auth-form-header">
+          <h1 id="alumniRegHeading">Alumni Registration</h1>
+          <p>Create your SkillBridge alumni account. All fields marked <span class="req-star">*</span> are required.</p>
+        </div>
+
+        <!-- Admin approval notice -->
+        <div class="approval-notice" role="note" aria-label="Approval notice">
+          <span class="notice-icon">⏳</span>
+          <div>
+            <strong>Admin Approval Required</strong>
+            <p>After you submit this form, our admin team will verify your MCA degree certificate and details. You can log in only after approval. This typically takes 1–3 working days.</p>
+          </div>
+        </div>
+
+        <!-- ── Success message ── -->
+        <% if (typeof success !== 'undefined' && success) { %>
+          <div class="flash flash-success" role="alert">
+            <span>✅</span>
+            <div><strong>Registration Submitted!</strong><br /><%= success %></div>
+          </div>
+        <% } %>
+
+        <!-- Validation errors -->
+        <% if (errors && errors.length > 0) { %>
+          <div class="flash flash-error" role="alert">
+            <span>⚠️</span>
+            <ul>
+              <% errors.forEach(e => { %><li><%= e.msg %></li><% }); %>
+            </ul>
+          </div>
+        <% } %>
+
+        <!-- ═══════════════════════════════════════════════════
+             ALUMNI REGISTRATION FORM
+        ═══════════════════════════════════════════════════ -->
+        <form
+          id="alumniRegForm"
+          action="/alumni/register"
+          method="POST"
+          enctype="multipart/form-data"
+          novalidate
+          aria-label="Alumni registration form"
+        >
+
+          <!-- ── SECTION 1 · Personal Information ──────────── -->
+          <fieldset class="form-section" id="a-section-personal">
+            <legend class="form-section-title">
+              <span class="section-num">1</span> Personal Information
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="a-fullName">
+                  Full Name <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="a-fullName"
+                  name="fullName"
+                  class="form-control"
+                  placeholder="e.g. Karthik Subramaniam"
+                  value="<%= formData.fullName || '' %>"
+                  required
+                  autocomplete="name"
+                  aria-required="true"
+                  aria-describedby="a-fullName-error"
+                />
+                <span class="form-error" id="a-fullName-error" role="alert"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="a-email">
+                  Email Address <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="a-email"
+                  name="email"
+                  class="form-control"
+                  placeholder="your@email.com"
+                  value="<%= formData.email || '' %>"
+                  required
+                  autocomplete="email"
+                  aria-required="true"
+                  aria-describedby="a-email-error"
+                />
+                <span class="form-error" id="a-email-error" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="a-mobile">
+                Mobile Number <span class="form-optional">(optional)</span>
+              </label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">+91</span>
+                <input
+                  type="tel"
+                  id="a-mobile"
+                  name="mobile"
+                  class="form-control with-prefix"
+                  placeholder="9876543210"
+                  value="<%= formData.mobile || '' %>"
+                  maxlength="10"
+                  pattern="[6-9][0-9]{9}"
+                  autocomplete="tel"
+                  aria-describedby="a-mobile-hint"
+                />
+              </div>
+              <span class="form-hint" id="a-mobile-hint">10-digit Indian mobile number.</span>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 2 · Academic Information ──────────── -->
+          <fieldset class="form-section" id="a-section-academic">
+            <legend class="form-section-title">
+              <span class="section-num">2</span> Academic Information
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="a-rollNumber">
+                  MCA Roll Number <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="a-rollNumber"
+                  name="rollNumber"
+                  class="form-control"
+                  placeholder="e.g. 18MCA042"
+                  value="<%= formData.rollNumber || '' %>"
+                  required
+                  aria-required="true"
+                  aria-describedby="a-rollNumber-error a-rollNumber-hint"
+                />
+                <span class="form-hint" id="a-rollNumber-hint">Your original PSG Tech MCA roll number.</span>
+                <span class="form-error" id="a-rollNumber-error" role="alert"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="a-admissionBatch">
+                  Admission Batch <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="a-admissionBatch"
+                  name="admissionBatch"
+                  class="form-control"
+                  placeholder="e.g. 2018"
+                  value="<%= formData.admissionBatch || '' %>"
+                  required
+                  maxlength="4"
+                  pattern="[0-9]{4}"
+                  aria-required="true"
+                  aria-describedby="a-admissionBatch-error"
+                />
+                <span class="form-error" id="a-admissionBatch-error" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="a-gradYear">
+                  MCA Graduation Year <span class="required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="a-gradYear"
+                  name="graduationYear"
+                  class="form-control"
+                  placeholder="e.g. 2020"
+                  value="<%= formData.graduationYear || '' %>"
+                  required
+                  maxlength="4"
+                  pattern="[0-9]{4}"
+                  aria-required="true"
+                  aria-describedby="a-gradYear-error"
+                />
+                <span class="form-error" id="a-gradYear-error" role="alert"></span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 3 · Professional Information ───────── -->
+          <fieldset class="form-section" id="a-section-professional">
+            <legend class="form-section-title">
+              <span class="section-num">3</span> Professional Information
+              <span class="section-optional">(all optional)</span>
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="a-profession">
+                  Current Job Title / Profession
+                </label>
+                <input
+                  type="text"
+                  id="a-profession"
+                  name="profession"
+                  class="form-control"
+                  placeholder="e.g. Senior Software Engineer"
+                  value="<%= formData.profession || '' %>"
+                  autocomplete="organization-title"
+                />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="a-company">
+                  Current Company
+                </label>
+                <input
+                  type="text"
+                  id="a-company"
+                  name="company"
+                  class="form-control"
+                  placeholder="e.g. TCS, Infosys, startup..."
+                  value="<%= formData.company || '' %>"
+                  autocomplete="organization"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="a-linkedin">
+                LinkedIn Profile URL
+              </label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix input-prefix-sm">🔗</span>
+                <input
+                  type="url"
+                  id="a-linkedin"
+                  name="linkedin"
+                  class="form-control with-prefix"
+                  placeholder="https://linkedin.com/in/your-profile"
+                  value="<%= formData.linkedin || '' %>"
+                  autocomplete="url"
+                  aria-describedby="a-linkedin-hint"
+                />
+              </div>
+              <span class="form-hint" id="a-linkedin-hint">Optional — helps students learn more about you.</span>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 4 · Document Upload ───────────────── -->
+          <fieldset class="form-section" id="a-section-document">
+            <legend class="form-section-title">
+              <span class="section-num">4</span> Graduation Certificate
+            </legend>
+
+            <!-- Accepted document types info box -->
+            <div class="doc-info-box" role="note">
+              <span>ℹ️</span>
+              <div>
+                <strong>Accepted Documents (any one):</strong>
+                <ul class="doc-list" role="list">
+                  <li>✅ MCA Degree Certificate (original or attested copy)</li>
+                  <li>✅ Provisional Certificate issued by PSG Tech</li>
+                  <li>✅ Course Completion Letter from the Department</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="a-document">
+                Upload Document <span class="required" aria-hidden="true">*</span>
+              </label>
+
+              <div class="file-drop-zone" id="aFileDropZone" tabindex="0" role="button"
+                   aria-label="Upload your graduation certificate — click or drag and drop"
+                   aria-describedby="a-doc-hint a-doc-error">
+                <div class="file-drop-content" id="aFileDropContent">
+                  <span class="file-drop-icon">📎</span>
+                  <p class="file-drop-title">Click to upload or drag &amp; drop</p>
+                  <p class="file-drop-sub">PDF, JPG or PNG · Max 5 MB</p>
+                </div>
+                <div class="file-selected-info" id="aFileSelectedInfo" style="display:none;">
+                  <span class="file-check-icon">✅</span>
+                  <span id="aSelectedFileName">No file chosen</span>
+                  <button type="button" class="file-remove-btn" id="aFileRemoveBtn" aria-label="Remove file">✕</button>
+                </div>
+                <input
+                  type="file"
+                  id="a-document"
+                  name="document"
+                  class="file-input-hidden"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  required
+                  aria-required="true"
+                />
+              </div>
+              <span class="form-hint" id="a-doc-hint">Upload a clear, readable scan or photograph. File size must not exceed 5 MB.</span>
+              <span class="form-error" id="a-doc-error" role="alert"></span>
+            </div>
+          </fieldset>
+
+          <!-- ── SECTION 5 · Security ───────────────────────── -->
+          <fieldset class="form-section" id="a-section-security">
+            <legend class="form-section-title">
+              <span class="section-num">5</span> Account Security
+            </legend>
+
+            <div class="form-group">
+              <label class="form-label" for="a-password">
+                Password <span class="required" aria-hidden="true">*</span>
+              </label>
+              <div class="password-wrap">
+                <input
+                  type="password"
+                  id="a-password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Create a strong password"
+                  required
+                  minlength="8"
+                  autocomplete="new-password"
+                  aria-required="true"
+                  aria-describedby="a-password-error a-password-hint"
+                />
+                <button type="button" class="password-toggle" aria-label="Show password" data-target="a-password">👁</button>
+              </div>
+              <div class="password-strength-bar" aria-hidden="true">
+                <div class="strength-fill" id="aStrengthFill"></div>
+              </div>
+              <span class="strength-label" id="aStrengthLabel"></span>
+              <span class="form-hint" id="a-password-hint">Minimum 8 characters with at least one letter and one number.</span>
+              <span class="form-error" id="a-password-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="a-confirmPassword">
+                Confirm Password <span class="required" aria-hidden="true">*</span>
+              </label>
+              <div class="password-wrap">
+                <input
+                  type="password"
+                  id="a-confirmPassword"
+                  name="confirmPassword"
+                  class="form-control"
+                  placeholder="Repeat your password"
+                  required
+                  autocomplete="new-password"
+                  aria-required="true"
+                  aria-describedby="a-confirmPassword-error"
+                />
+                <button type="button" class="password-toggle" aria-label="Show confirm password" data-target="a-confirmPassword">👁</button>
+              </div>
+              <span class="form-error" id="a-confirmPassword-error" role="alert"></span>
+            </div>
+          </fieldset>
+
+          <!-- ── Terms & Conditions ─────────────────────────── -->
+          <div class="form-group form-check-group">
+            <label class="form-check-label" for="a-terms">
+              <input
+                type="checkbox"
+                id="a-terms"
+                name="terms"
+                class="form-check-input"
+                required
+                aria-required="true"
+                aria-describedby="a-terms-error"
+              />
+              <span>
+                I agree to the <a href="#" class="link">Terms and Conditions</a> and
+                <a href="#" class="link">Privacy Policy</a>. I confirm that I have completed my
+                MCA from PSG College of Technology and all information provided is accurate.
+              </span>
+            </label>
+            <span class="form-error" id="a-terms-error" role="alert"></span>
+          </div>
+
+          <!-- ── Submit ──────────────────────────────────────── -->
+          <button type="submit" class="btn btn-secondary btn-submit w-100" id="aSubmitBtn">
+            <span class="btn-text">Submit Alumni Registration</span>
+            <span class="btn-spinner" aria-hidden="true" style="display:none;">⏳</span>
+          </button>
+
+          <p class="auth-switch-text">
+            Already registered?
+            <a href="/login" class="link">Login here →</a>
+          </p>
+          <p class="auth-switch-text">
+            Are you a student?
+            <a href="/student/register" class="link">Register as Student →</a>
+          </p>
+
+        </form><!-- end #alumniRegForm -->
+
+      </div><!-- end .auth-form-card -->
+    </main><!-- end .auth-form-panel -->
+
+  </div><!-- end .auth-layout -->
+</section>
+
+<script src="/js/register-validation.js"></script>
+
+<%- include('../partials/footer') %>

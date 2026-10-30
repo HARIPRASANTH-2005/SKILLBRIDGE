@@ -1,0 +1,196 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ALUMNI PROFILE — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Alumni Portal</div>
+      <nav class="sidebar-nav" aria-label="Alumni navigation">
+        <a href="/alumni/dashboard" class="sidebar-link">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects/create" class="sidebar-link">
+          <span>➕</span> Post Project
+        </a>
+        <a href="/alumni/proposals" class="sidebar-link">
+          <span>📥</span> Review Proposals
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Mentee Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Student Endorsements
+        </a>
+        <a href="/alumni/profile" class="sidebar-link active">
+          <span>👤</span> Alumni Profile
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Profile Content ───────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/alumni/dashboard">Alumni</a>
+      <span>/</span>
+      <span>Profile</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Alumni Mentor Profile</h1>
+        <p>Manage your public mentor credentials, company information, and technical domains.</p>
+      </div>
+      <div>
+        <span class="badge badge-approved" style="padding: 0.35rem 0.85rem; font-size: var(--fs-xs);">
+          ✓ VERIFIED PSG TECH MCA ALUMNI
+        </span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 320px 1fr; gap: var(--sp-6);">
+      
+      <!-- Left Column: Personal & Academic Credentials -->
+      <div class="card" style="height: fit-content;">
+        <div class="text-center mb-4">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--clr-surface-elevated); border: 2px solid var(--clr-border); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto var(--sp-3);">
+            🏆
+          </div>
+          <h2 style="font-size: var(--fs-xl); font-weight: 700;"><%= currentUser && currentUser.fullName ? currentUser.fullName : 'Karthik Subramaniam' %></h2>
+          <div class="text-secondary" style="font-size: var(--fs-xs); margin-top: 2px;">
+            MCA Roll Number: <strong style="color: var(--clr-text);"><%= currentUser && currentUser.rollNumber ? currentUser.rollNumber : '17MCA042' %></strong>
+          </div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Class of <%= currentUser && currentUser.graduationYear ? currentUser.graduationYear : '2019' %> · PSG College of Technology
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4); margin-bottom: var(--sp-4);">
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Profession:</span>
+            <span><%= currentUser && currentUser.profession ? currentUser.profession : 'Senior Software Engineer' %></span>
+          </div>
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Company:</span>
+            <span><%= currentUser && currentUser.company ? currentUser.company : 'Amazon Web Services' %></span>
+          </div>
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Admission Batch:</span>
+            <span>2016 – 2019</span>
+          </div>
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+            <span class="text-muted">Verified Email:</span>
+            <span class="text-secondary"><%= currentUser && currentUser.email ? currentUser.email : 'karthik.subramaniam@alumni.psgtech.ac.in' %></span>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4);">
+          <div class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">Verified Degree Document</div>
+          <div class="doc-info-box" style="margin: 0; padding: var(--sp-2) var(--sp-3);">
+            <span>🎓</span>
+            <div style="font-size: var(--fs-xs);">
+              <strong>PSG_Tech_MCA_Degree.pdf</strong>
+              <div class="text-muted" style="font-size: 0.65rem;">Verified by MCA Dept Office</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Mentorship Domain & Projects -->
+      <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+        
+        <!-- Mentorship Areas -->
+        <div class="card">
+          <div class="d-flex justify-between align-center mb-4">
+            <div>
+              <h3 style="font-size: var(--fs-lg);">Mentorship Focus Domains</h3>
+              <p class="text-secondary" style="font-size: var(--fs-xs);">Technical specialties offered for student project guidance</p>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary">Edit Specialties</button>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="tag">Distributed Systems</span>
+            <span class="tag">Cloud Architecture (AWS)</span>
+            <span class="tag">Microservices</span>
+            <span class="tag">PostgreSQL / DynamoDB</span>
+            <span class="tag">Observability &amp; SRE</span>
+            <span class="tag">Go / Python</span>
+          </div>
+
+          <div class="form-group mb-0">
+            <label class="form-label" for="alumniBio">Mentorship Statement</label>
+            <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.7;">
+              "Passionate about helping current MCA students master real production constraints — concurrency, idempotent API design, structured logging, and robust test suites. Open to mentoring students on backend microservices."
+            </p>
+          </div>
+        </div>
+
+        <!-- Professional Links -->
+        <div class="card">
+          <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">Professional Links</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="alumniLinkedin">LinkedIn Profile</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">linkedin.com/in/</span>
+                <input type="text" id="alumniLinkedin" class="form-control with-prefix" value="karthik-subramaniam-dev" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="alumniGithub">GitHub Profile</label>
+              <div class="input-prefix-wrap">
+                <span class="input-prefix">github.com/</span>
+                <input type="text" id="alumniGithub" class="form-control with-prefix" value="karthik-subramaniam" />
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-primary">Update Links</button>
+        </div>
+
+        <!-- Mentored Projects History -->
+        <div class="card">
+          <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">Mentored Projects (3)</h3>
+          
+          <div class="d-flex flex-wrap gap-3" style="flex-direction: column;">
+            <div style="padding: var(--sp-3) var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+              <div class="d-flex justify-between align-center">
+                <strong>Campus Placement Assessment Engine</strong>
+                <span class="badge badge-active">ACTIVE MENTORSHIP</span>
+              </div>
+              <div class="text-muted" style="font-size: var(--fs-xs); margin-top: 2px;">
+                Student: Hari Prasanth M (24MCA018) · 4 Weeks Duration
+              </div>
+            </div>
+
+            <div style="padding: var(--sp-3) var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+              <div class="d-flex justify-between align-center">
+                <strong>Distributed Logging &amp; Observability Sidecar</strong>
+                <span class="badge badge-pending">OPEN PROPOSALS</span>
+              </div>
+              <div class="text-muted" style="font-size: var(--fs-xs); margin-top: 2px;">
+                2 Student Proposals Received · 3 Weeks Scope
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

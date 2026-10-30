@@ -1,0 +1,162 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     TASK MANAGEMENT & TRACKING — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<section class="section" style="padding-top: var(--sp-12);">
+  <div class="section-container">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/projects">Projects</a>
+      <span>/</span>
+      <span>Task Management &amp; Progress</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <div class="d-flex align-center gap-2 mb-2">
+          <span class="badge badge-active">ACTIVE WORKSPACE</span>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Project: Campus Placement Assessment Engine</span>
+        </div>
+        <h1>Task Board &amp; Milestones</h1>
+        <p>Collaborative milestone tracking between mentor and student.</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/messages" class="btn btn-secondary">Project Chat 💬</a>
+        <button type="button" class="btn btn-primary">+ Add New Task</button>
+      </div>
+    </div>
+
+    <!-- Kanban Columns Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--sp-6);">
+
+      <!-- Column 1: Backlog / To Do -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+        <div class="d-flex justify-between align-center mb-4">
+          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-text-muted);">
+            To Do (2)
+          </strong>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3" style="flex-direction: column;">
+          <div class="card" style="padding: var(--sp-4);">
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-pending">TASK</span>
+              <span class="text-muted" style="font-size: 0.65rem;">Priority: High</span>
+            </div>
+            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Memory Leaks Profiler</strong>
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
+              Stress-test sandboxed runner with 50 concurrent infinite-loop submissions.
+            </p>
+            <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
+              <span>Assignee: Hari (Student)</span>
+              <span>Nov 6</span>
+            </div>
+          </div>
+
+          <div class="card" style="padding: var(--sp-4);">
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-pending">TASK</span>
+            </div>
+            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Swagger / OpenAPI Specs</strong>
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
+              Document all problem upload and runner endpoints using JSDoc comments.
+            </p>
+            <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
+              <span>Assignee: Hari (Student)</span>
+              <span>Nov 10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2: In Progress -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+        <div class="d-flex justify-between align-center mb-4">
+          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-text);">
+            In Progress (1)
+          </strong>
+        </div>
+
+        <div class="card" style="padding: var(--sp-4); border-left: 2px solid var(--clr-info-text);">
+          <div class="d-flex justify-between align-center mb-2">
+            <span class="badge badge-active">SPRINT</span>
+            <span class="text-muted" style="font-size: 0.65rem;">Due: Tomorrow</span>
+          </div>
+          <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Docker Sandbox Daemon</strong>
+          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
+            Wire Dockerode SDK in Express to spawn isolated Alpine containers with memory constraints.
+          </p>
+          <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
+            <span>Branch: feature/docker</span>
+            <button class="btn btn-sm btn-subtle">Ready for Review</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 3: In Review -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+        <div class="d-flex justify-between align-center mb-4">
+          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-warning-text);">
+            Under Review (1)
+          </strong>
+        </div>
+
+        <div class="card" style="padding: var(--sp-4); border-left: 2px solid var(--clr-warning-text);">
+          <div class="d-flex justify-between align-center mb-2">
+            <span class="badge badge-pending">NEEDS ALUMNI SIGN-OFF</span>
+          </div>
+          <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">MongoDB Schema for Test Runs</strong>
+          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
+            Pull request #4 submitted with indexing strategies for fast student percentile queries.
+          </p>
+          <div class="d-flex justify-between align-center" style="font-size: 0.7rem;">
+            <a href="#" class="link">View PR #4</a>
+            <button class="btn btn-sm btn-primary">Approve PR</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 4: Done -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+        <div class="d-flex justify-between align-center mb-4">
+          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-success-text);">
+            Completed (2)
+          </strong>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3" style="flex-direction: column;">
+          <div class="card" style="padding: var(--sp-4); opacity: 0.85;">
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-approved">VERIFIED</span>
+            </div>
+            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Project Scoping &amp; Architecture</strong>
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5;">
+              Agreed on Express.js, TypeScript, and Docker container sandbox boundaries.
+            </p>
+          </div>
+
+          <div class="card" style="padding: var(--sp-4); opacity: 0.85;">
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-approved">VERIFIED</span>
+            </div>
+            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Initial Repository Boilerplate</strong>
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5;">
+              Configured ESLint, Prettier, Jest, and GitHub Actions CI runner.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+

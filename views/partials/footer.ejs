@@ -1,0 +1,69 @@
+  </main><!-- end #main-content -->
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-container">
+
+      <div class="footer-brand">
+        <span class="brand-name" style="display: flex; align-items: center; gap: 0.5rem;">
+          <span class="brand-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </span>
+          SkillBridge
+        </span>
+        <p class="footer-tagline">Connecting PSG College of Technology MCA students with alumni mentors for real-world project collaboration.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/projects">Explore Opportunities</a></li>
+            <% if (!currentUser) { %>
+              <li><a href="/student/register">Current MCA Students</a></li>
+              <li><a href="/alumni/register">MCA Alumni</a></li>
+              <li><a href="/status">Verification Status</a></li>
+              <li><a href="/login">Sign In</a></li>
+            <% } else if (currentUser.role === 'student') { %>
+              <li><a href="/student/dashboard">Student Dashboard</a></li>
+              <li><a href="/student/tasks">Assigned Tasks</a></li>
+              <li><a href="/student/profile">Student Profile</a></li>
+            <% } else if (currentUser.role === 'alumni') { %>
+              <li><a href="/alumni/dashboard">Alumni Dashboard</a></li>
+              <li><a href="/projects/create">Post a Project</a></li>
+              <li><a href="/alumni/proposals">Review Proposals</a></li>
+              <li><a href="/alumni/profile">Alumni Profile</a></li>
+            <% } else if (currentUser.role === 'admin') { %>
+              <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+              <li><a href="/admin/verifications">Verification Queue</a></li>
+              <li><a href="/admin/users">User Directory</a></li>
+            <% } %>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Institution</h4>
+          <ul>
+            <li><a href="https://www.psgtech.edu" target="_blank" rel="noopener">PSG College of Technology</a></li>
+            <li><a href="https://www.psgtech.edu" target="_blank" rel="noopener">Dept. of Computer Applications</a></li>
+            <li><a href="#">Two-Year MCA Curriculum</a></li>
+            <li><a href="#">Industry Mentorship Cell</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <%= new Date().getFullYear() %> SkillBridge — PSG College of Technology, Department of Computer Applications. Quiet, precise, institutional collaboration.</p>
+    </div>
+  </footer>
+  <!-- ── END FOOTER ──────────────────────────────────────── -->
+
+  <!-- Global JS -->
+  <script src="/js/main.js"></script>
+</body>
+</html>

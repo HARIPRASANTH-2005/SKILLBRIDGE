@@ -1,0 +1,143 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     STUDENT ASSIGNED TASKS — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Workspace</div>
+      <nav class="sidebar-nav" aria-label="Student navigation">
+        <a href="/student/dashboard" class="sidebar-link">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects" class="sidebar-link">
+          <span>🔍</span> Browse Projects
+        </a>
+        <a href="/student/tasks" class="sidebar-link active">
+          <span>✅</span> Assigned Tasks
+          <span class="sidebar-badge">3</span>
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Project Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Feedback &amp; Ratings
+        </a>
+        <a href="/student/profile" class="sidebar-link">
+          <span>👤</span> Student Profile
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Tasks Content ─────────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/student/dashboard">Student</a>
+      <span>/</span>
+      <span>Assigned Tasks</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Assigned Milestone Tasks</h1>
+        <p>Track your technical deliverables for accepted alumni collaboration projects.</p>
+      </div>
+      <div>
+        <a href="/projects" class="btn btn-secondary">Browse More Projects</a>
+      </div>
+    </div>
+
+    <!-- Active Collaboration Banner -->
+    <div class="card mb-6" style="border-left: 3px solid var(--clr-text-secondary);">
+      <div class="d-flex justify-between align-center flex-wrap gap-2">
+        <div>
+          <span class="badge badge-active">CURRENT PROJECT</span>
+          <h2 style="font-size: var(--fs-xl); margin-top: 4px;">E-Commerce GraphQL Microservice</h2>
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Alumni Mentor: Divya Swaminathan (2016) · Total Milestones: 3 · Progress: 66%
+          </div>
+        </div>
+        <a href="/messages" class="btn btn-sm btn-secondary">Message Mentor 💬</a>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
+      
+      <!-- Task 1 -->
+      <div class="card">
+        <div class="d-flex justify-between align-center flex-wrap gap-2 mb-3">
+          <div class="d-flex align-center gap-3">
+            <span class="badge badge-active">IN PROGRESS</span>
+            <h3 style="font-size: var(--fs-base);">Milestone 1: Redis Cache &amp; Rate Limiting Implementation</h3>
+          </div>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Due: Tomorrow, 11:59 PM</span>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.6; margin-bottom: var(--sp-4);">
+          Implement an in-memory caching wrapper around high-traffic product catalog queries. Configure Redis sliding window rate limiter middleware on checkout mutations.
+        </p>
+        <div class="d-flex justify-between align-center flex-wrap gap-2" style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-3);">
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Target Branch: <code>feature/redis-cache</code> · Tests required: unit tests
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-primary">Submit for Review</button>
+            <button type="button" class="btn btn-sm btn-secondary">Add Progress Note</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task 2 -->
+      <div class="card">
+        <div class="d-flex justify-between align-center flex-wrap gap-2 mb-3">
+          <div class="d-flex align-center gap-3">
+            <span class="badge badge-pending">PENDING START</span>
+            <h3 style="font-size: var(--fs-base);">Milestone 2: Unit &amp; Integration Test Suite (Jest)</h3>
+          </div>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Due: Nov 4, 2026</span>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.6; margin-bottom: var(--sp-4);">
+          Achieve minimum 85% line coverage on authentication and order settlement resolvers. Mock payment gateway responses using Jest mock functions.
+        </p>
+        <div class="d-flex justify-between align-center flex-wrap gap-2" style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-3);">
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Pre-requisite: Milestone 1 approval
+          </div>
+          <button type="button" class="btn btn-sm btn-secondary">Mark In Progress</button>
+        </div>
+      </div>
+
+      <!-- Task 3 -->
+      <div class="card">
+        <div class="d-flex justify-between align-center flex-wrap gap-2 mb-3">
+          <div class="d-flex align-center gap-3">
+            <span class="badge badge-approved">COMPLETED</span>
+            <h3 style="font-size: var(--fs-base);">Milestone 0: GraphQL Schema Definition &amp; Prisma Models</h3>
+          </div>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Reviewed Oct 24, 2026</span>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.6; margin-bottom: var(--sp-2);">
+          Defined complete type definitions for User, Product, Inventory, and Order. Configured Prisma schema with migrations for PostgreSQL.
+        </p>
+        <div class="text-muted" style="font-size: var(--fs-xs);">
+          Mentor Feedback: "Clean schema organization. Good separation of concerns."
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

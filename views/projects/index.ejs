@@ -1,0 +1,199 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     EXPLORE OPPORTUNITIES — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<section class="section" style="padding-top: var(--sp-12);">
+  <div class="section-container">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span>Explore Opportunities</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Explore Opportunities</h1>
+        <p>Production engineering problems and technical mentorship hosted by verified PSG College of Technology MCA alumni.</p>
+      </div>
+      <div>
+        <% if (currentUser && currentUser.role === 'alumni') { %>
+          <a href="/projects/create" class="btn btn-primary">+ Post New Opportunity</a>
+        <% } else if (!currentUser) { %>
+          <a href="/student/register" class="btn btn-primary">Join as Student to Apply</a>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="card mb-8">
+      <form action="/projects" method="GET" class="d-flex flex-wrap gap-4 align-center">
+        <div style="flex: 2; min-width: 260px;">
+          <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Search title, technical stack, or project domain..."
+            value="<%= typeof search !== 'undefined' ? search : '' %>"
+          />
+        </div>
+        <div style="flex: 1; min-width: 170px;">
+          <select name="category" class="form-control">
+            <option value="">All Categories</option>
+            <option value="web" <%= category === 'web' ? 'selected' : '' %>>Full-Stack Web</option>
+            <option value="cloud" <%= category === 'cloud' ? 'selected' : '' %>>Cloud &amp; DevOps</option>
+            <option value="mobile" <%= category === 'mobile' ? 'selected' : '' %>>Mobile Systems</option>
+            <option value="data" <%= category === 'data' ? 'selected' : '' %>>Data &amp; Analytics</option>
+            <option value="systems" <%= category === 'systems' ? 'selected' : '' %>>Core Systems</option>
+            <option value="ai" <%= category === 'ai' ? 'selected' : '' %>>Machine Learning &amp; AI</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+          <select name="sort" class="form-control">
+            <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest First</option>
+            <option value="deadline" <%= sort === 'deadline' ? 'selected' : '' %>>Closing Soon</option>
+          </select>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filter</button>
+          <% if (search || category || skill) { %>
+            <a href="/projects" class="btn btn-secondary">Clear</a>
+          <% } %>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── State 1: Database Unavailable (HTTP 503) ────────── -->
+    <% if (typeof dbUnavailable !== 'undefined' && dbUnavailable) { %>
+      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6); border: 1px solid var(--clr-border);">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Service Temporarily Unavailable</h2>
+        <p class="text-secondary" style="max-width: 520px; margin: 0 auto var(--sp-6); line-height: 1.6;">
+          Opportunities are temporarily unavailable. The platform administrator has been notified. Try again in a few moments.
+        </p>
+        <a href="/projects" class="btn btn-secondary">Retry Loading Opportunities</a>
+      </div>
+
+    <!-- ── State 2: Empty Filter Results ───────────────────── -->
+    <% } else if (projects.length === 0 && (search || category || skill)) { %>
+      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">No Opportunities Match Your Criteria</h2>
+        <p class="text-secondary" style="max-width: 480px; margin: 0 auto var(--sp-6); line-height: 1.6;">
+          No opportunities match your current filters. Try broadening your search keywords or clearing active category filters.
+        </p>
+        <a href="/projects" class="btn btn-secondary">Clear All Filters</a>
+      </div>
+
+    <!-- ── State 3: Empty Open Opportunities List ──────────── -->
+    <% } else if (projects.length === 0) { %>
+      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">No Opportunities Currently Open</h2>
+        <p class="text-secondary" style="max-width: 500px; margin: 0 auto var(--sp-6); line-height: 1.6;">
+          No opportunities currently open. Verified MCA alumni post new projects regularly — check back soon or set up an alert.
+        </p>
+        <% if (currentUser && currentUser.role === 'alumni') { %>
+          <a href="/projects/create" class="btn btn-primary">Post the First Opportunity</a>
+        <% } else { %>
+          <a href="/" class="btn btn-secondary">Return to Overview</a>
+        <% } %>
+      </div>
+
+    <!-- ── State 4: Populated Project Cards ────────────────── -->
+    <% } else { %>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: var(--sp-6);">
+        <% projects.forEach(p => { %>
+          <div class="card d-flex" style="flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="d-flex justify-between align-center mb-3">
+                <span class="badge <%= p.status === 'open' ? 'badge-pending' : 'badge-approved' %>">
+                  <%= p.status === 'open' ? 'OPEN FOR PROPOSALS' : p.status.toUpperCase() %>
+                </span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">
+                  <%= p.duration || 'Flexible Scope' %>
+                </span>
+              </div>
+
+              <h3 style="font-size: var(--fs-lg); font-weight: 700; margin-bottom: var(--sp-2);">
+                <a href="/projects/<%= p._id %>" class="link" style="text-decoration: none; color: var(--clr-text);">
+                  <%= p.title %>
+                </a>
+              </h3>
+
+              <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.6; margin-bottom: var(--sp-4);">
+                <%= p.description.length > 150 ? p.description.substring(0, 150) + '...' : p.description %>
+              </p>
+
+              <% if (p.skills && p.skills.length > 0) { %>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  <% p.skills.slice(0, 5).forEach(s => { %>
+                    <span class="tag"><%= s %></span>
+                  <% }) %>
+                </div>
+              <% } %>
+            </div>
+
+            <div style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-4); margin-top: var(--sp-2);">
+              <div class="d-flex justify-between align-center">
+                <div style="font-size: var(--fs-xs);">
+                  <span class="text-muted">Mentor:</span>
+                  <strong style="color: var(--clr-text);"><%= p.creatorName %></strong>
+                  <div class="text-muted" style="font-size: 0.7rem;">
+                    <%= p.creatorBatch ? 'Class of ' + p.creatorBatch : 'PSG Tech MCA Alumni' %>
+                    <%= p.creatorCompany ? '· ' + p.creatorCompany : '' %>
+                  </div>
+                </div>
+                <a href="/projects/<%= p._id %>" class="btn btn-sm btn-primary">View &amp; Apply →</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- Pagination Toolbar -->
+      <% if (totalPages > 1) { %>
+        <div class="d-flex justify-center align-center gap-3 mt-8">
+          <% if (page > 1) { %>
+            <a href="/projects?page=<%= page - 1 %>&search=<%= search %>&category=<%= category %>&sort=<%= sort %>" class="btn btn-sm btn-secondary">
+              ← Previous
+            </a>
+          <% } %>
+
+          <span class="text-secondary" style="font-size: var(--fs-sm);">
+            Page <strong><%= page %></strong> of <strong><%= totalPages %></strong> (<%= total %> total)
+          </span>
+
+          <% if (page < totalPages) { %>
+            <a href="/projects?page=<%= page + 1 %>&search=<%= search %>&category=<%= category %>&sort=<%= sort %>" class="btn btn-sm btn-secondary">
+              Next →
+            </a>
+          <% } %>
+        </div>
+      <% } %>
+    <% } %>
+
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

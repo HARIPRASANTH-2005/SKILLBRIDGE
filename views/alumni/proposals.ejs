@@ -1,0 +1,159 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ALUMNI PROPOSAL REVIEW — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Alumni Portal</div>
+      <nav class="sidebar-nav" aria-label="Alumni navigation">
+        <a href="/alumni/dashboard" class="sidebar-link">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects/create" class="sidebar-link">
+          <span>➕</span> Post Project
+        </a>
+        <a href="/alumni/proposals" class="sidebar-link active">
+          <span>📥</span> Review Proposals
+          <span class="sidebar-badge">2</span>
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Mentee Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Student Endorsements
+        </a>
+        <a href="/alumni/profile" class="sidebar-link">
+          <span>👤</span> Alumni Profile
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ───────────────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/alumni/dashboard">Alumni</a>
+      <span>/</span>
+      <span>Proposals</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Student Proposals Review</h1>
+        <p>Review applicant proposals for your posted projects and select qualified student collaborators.</p>
+      </div>
+      <div>
+        <a href="/projects/create" class="btn btn-primary">+ Post Another Project</a>
+      </div>
+    </div>
+
+    <!-- Proposal Cards List -->
+    <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+
+      <!-- Proposal Item 1 -->
+      <div class="card">
+        <div class="d-flex justify-between align-center flex-wrap gap-2 mb-3">
+          <div>
+            <span class="badge badge-pending">PENDING DECISION</span>
+            <h2 style="font-size: var(--fs-xl); margin-top: 4px;">Arunachalam V</h2>
+            <div class="text-secondary" style="font-size: var(--fs-xs);">
+              Roll No: <strong style="color: var(--clr-text);">24MCA009</strong> · 1st Year MCA · PSG Tech
+            </div>
+          </div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Submitted: 2 days ago
+          </div>
+        </div>
+
+        <div style="background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4); margin-bottom: var(--sp-4);">
+          <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Applied Project</div>
+          <strong style="color: var(--clr-text); font-size: var(--fs-base);">Distributed Logging &amp; Observability Sidecar</strong>
+          <div class="text-secondary" style="font-size: var(--fs-xs); margin-top: 2px;">
+            Target Stack: Go / Python · OpenTelemetry · Prometheus
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Applicant Proposal Pitch &amp; Technical Approach</div>
+          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.7; background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4);">
+            "I have experience with Go routines, Prometheus exporters, and Docker containerization from my undergraduate project. For this sidecar, I propose using the official OpenTelemetry Go SDK to collect HTTP tracing spans and forward them via gRPC to an OTel collector. I can dedicate 15 hours per week and target delivery in 3 milestones across 3 weeks."
+          </p>
+        </div>
+
+        <div class="d-flex justify-between align-center flex-wrap gap-4" style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-4);">
+          <div class="d-flex align-center gap-2">
+            <span class="text-muted" style="font-size: var(--fs-xs);">Verified Skills:</span>
+            <span class="tag">Go</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Prometheus</span>
+            <span class="tag">Linux</span>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-primary">✓ Accept Proposal</button>
+            <a href="/messages" class="btn btn-sm btn-secondary">Message Applicant 💬</a>
+            <button type="button" class="btn btn-sm btn-danger">Decline</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proposal Item 2 -->
+      <div class="card">
+        <div class="d-flex justify-between align-center flex-wrap gap-2 mb-3">
+          <div>
+            <span class="badge badge-pending">PENDING DECISION</span>
+            <h2 style="font-size: var(--fs-xl); margin-top: 4px;">Meenakshi S</h2>
+            <div class="text-secondary" style="font-size: var(--fs-xs);">
+              Roll No: <strong style="color: var(--clr-text);">24MCA024</strong> · 1st Year MCA · PSG Tech
+            </div>
+          </div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Submitted: 3 days ago
+          </div>
+        </div>
+
+        <div style="background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4); margin-bottom: var(--sp-4);">
+          <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Applied Project</div>
+          <strong style="color: var(--clr-text); font-size: var(--fs-base);">Distributed Logging &amp; Observability Sidecar</strong>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Applicant Proposal Pitch &amp; Technical Approach</div>
+          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.7; background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4);">
+            "My focus has been on Python asynchronous networking (AsyncIO) and Structured Logging. I can implement the log parsing and Prometheus metrics daemon in Python with strict unit test coverage and Grafana dashboard templates."
+          </p>
+        </div>
+
+        <div class="d-flex justify-between align-center flex-wrap gap-4" style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-4);">
+          <div class="d-flex align-center gap-2">
+            <span class="text-muted" style="font-size: var(--fs-xs);">Verified Skills:</span>
+            <span class="tag">Python</span>
+            <span class="tag">AsyncIO</span>
+            <span class="tag">Grafana</span>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-primary">✓ Accept Proposal</button>
+            <a href="/messages" class="btn btn-sm btn-secondary">Message Applicant 💬</a>
+            <button type="button" class="btn btn-sm btn-danger">Decline</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

@@ -1,0 +1,280 @@
+<%- include('partials/head', { title: title }) %>
+<%- include('partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     HOMEPAGE — SkillBridge
+     Sections: Hero · Platform Scope · Workflow · Roles · Architecture · CTA
+     Monochrome Graphite Design System
+══════════════════════════════════════════════════════════ -->
+
+<!-- ── HERO SECTION ──────────────────────────────────────── -->
+<section class="hero" aria-label="SkillBridge Overview">
+  <div class="hero-bg-shapes" aria-hidden="true"></div>
+
+  <div class="hero-container">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+      </svg>
+      <span>PSG College of Technology · Department of Computer Applications</span>
+    </div>
+
+    <h1 class="hero-title">
+      Bridging MCA Talent With<br />
+      <span class="gradient-text">Real-World Industry Projects</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      SkillBridge is a dedicated collaboration platform uniting verified PSG Tech MCA alumni with current students. Collaborate on production-grade deliverables, gain hands-on technical mentorship, and build verifiable project portfolios.
+    </p>
+
+    <div class="hero-actions">
+      <a href="/student/register" class="btn btn-primary btn-lg" id="heroStudentBtn">
+        Current MCA Students →
+      </a>
+      <a href="/alumni/register" class="btn btn-secondary btn-lg" id="heroAlumniBtn">
+        MCA Alumni
+      </a>
+      <a href="/projects" class="btn btn-ghost btn-lg" id="heroBrowseBtn">
+        Explore Opportunities
+      </a>
+    </div>
+
+    <div class="hero-trust">
+      <span><span>✓</span> Verified MCA Institutional Credentials</span>
+      <span><span>✓</span> Department-Supervised Accounts</span>
+      <span><span>✓</span> Milestone-Based Deliverables</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── PLATFORM METRICS / HIGHLIGHTS ─────────────────────── -->
+<section class="stats-bar" aria-label="Platform Highlights">
+  <div class="stats-container">
+    <div class="stat-item">
+      <span class="stat-number">2-Year</span>
+      <span class="stat-label">Full MCA Curriculum Focus</span>
+    </div>
+    <div class="stat-divider" aria-hidden="true"></div>
+    <div class="stat-item">
+      <span class="stat-number">100%</span>
+      <span class="stat-label">Department-Verified Profiles</span>
+    </div>
+    <div class="stat-divider" aria-hidden="true"></div>
+    <div class="stat-item">
+      <span class="stat-number">Production</span>
+      <span class="stat-label">Alumni Mentored Deliverables</span>
+    </div>
+    <div class="stat-divider" aria-hidden="true"></div>
+    <div class="stat-item">
+      <span class="stat-number">Zero-Fee</span>
+      <span class="stat-label">PSG Tech Community Platform</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────── -->
+<section class="section how-it-works" id="how-it-works" aria-labelledby="howHeading">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">System Process</span>
+      <h2 id="howHeading">The Collaboration Workflow</h2>
+      <p>A structured, verified path from institutional registration to project completion.</p>
+    </div>
+
+    <div class="steps-grid">
+      <!-- Step 1 -->
+      <div class="step-card">
+        <div class="step-number">Step 01</div>
+        <div class="step-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <h3>Verification &amp; Onboarding</h3>
+        <p>Students and alumni register using their PSG Tech roll numbers and proof documents. The administrative team reviews each submission before account activation.</p>
+        <div class="step-tags">
+          <span class="tag">ID Card Verification</span>
+          <span class="tag">Degree Verification</span>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-card">
+        <div class="step-number">Step 02</div>
+        <div class="step-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <h3>Opportunity Scoping &amp; Proposals</h3>
+        <p>Alumni publish real technical requirements with required skills and deliverables. Students browse active opportunities and submit focused technical proposals.</p>
+        <div class="step-tags">
+          <span class="tag">Technical Scope</span>
+          <span class="tag">Proposal Review</span>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-card">
+        <div class="step-number">Step 03</div>
+        <div class="step-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3>Execution &amp; Endorsement</h3>
+        <p>Selected students break down work into manageable tasks, track milestone progress, exchange technical feedback with alumni mentors, and earn verifiable ratings.</p>
+        <div class="step-tags">
+          <span class="tag">Task Tracking</span>
+          <span class="tag">Portfolio Endorsement</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ROLES SECTION ─────────────────────────────────────── -->
+<section class="section roles-section" aria-labelledby="rolesHeading">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">Two Roles, One Ecosystem</span>
+      <h2 id="rolesHeading">Purpose-Built for PSG Tech MCA</h2>
+      <p>Tailored interfaces designed for current students and industry alumni.</p>
+    </div>
+
+    <div class="roles-grid">
+      <!-- Student Card -->
+      <div class="role-card role-student">
+        <div class="role-icon-wrap" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </div>
+        <h3>For Current MCA Students</h3>
+        <p class="role-desc">Enrolled in 1st or 2nd year MCA at PSG College of Technology, seeking practical industry experience beyond standard coursework.</p>
+        <ul class="role-features" role="list">
+          <li><span>✓</span> Access alumni-posted development projects</li>
+          <li><span>✓</span> Submit proposals with skill self-assessments</li>
+          <li><span>✓</span> Manage task deliverables on a clear board</li>
+          <li><span>✓</span> Receive structured feedback from working professionals</li>
+          <li><span>✓</span> Build a portfolio backed by alumni endorsements</li>
+        </ul>
+        <a href="/student/register" class="btn btn-primary w-100" id="studentRegisterBtn">Student Registration</a>
+      </div>
+
+      <!-- Alumni Card -->
+      <div class="role-card role-alumni">
+        <div class="role-icon-wrap" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="7"></circle>
+            <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+          </svg>
+        </div>
+        <h3>For MCA Alumni</h3>
+        <p class="role-desc">Graduated MCA professionals who want to give back to the department, mentor promising students, and delegate real tasks.</p>
+        <ul class="role-features" role="list">
+          <li><span>✓</span> Publish projects with defined technical scopes</li>
+          <li><span>✓</span> Review student applicant qualifications and proposals</li>
+          <li><span>✓</span> Select candidates and assign milestone tasks</li>
+          <li><span>✓</span> Oversee development and review code/deliverables</li>
+          <li><span>✓</span> Provide ratings and support student career readiness</li>
+        </ul>
+        <a href="/alumni/register" class="btn btn-secondary w-100" id="alumniRegisterBtn">Alumni Registration</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES SECTION ──────────────────────────────────── -->
+<section class="section features-section" aria-labelledby="featuresHeading">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">Platform Architecture</span>
+      <h2 id="featuresHeading">Integrated Project Capabilities</h2>
+      <p>Built with essential tools for remote technical pair-work and supervision.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+        </span>
+        <h4>Department Verification</h4>
+        <p>Every registrant undergoes institutional ID and certificate review before login access is granted.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+        </span>
+        <h4>Structured Proposals</h4>
+        <p>Students present approach, timeline, and relevant skills for alumni evaluation and selection.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </span>
+        <h4>Milestone Task Board</h4>
+        <p>Work is broken into trackable tasks with status indicators: To Do, In Progress, Review, and Completed.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </span>
+        <h4>Technical Discussions</h4>
+        <p>Direct project-scoped message feeds keep collaboration history organised and accessible.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </span>
+        <h4>Verified Endorsements</h4>
+        <p>Quantitative ratings and qualitative notes reflect authentic project outcomes and work ethic.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon" style="display: flex; align-items: center; justify-content: center;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </span>
+        <h4>Session Security</h4>
+        <p>BCrypt password hashing, secure cookie sessions, Helmet headers, and role-based route protection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CALL TO ACTION ────────────────────────────────────── -->
+<section class="cta-section" aria-labelledby="ctaHeading">
+  <div class="cta-container">
+    <h2 id="ctaHeading">Ready to Collaborate?</h2>
+    <p>Join the PSG College of Technology MCA network. Registration is straightforward and accounts are reviewed by the department administration.</p>
+    <div class="cta-actions">
+      <a href="/student/register" class="btn btn-primary btn-lg" id="ctaStudentBtn">Current MCA Students</a>
+      <a href="/alumni/register" class="btn btn-secondary btn-lg" id="ctaAlumniBtn">MCA Alumni</a>
+      <a href="/login" class="btn btn-ghost btn-lg" id="ctaLoginBtn">Sign In to Account →</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

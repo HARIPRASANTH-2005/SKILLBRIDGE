@@ -1,0 +1,16 @@
+<%- include('partials/head', { title: '500 — Server Error' }) %>
+<%- include('partials/navbar') %>
+
+<section class="error-page" aria-labelledby="err500Heading">
+  <div class="error-container">
+    <div class="error-code" aria-hidden="true">500</div>
+    <h1 id="err500Heading">Something Went Wrong</h1>
+    <p>An unexpected error occurred on the server. Please try again later.</p>
+    <% if (typeof error !== 'undefined' && error && process.env.NODE_ENV !== 'production') { %>
+      <pre class="error-detail"><%= error %></pre>
+    <% } %>
+    <a href="/" class="btn btn-primary">← Back to Home</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

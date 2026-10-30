@@ -1,0 +1,301 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     OPPORTUNITY DETAILS — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<section class="section" style="padding-top: var(--sp-12);">
+  <div class="section-container" style="max-width: 1080px;">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/projects">Explore Opportunities</a>
+      <span>/</span>
+      <span><%= project ? project.title : 'Details' %></span>
+    </div>
+
+    <% if (typeof dbUnavailable !== 'undefined' && dbUnavailable) { %>
+      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Service Temporarily Unavailable</h2>
+        <p class="text-secondary" style="max-width: 500px; margin: 0 auto var(--sp-6); line-height: 1.6;">
+          Opportunities are temporarily unavailable. The platform administrator has been notified. Try again in a few moments.
+        </p>
+        <a href="/projects" class="btn btn-secondary">← Back to Opportunities</a>
+      </div>
+    <% } else if (!project) { %>
+      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Opportunity Not Found</h2>
+        <p class="text-secondary" style="max-width: 500px; margin: 0 auto var(--sp-6); line-height: 1.6;">
+          This project may have concluded, been archived, or removed by its mentor.
+        </p>
+        <a href="/projects" class="btn btn-secondary">← Back to Opportunities</a>
+      </div>
+    <% } else { %>
+
+      <!-- Alert messages -->
+      <% if (message === 'proposal_submitted') { %>
+        <div class="doc-info-box mb-6" style="border-color: var(--clr-success-border); background: var(--clr-success-bg); color: var(--clr-success-text);">
+          <span>✓</span>
+          <div>
+            <strong>Proposal Submitted Successfully</strong>
+            <p style="font-size: var(--fs-xs); margin: 0;">The alumni mentor has received your technical proposal and approach. You will be notified once reviewed.</p>
+          </div>
+        </div>
+      <% } else if (message === 'already_submitted') { %>
+        <div class="doc-info-box mb-6">
+          <span>ℹ</span>
+          <div>
+            <strong>Proposal Already On File</strong>
+            <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">You have already submitted a proposal for this project. Review status in your Student Dashboard.</p>
+          </div>
+        </div>
+      <% } else if (message === 'pitch_required') { %>
+        <div class="doc-info-box mb-6" style="border-color: var(--clr-danger-border); background: var(--clr-danger-bg); color: var(--clr-danger-text);">
+          <span>✕</span>
+          <div>
+            <strong>Proposal Pitch Required</strong>
+            <p style="font-size: var(--fs-xs); margin: 0;">Please provide a technical implementation proposal of at least 15 characters.</p>
+          </div>
+        </div>
+      <% } %>
+
+      <div class="dashboard-header">
+        <div>
+          <div class="d-flex align-center gap-2 mb-2">
+            <span class="badge <%= project.status === 'open' ? 'badge-pending' : 'badge-approved' %>">
+              <%= project.status === 'open' ? 'OPEN FOR PROPOSALS' : project.status.toUpperCase() %>
+            </span>
+            <span class="text-muted" style="font-size: var(--fs-xs);">
+              Category: <%= project.category.toUpperCase() %> · <%= project.duration || 'Flexible Scope' %>
+              <% if (project.deadline) { %>
+                · Deadline: <%= new Date(project.deadline).toLocaleDateString() %>
+              <% } %>
+            </span>
+          </div>
+          <h1 style="font-size: var(--fs-3xl);"><%= project.title %></h1>
+          <p>Supervised by <%= project.creatorName %> (<%= project.creatorCompany || 'PSG Tech MCA Alumni' %>)</p>
+        </div>
+        <div>
+          <% if (!currentUser) { %>
+            <a href="/login?returnTo=/projects/<%= project._id %>" class="btn btn-primary">Sign In to Apply</a>
+          <% } else if (currentUser.role === 'student' && currentUser.status === 'approved' && !alreadyApplied) { %>
+            <a href="#submitProposalCard" class="btn btn-primary">Submit Proposal ↓</a>
+          <% } else if (currentUser._id && currentUser._id.toString() === project.creatorId?.toString()) { %>
+            <a href="/alumni/proposals" class="btn btn-secondary">Review Proposals (<%= (project.proposals || []).length %>)</a>
+          <% } %>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-8);">
+
+        <!-- Main Column: Technical Scope & Requirements -->
+        <div>
+          <div class="card mb-6">
+            <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Technical Problem Statement &amp; Scope</h2>
+            <div class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.8; white-space: pre-line; margin-bottom: var(--sp-4);">
+              <%= project.description %>
+            </div>
+
+            <% if (project.skills && project.skills.length > 0) { %>
+              <h3 style="font-size: var(--fs-base); margin-bottom: var(--sp-2);">Required Technologies &amp; Skills</h3>
+              <div class="d-flex flex-wrap gap-2 mb-4">
+                <% project.skills.forEach(s => { %>
+                  <span class="tag"><%= s %></span>
+                <% }) %>
+              </div>
+            <% } %>
+
+            <div class="form-row mt-4" style="background: var(--clr-bg-subtle); padding: var(--sp-4); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Collaboration Cadence:</span>
+                <div style="font-weight: 600; color: var(--clr-text); font-size: var(--fs-sm); text-transform: capitalize;"><%= project.cadence || 'Weekly' %> reviews</div>
+              </div>
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Cohort Capacity:</span>
+                <div style="font-weight: 600; color: var(--clr-text); font-size: var(--fs-sm);"><%= project.maxStudents || 1 %> MCA Student(s)</div>
+              </div>
+              <div>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Status:</span>
+                <div style="font-weight: 600; color: var(--clr-text); font-size: var(--fs-sm); text-transform: uppercase;"><%= project.status %></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proposal Section based on Auth & Verification State -->
+          <% if (!currentUser) { %>
+            <div class="card text-center" style="padding: var(--sp-8);">
+              <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-2);">Verified Student Application Gate</h3>
+              <p class="text-secondary" style="font-size: var(--fs-sm); margin-bottom: var(--sp-5); max-width: 480px; margin-left: auto; margin-right: auto;">
+                Only verified PSG College of Technology MCA students can submit proposals and collaborate with alumni mentors.
+              </p>
+              <div class="d-flex justify-center gap-3">
+                <a href="/login?returnTo=/projects/<%= project._id %>" class="btn btn-primary">Sign In with MCA Account</a>
+                <a href="/student/register" class="btn btn-secondary">Register as Current Student</a>
+              </div>
+            </div>
+
+          <% } else if (currentUser.status !== 'approved') { %>
+            <div class="card text-center" style="padding: var(--sp-8);">
+              <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-2);">Verification In Progress</h3>
+              <p class="text-secondary" style="font-size: var(--fs-sm); margin-bottom: var(--sp-5); max-width: 500px; margin-left: auto; margin-right: auto;">
+                Your account is currently <strong><%= currentUser.status %></strong>. Project proposals are unlocked once your academic credentials have been verified by the department administrator.
+              </p>
+              <a href="/status" class="btn btn-secondary">Check Verification Status</a>
+            </div>
+
+          <% } else if (currentUser.role !== 'student') { %>
+            <div class="card text-center" style="padding: var(--sp-6);">
+              <p class="text-secondary" style="font-size: var(--fs-sm); margin: 0;">
+                You are currently signed in with an <strong><%= currentUser.role.toUpperCase() %></strong> profile. Only verified students may submit project applications.
+              </p>
+            </div>
+
+          <% } else if (alreadyApplied) { %>
+            <div class="card" style="border-color: var(--clr-border);">
+              <div class="d-flex align-center gap-3">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--clr-success-bg); border: 1px solid var(--clr-success-border); display: flex; align-items: center; justify-content: center; color: var(--clr-success-text);">
+                  ✓
+                </div>
+                <div>
+                  <h3 style="font-size: var(--fs-base); margin-bottom: var(--sp-1);">Proposal Submitted</h3>
+                  <p class="text-secondary" style="font-size: var(--fs-xs); margin: 0;">
+                    Your proposal for this opportunity has been registered and is under review by <%= project.creatorName %>. You will receive an update in your dashboard.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          <% } else { %>
+            <!-- Active Proposal Submission Form -->
+            <div class="card" id="submitProposalCard">
+              <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Submit Technical Proposal</h2>
+              <p class="text-secondary" style="font-size: var(--fs-sm); margin-bottom: var(--sp-5);">
+                Describe your technical approach, relevant coursework, and implementation plan for <%= project.creatorName %>.
+              </p>
+
+              <form action="/projects/<%= project._id %>/proposals" method="POST">
+                <div class="form-group">
+                  <label class="form-label" for="pitch">
+                    Technical Approach &amp; Implementation Plan <span class="required">*</span>
+                  </label>
+                  <textarea
+                    id="pitch"
+                    name="pitch"
+                    rows="5"
+                    class="form-control"
+                    placeholder="Outline your architecture, libraries you plan to use, and how you will meet the requirements..."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="hoursPerWeek">
+                      Weekly Availability (Hours) <span class="required">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      id="hoursPerWeek"
+                      name="hoursPerWeek"
+                      class="form-control"
+                      placeholder="e.g. 10"
+                      min="4"
+                      max="40"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="targetWeeks">
+                      Estimated Duration (Weeks) <span class="required">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      id="targetWeeks"
+                      name="targetWeeks"
+                      class="form-control"
+                      placeholder="e.g. 4"
+                      min="1"
+                      max="12"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="repoUrl">
+                    Relevant GitHub / Code Sample Link <span class="form-optional">(optional)</span>
+                  </label>
+                  <input
+                    type="url"
+                    id="repoUrl"
+                    name="repoUrl"
+                    class="form-control"
+                    placeholder="https://github.com/username/project"
+                  />
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                  Submit Proposal to Mentor
+                </button>
+              </form>
+            </div>
+          <% } %>
+
+        </div>
+
+        <!-- Right Column: Alumni Mentor Info & Parameters -->
+        <div>
+          <div class="card mb-6">
+            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-3);">
+              Alumni Mentor
+            </div>
+            <div class="d-flex align-center gap-3 mb-3">
+              <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--clr-text);">
+                <%= project.creatorName ? project.creatorName.charAt(0) : 'M' %>
+              </div>
+              <div>
+                <strong style="color: var(--clr-text); font-size: var(--fs-base);"><%= project.creatorName %></strong>
+                <div class="text-secondary" style="font-size: var(--fs-xs);">
+                  <%= project.creatorProfession || 'Software Professional' %>
+                  <%= project.creatorCompany ? '· ' + project.creatorCompany : '' %>
+                </div>
+              </div>
+            </div>
+
+            <div class="doc-info-box mb-4" style="margin: 0 0 var(--sp-4) 0; font-size: var(--fs-xs);">
+              <span>✓</span>
+              <div>
+                <strong><%= project.creatorBatch ? 'PSG Tech MCA Class of ' + project.creatorBatch : 'PSG Tech MCA Alumni' %></strong>
+                <div class="text-muted" style="font-size: 0.7rem;">Department Verified Member</div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
+              <span class="text-muted">Total Proposals:</span>
+              <span><%= (project.proposals || []).length %> submitted</span>
+            </div>
+            <div class="d-flex justify-between" style="font-size: var(--fs-xs);">
+              <span class="text-muted">Target Capacity:</span>
+              <span><%= project.maxStudents || 1 %> Student(s)</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="font-size: var(--fs-base); margin-bottom: var(--sp-3);">Trust &amp; Verification Protocol</h3>
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: 0;">
+              All mentors on SkillBridge are verified alumni of the Department of Computer Applications, PSG College of Technology. Project milestones are tracked on the internal task board and recorded in institutional portfolios.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    <% } %>
+
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,184 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     CREATE / POST PROJECT — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Alumni Portal</div>
+      <nav class="sidebar-nav" aria-label="Alumni navigation">
+        <a href="/alumni/dashboard" class="sidebar-link">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects/create" class="sidebar-link active">
+          <span>➕</span> Post Project
+        </a>
+        <a href="/alumni/proposals" class="sidebar-link">
+          <span>📥</span> Review Proposals
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Mentee Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Student Endorsements
+        </a>
+        <a href="/alumni/profile" class="sidebar-link">
+          <span>👤</span> Alumni Profile
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Form Content ──────────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/alumni/dashboard">Alumni</a>
+      <span>/</span>
+      <span>Post Project</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Post a New MCA Collaboration Project</h1>
+        <p>Outline real production tasks from your professional experience to mentor current MCA students.</p>
+      </div>
+      <div>
+        <a href="/alumni/dashboard" class="btn btn-secondary">Cancel &amp; Return</a>
+      </div>
+    </div>
+
+    <div class="auth-form-card" style="max-width: 820px; margin: 0 auto;">
+      
+      <form action="/projects" method="POST" novalidate>
+        
+        <!-- Section 1: Overview -->
+        <fieldset class="form-section">
+          <legend class="form-section-title">
+            <span class="section-num">1</span> Project Overview
+          </legend>
+
+          <div class="form-group">
+            <label class="form-label" for="projectTitle">
+              Project Title <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="projectTitle"
+              name="title"
+              class="form-control"
+              placeholder="e.g. Distributed Telemetry Pipeline with Kafka & Go"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="projectCategory">
+                Primary Technical Category <span class="required">*</span>
+              </label>
+              <select id="projectCategory" name="category" class="form-control" required>
+                <option value="" disabled selected>— Select Category —</option>
+                <option value="web">Full-Stack Web Development</option>
+                <option value="cloud">Cloud Infrastructure &amp; DevOps</option>
+                <option value="mobile">Mobile Systems (iOS/Android)</option>
+                <option value="data">Data Engineering &amp; ML</option>
+                <option value="systems">Systems &amp; Network Programming</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="projectDuration">
+                Estimated Timeline <span class="required">*</span>
+              </label>
+              <select id="projectDuration" name="duration" class="form-control" required>
+                <option value="" disabled selected>— Select Duration —</option>
+                <option value="2-3">2–3 Weeks (Focused Sprint)</option>
+                <option value="4-6">4–6 Weeks (Standard Capstone)</option>
+                <option value="8+">8+ Weeks (Comprehensive System)</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Section 2: Detailed Scope -->
+        <fieldset class="form-section">
+          <legend class="form-section-title">
+            <span class="section-num">2</span> Technical Scope &amp; Deliverables
+          </legend>
+
+          <div class="form-group">
+            <label class="form-label" for="projectDescription">
+              Detailed Scope &amp; Problem Statement <span class="required">*</span>
+            </label>
+            <textarea
+              id="projectDescription"
+              name="description"
+              rows="6"
+              class="form-control"
+              placeholder="Describe the production context, architecture requirements, and goals for the student..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="projectSkills">
+              Required Skills &amp; Tech Stack (comma separated) <span class="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="projectSkills"
+              name="skills"
+              class="form-control"
+              placeholder="e.g. Node.js, Docker, PostgreSQL, Redis, Jest"
+              required
+            />
+            <span class="form-hint">Students filter projects by these tags.</span>
+          </div>
+        </fieldset>
+
+        <!-- Section 3: Mentorship Setup -->
+        <fieldset class="form-section">
+          <legend class="form-section-title">
+            <span class="section-num">3</span> Mentorship Cadence
+          </legend>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="cadence">Check-in Rhythm <span class="required">*</span></label>
+              <select id="cadence" name="cadence" class="form-control" required>
+                <option value="weekly">Weekly Virtual Code Review</option>
+                <option value="biweekly">Bi-weekly Check-in &amp; PR reviews</option>
+                <option value="async">Async GitHub PR comments &amp; Chat</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="maxStudents">Max Student Collaborators</label>
+              <input type="number" id="maxStudents" name="maxStudents" class="form-control" value="1" min="1" max="3" />
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="d-flex justify-between align-center mt-6">
+          <a href="/alumni/dashboard" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary btn-lg">Publish Project to Students</button>
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

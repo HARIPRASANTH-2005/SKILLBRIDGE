@@ -1,0 +1,168 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     REGISTRATION VERIFICATION STATUS — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<section class="section" style="min-height: calc(100vh - 180px); display: flex; align-items: center; padding: var(--sp-12) 0;">
+  <div class="section-container" style="max-width: 820px;">
+
+    <div class="section-header" style="margin-bottom: var(--sp-8);">
+      <span class="section-tag">Verification Status</span>
+      <h2>Application Review &amp; Trust State</h2>
+      <p>All student and alumni registrations are verified against PSG College of Technology Department of Computer Applications records before platform access is granted.</p>
+    </div>
+
+    <!-- Status Lookup Form -->
+    <div class="card" style="margin-bottom: var(--sp-8);">
+      <form action="/status" method="GET" class="d-flex gap-4 flex-wrap align-center">
+        <div style="flex: 1; min-width: 280px;">
+          <label class="form-label" for="lookupEmail">Enter Registered Institutional Email or MCA Roll Number</label>
+          <input
+            type="text"
+            id="lookupEmail"
+            name="q"
+            class="form-control"
+            placeholder="e.g. 24MCA018 or student@psgtech.ac.in"
+            value="<%= typeof query !== 'undefined' ? query : '' %>"
+            required
+          />
+        </div>
+        <div style="align-self: flex-end;">
+          <button type="submit" class="btn btn-primary" style="height: 42px;">Check Trust Status</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Specific User Lookup Result -->
+    <% if (typeof userResult !== 'undefined' && userResult) { %>
+      <div class="card mb-8">
+        <div class="d-flex justify-between align-center flex-wrap gap-2 mb-4">
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-1);">
+              Applicant Verification Record
+            </div>
+            <h3 style="font-size: var(--fs-xl); color: var(--clr-text);"><%= userResult.fullName %></h3>
+            <div class="text-secondary" style="font-size: var(--fs-xs);">
+              Roll: <strong><%= userResult.rollNumber %></strong> · <%= userResult.email %>
+            </div>
+          </div>
+          <div>
+            <%- include('../partials/trust-badge', { status: userResult.status }) %>
+          </div>
+        </div>
+
+        <% if (userResult.status === 'pending') { %>
+          <div class="doc-info-box mb-4">
+            <span>⏳</span>
+            <div>
+              <strong>Verification Currently In Progress</strong>
+              <p class="text-muted" style="font-size: var(--fs-xs); margin: 0; line-height: 1.5;">
+                Your registration was received on <%= new Date(userResult.createdAt).toLocaleDateString() %> and is assigned to the department administrative review queue. ID proofs are typically authenticated within 1–2 working days.
+              </p>
+            </div>
+          </div>
+        <% } else if (userResult.status === 'approved') { %>
+          <div class="doc-info-box mb-4" style="border-color: var(--clr-success-border); background: var(--clr-success-bg); color: var(--clr-success-text);">
+            <span>✓</span>
+            <div>
+              <strong>Credentials Verified &amp; Cleared</strong>
+              <p style="font-size: var(--fs-xs); margin: 0; line-height: 1.5;">
+                Your identity has been authenticated against institutional records. You may now sign in to access project collaboration.
+              </p>
+            </div>
+          </div>
+          <a href="/login" class="btn btn-primary w-100">Proceed to Sign In →</a>
+        <% } else if (userResult.status === 'rejected') { %>
+          <div class="doc-info-box mb-4" style="border-color: var(--clr-danger-border); background: var(--clr-danger-bg); color: var(--clr-danger-text);">
+            <span>✕</span>
+            <div>
+              <strong>Verification Declined by Administrator</strong>
+              <p style="font-size: var(--fs-xs); margin: 0 0 var(--sp-2) 0; line-height: 1.5;">
+                Reason: <%= userResult.rejectionReason || 'Uploaded document could not be validated against official registrar data.' %>
+              </p>
+              <div class="text-muted" style="font-size: 0.7rem;">
+                Please re-submit registration with a clear, unexpired document or contact the department coordinator.
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-3">
+            <a href="/<%= userResult.role %>/register" class="btn btn-secondary">Submit New Application</a>
+          </div>
+        <% } %>
+      </div>
+
+    <% } else if (typeof notFound !== 'undefined' && notFound) { %>
+      <div class="card text-center mb-8" style="padding: var(--sp-8);">
+        <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-2);">No Application Found for "<%= query %>"</h3>
+        <p class="text-secondary" style="font-size: var(--fs-sm); max-width: 480px; margin: 0 auto var(--sp-4);">
+          Please check for typos in your email address or MCA roll number. If you have not registered yet, choose a registration path below.
+        </p>
+        <div class="d-flex justify-center gap-3">
+          <a href="/student/register" class="btn btn-primary">Current Student Registration</a>
+          <a href="/alumni/register" class="btn btn-secondary">MCA Alumni Registration</a>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Educational Status Lifecycle Overview -->
+    <h3 style="font-size: var(--fs-base); font-weight: 600; margin-bottom: var(--sp-4); color: var(--clr-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+      Verification Stages Overview
+    </h3>
+
+    <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
+
+      <!-- Stage 1: PENDING -->
+      <div class="card" style="border-left: 3px solid var(--clr-warning);">
+        <div class="d-flex justify-between align-center mb-2 flex-wrap gap-2">
+          <div class="d-flex align-center gap-2">
+            <%- include('../partials/trust-badge', { status: 'pending' }) %>
+            <h4 style="font-size: var(--fs-base); font-weight: 600; color: var(--clr-text);">Pending Admin Verification</h4>
+          </div>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Expected: 1–2 business days</span>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin: 0;">
+          Your registration details and uploaded institutional proof are queued in the department administrator's verification console. No action is required from you during this window.
+        </p>
+      </div>
+
+      <!-- Stage 2: APPROVED -->
+      <div class="card" style="border-left: 3px solid var(--clr-success);">
+        <div class="d-flex justify-between align-center mb-2 flex-wrap gap-2">
+          <div class="d-flex align-center gap-2">
+            <%- include('../partials/trust-badge', { status: 'approved' }) %>
+            <h4 style="font-size: var(--fs-base); font-weight: 600; color: var(--clr-text);">Verified Institutional Member</h4>
+          </div>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Instant Access</span>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin: 0;">
+          Credentials authenticated against departmental records. Full access granted: students can submit proposals and complete project tasks; alumni can post projects and mentor students.
+        </p>
+      </div>
+
+      <!-- Stage 3: REJECTED -->
+      <div class="card" style="border-left: 3px solid var(--clr-danger);">
+        <div class="d-flex justify-between align-center mb-2 flex-wrap gap-2">
+          <div class="d-flex align-center gap-2">
+            <%- include('../partials/trust-badge', { status: 'rejected' }) %>
+            <h4 style="font-size: var(--fs-base); font-weight: 600; color: var(--clr-text);">Verification Declined</h4>
+          </div>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Action Required</span>
+        </div>
+        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin: 0;">
+          Occurs if an uploaded document is unreadable, roll number does not match departmental registrar lists, or batch year is incorrect. The exact administrator note is provided above.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="/" class="btn btn-secondary">← Back to Homepage</a>
+    </div>
+
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,196 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ALUMNI DASHBOARD — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Alumni Portal</div>
+      <nav class="sidebar-nav" aria-label="Alumni navigation">
+        <a href="/alumni/dashboard" class="sidebar-link active">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects/create" class="sidebar-link">
+          <span>➕</span> Post Project
+        </a>
+        <a href="/alumni/proposals" class="sidebar-link">
+          <span>📥</span> Review Proposals
+          <span class="sidebar-badge">2</span>
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Mentee Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Student Endorsements
+        </a>
+        <a href="/alumni/profile" class="sidebar-link">
+          <span>👤</span> Alumni Profile
+        </a>
+      </nav>
+    </div>
+
+    <div>
+      <div class="sidebar-heading">Alumni Community</div>
+      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
+        <div>
+          <strong style="font-size: var(--fs-xs);">PSG Tech MCA Alumni</strong>
+          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
+            Mentorship Cell · Giving back to the next generation
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Dashboard Content ─────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/alumni/dashboard">Alumni</a>
+      <span>/</span>
+      <span>Dashboard</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Welcome Back, <%= currentUser && currentUser.fullName ? currentUser.fullName : 'Karthik Subramaniam' %></h1>
+        <p>Class of <%= currentUser && currentUser.graduationYear ? currentUser.graduationYear : '2019' %> · Senior Software Engineer · PSG Tech MCA Alumni</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/projects/create" class="btn btn-primary">+ Post New Project</a>
+        <a href="/alumni/proposals" class="btn btn-secondary">Review Proposals (2)</a>
+      </div>
+    </div>
+
+    <!-- Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-title">Posted Projects</div>
+        <div class="metric-value">3</div>
+        <div class="metric-sub">2 active · 1 completed</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Proposals Received</div>
+        <div class="metric-value">5</div>
+        <div class="metric-sub">2 awaiting review</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Selected Mentees</div>
+        <div class="metric-value">2</div>
+        <div class="metric-sub">Active project collaborators</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Milestones Reviewed</div>
+        <div class="metric-value">8</div>
+        <div class="metric-sub">Technical deliverables approved</div>
+      </div>
+    </div>
+
+    <!-- Posted Projects Table -->
+    <div class="card mb-6">
+      <div class="d-flex justify-between align-center mb-4">
+        <div>
+          <h3 style="font-size: var(--fs-lg);">Your Posted Projects</h3>
+          <p class="text-secondary" style="font-size: var(--fs-xs);">Manage project scopes and review student applications</p>
+        </div>
+        <a href="/projects/create" class="btn btn-sm btn-secondary">+ Add Project</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Project Title</th>
+              <th>Status</th>
+              <th>Applicants</th>
+              <th>Active Mentee</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Campus Placement Assessment Engine</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">Node.js · MongoDB · Docker</div>
+              </td>
+              <td><span class="badge badge-active">IN PROGRESS</span></td>
+              <td>3 Proposals</td>
+              <td>Hari Prasanth M (24MCA018)</td>
+              <td>
+                <div class="d-flex gap-2">
+                  <a href="/projects/1/tasks" class="btn btn-sm btn-secondary">Tasks</a>
+                  <a href="/messages" class="btn btn-sm btn-ghost">Chat</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Distributed Logging &amp; Observability Sidecar</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">Go / Python · OpenTelemetry · Prometheus</div>
+              </td>
+              <td><span class="badge badge-pending">OPEN FOR APPLICANTS</span></td>
+              <td>2 Pending Proposals</td>
+              <td><span class="text-muted">—</span></td>
+              <td>
+                <a href="/alumni/proposals" class="btn btn-sm btn-primary">Review Applicants</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Enterprise Role-Based Access Control Module</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">FastAPI · PostgreSQL · OAuth2</div>
+              </td>
+              <td><span class="badge badge-approved">COMPLETED</span></td>
+              <td>4 Proposals</td>
+              <td>Swetha R (22MCA035)</td>
+              <td>
+                <a href="/reviews" class="btn btn-sm btn-secondary">View Review</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pending Proposals Quick Action -->
+    <div class="card">
+      <div class="d-flex justify-between align-center mb-4">
+        <div>
+          <h3 style="font-size: var(--fs-lg);">Recent Proposals Awaiting Decision</h3>
+          <p class="text-secondary" style="font-size: var(--fs-xs);">Evaluate technical approach and accept promising candidates</p>
+        </div>
+        <a href="/alumni/proposals" class="link text-secondary" style="font-size: var(--fs-xs);">View All Proposals →</a>
+      </div>
+
+      <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
+        <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+          <div class="d-flex justify-between align-center mb-2 flex-wrap gap-2">
+            <div>
+              <strong style="font-size: var(--fs-sm);">Arunachalam V (24MCA009)</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">Applied for: Distributed Logging &amp; Observability Sidecar · 1st Year MCA</div>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="/alumni/proposals" class="btn btn-sm btn-primary">Accept</a>
+              <a href="/alumni/proposals" class="btn btn-sm btn-secondary">Review Details</a>
+            </div>
+          </div>
+          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6;">
+            "I have experience with Go routines and Prometheus exporters from my undergraduate capstone. I can deliver the OpenTelemetry exporter within 3 weeks."
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

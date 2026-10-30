@@ -1,0 +1,168 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN PROJECT MANAGEMENT — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Administration</div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="/admin/dashboard" class="sidebar-link">
+          <span>🛡️</span> Overview
+        </a>
+        <a href="/admin/verifications" class="sidebar-link">
+          <span>⏳</span> Verifications Queue
+          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+        </a>
+        <a href="/admin/users" class="sidebar-link">
+          <span>👥</span> User Directory
+        </a>
+        <a href="/admin/projects" class="sidebar-link active">
+          <span>📁</span> Moderation &amp; Projects
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ── Main Projects Oversight ────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/admin/dashboard">Admin</a>
+      <span>/</span>
+      <span>Projects Oversight</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Project Moderation &amp; Management</h1>
+        <p>Monitor technical projects posted by alumni mentors to ensure academic standards and student safety.</p>
+      </div>
+      <div>
+        <a href="/projects" class="btn btn-secondary">Public Project Directory ↗</a>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="card mb-6">
+      <div class="d-flex flex-wrap gap-4 align-center">
+        <div style="flex: 2; min-width: 240px;">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search projects by title, mentor, or technology..."
+          />
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+          <select class="form-control">
+            <option value="">All Categories</option>
+            <option value="web">Full-Stack Web</option>
+            <option value="cloud">Cloud / DevOps</option>
+            <option value="mobile">Mobile</option>
+            <option value="data">Data Engineering</option>
+          </select>
+        </div>
+        <div style="flex: 1; min-width: 140px;">
+          <select class="form-control">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="active">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary">Filter</button>
+      </div>
+    </div>
+
+    <!-- Projects Table -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Project Title</th>
+            <th>Alumni Mentor</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Applications</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Campus Placement Assessment Engine</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">Node.js · Docker · MongoDB</div>
+            </td>
+            <td>Karthik Subramaniam (2019)</td>
+            <td><span class="tag">Web Dev</span></td>
+            <td><span class="badge badge-active">IN PROGRESS</span></td>
+            <td>3 Proposals</td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/projects/1" class="btn btn-sm btn-secondary">Inspect</a>
+                <button type="button" class="btn btn-sm btn-ghost">Moderate</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Distributed Logging &amp; Observability Sidecar</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">Go / Python · OpenTelemetry</div>
+            </td>
+            <td>Anitha Murugan (2017)</td>
+            <td><span class="tag">Cloud</span></td>
+            <td><span class="badge badge-pending">OPEN</span></td>
+            <td>2 Proposals</td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/projects/2" class="btn btn-sm btn-secondary">Inspect</a>
+                <button type="button" class="btn btn-sm btn-ghost">Moderate</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Mobile Health Diagnostic Assistant</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">React Native · SQLite</div>
+            </td>
+            <td>Suresh Perumal (2020)</td>
+            <td><span class="tag">Mobile</span></td>
+            <td><span class="badge badge-pending">OPEN</span></td>
+            <td>1 Proposal</td>
+            <td>
+              <div class="d-flex gap-2">
+                <a href="/projects/3" class="btn btn-sm btn-secondary">Inspect</a>
+                <button type="button" class="btn btn-sm btn-ghost">Moderate</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>College Attendance Management API</strong>
+              <div class="text-muted" style="font-size: var(--fs-xs);">Express.js · PostgreSQL</div>
+            </td>
+            <td>Arvind Ramanathan (2017)</td>
+            <td><span class="tag">Web Dev</span></td>
+            <td><span class="badge badge-approved">COMPLETED</span></td>
+            <td>4 Proposals</td>
+            <td>
+              <a href="/reviews" class="btn btn-sm btn-secondary">View Outcomes</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+

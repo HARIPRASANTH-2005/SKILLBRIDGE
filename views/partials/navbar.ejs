@@ -1,0 +1,75 @@
+  <!-- ── NAVBAR ─────────────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+
+      <!-- Brand logo -->
+      <a href="/" class="nav-brand" aria-label="SkillBridge home">
+        <span class="brand-icon" style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </span>
+        <span class="brand-name">Skill<span class="brand-accent">Bridge</span></span>
+      </a>
+
+      <!-- Hamburger (mobile) -->
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Nav links -->
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="/" class="nav-link">Home</a></li>
+        <li><a href="/projects" class="nav-link">Explore Opportunities</a></li>
+
+        <% if (!currentUser) { %>
+          <!-- Guest links -->
+          <li class="nav-dropdown">
+            <button class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false">Register ▾</button>
+            <ul class="dropdown-menu" role="list">
+              <li><a href="/student/register" class="dropdown-item">Current MCA Student</a></li>
+              <li><a href="/alumni/register"  class="dropdown-item">MCA Alumni</a></li>
+            </ul>
+          </li>
+          <li><a href="/status" class="nav-link">Verification Status</a></li>
+          <li><a href="/login" class="nav-link nav-btn">Sign In</a></li>
+
+        <% } else if (currentUser.role === 'student') { %>
+          <li><a href="/student/dashboard" class="nav-link">Dashboard</a></li>
+          <li><a href="/student/tasks"     class="nav-link">My Tasks</a></li>
+          <li><a href="/student/profile"   class="nav-link">Profile</a></li>
+          <li class="nav-user-greeting">
+            <span class="text-secondary"><%= currentUser.fullName ? currentUser.fullName.split(' ')[0] : 'Student' %></span>
+            <%- include('trust-badge', { status: currentUser.status, label: currentUser.status === 'approved' ? 'Verified' : 'Pending' }) %>
+          </li>
+          <li><a href="/logout" class="nav-link nav-btn nav-btn-outline">Logout</a></li>
+
+        <% } else if (currentUser.role === 'alumni') { %>
+          <li><a href="/alumni/dashboard"  class="nav-link">Dashboard</a></li>
+          <li><a href="/projects/create"   class="nav-link">Post Project</a></li>
+          <li><a href="/alumni/proposals"  class="nav-link">Proposals</a></li>
+          <li><a href="/alumni/profile"    class="nav-link">Profile</a></li>
+          <li class="nav-user-greeting">
+            <span class="text-secondary"><%= currentUser.fullName ? currentUser.fullName.split(' ')[0] : 'Alumni' %></span>
+            <%- include('trust-badge', { status: currentUser.status, label: currentUser.status === 'approved' ? 'Alumni' : 'Pending' }) %>
+          </li>
+          <li><a href="/logout" class="nav-link nav-btn nav-btn-outline">Logout</a></li>
+
+        <% } else if (currentUser.role === 'admin') { %>
+          <li><a href="/admin/dashboard"     class="nav-link">Dashboard</a></li>
+          <li><a href="/admin/verifications" class="nav-link">Verifications</a></li>
+          <li><a href="/admin/users"         class="nav-link">Users</a></li>
+          <li><a href="/admin/projects"      class="nav-link">Projects</a></li>
+          <li class="nav-user-greeting">
+            <span class="badge badge-active" style="font-size: var(--fs-xs);">Administrator</span>
+          </li>
+          <li><a href="/logout" class="nav-link nav-btn nav-btn-outline">Logout</a></li>
+        <% } %>
+      </ul>
+
+    </div>
+  </nav>
+  <!-- ── END NAVBAR ──────────────────────────────────── -->
+
+  <main id="main-content">

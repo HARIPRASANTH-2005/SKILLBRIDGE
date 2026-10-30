@@ -1,0 +1,254 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     STUDENT DASHBOARD — SkillBridge
+     Charcoal-Black & Slate-Gray Monochrome Interface
+══════════════════════════════════════════════════════════ -->
+
+<div class="dashboard-layout">
+
+  <!-- ── Dashboard Sidebar ──────────────────────────────── -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Workspace</div>
+      <nav class="sidebar-nav" aria-label="Student navigation">
+        <a href="/student/dashboard" class="sidebar-link active">
+          <span>📊</span> Overview
+        </a>
+        <a href="/projects" class="sidebar-link">
+          <span>🔍</span> Browse Projects
+        </a>
+        <a href="/student/tasks" class="sidebar-link">
+          <span>✅</span> Assigned Tasks
+          <span class="sidebar-badge">3</span>
+        </a>
+        <a href="/messages" class="sidebar-link">
+          <span>💬</span> Project Messages
+        </a>
+        <a href="/reviews" class="sidebar-link">
+          <span>⭐</span> Feedback &amp; Ratings
+        </a>
+        <a href="/student/profile" class="sidebar-link">
+          <span>👤</span> Student Profile
+        </a>
+      </nav>
+    </div>
+
+    <div>
+      <div class="sidebar-heading">Institutional Info</div>
+      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
+        <div>
+          <strong style="font-size: var(--fs-xs);">Department of CA</strong>
+          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
+            PSG College of Technology<br />MCA 2-Year Program
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Dashboard Content ─────────────────────────── -->
+  <main class="dashboard-main">
+
+    <div class="breadcrumbs">
+      <a href="/">Home</a>
+      <span>/</span>
+      <a href="/student/dashboard">Student</a>
+      <span>/</span>
+      <span>Dashboard</span>
+    </div>
+
+    <div class="dashboard-header">
+      <div>
+        <h1>Welcome Back, <%= currentUser && currentUser.fullName ? currentUser.fullName : 'MCA Student' %></h1>
+        <p>Roll No: <strong style="color: var(--clr-text);"><%= currentUser && currentUser.rollNumber ? currentUser.rollNumber : '24MCA018' %></strong> · 1st Year MCA · PSG College of Technology</p>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="/projects" class="btn btn-primary">Browse Projects →</a>
+        <a href="/student/profile" class="btn btn-secondary">Edit Profile</a>
+      </div>
+    </div>
+
+    <!-- Metrics Grid -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-title">Active Proposals</div>
+        <div class="metric-value">2</div>
+        <div class="metric-sub">1 under review by mentor</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Assigned Tasks</div>
+        <div class="metric-value">3</div>
+        <div class="metric-sub">1 milestone due this week</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Completed Projects</div>
+        <div class="metric-value">1</div>
+        <div class="metric-sub">Verified by alumni mentor</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-title">Endorsement Score</div>
+        <div class="metric-value">4.9<span style="font-size: 1rem; color: var(--clr-text-muted);">/5.0</span></div>
+        <div class="metric-sub">Based on completed deliverables</div>
+      </div>
+    </div>
+
+    <!-- Active Proposals & Assigned Tasks -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: var(--sp-6); margin-bottom: var(--sp-8);">
+      
+      <!-- Submitted Proposals -->
+      <div class="card">
+        <div class="d-flex justify-between align-center mb-4">
+          <h3 style="font-size: var(--fs-lg);">Submitted Proposals</h3>
+          <a href="/projects" class="link text-secondary" style="font-size: var(--fs-xs);">Find More</a>
+        </div>
+
+        <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
+          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-2">
+              <strong style="font-size: var(--fs-sm);">Healthcare Inventory Analytics Pipeline</strong>
+              <span class="badge badge-pending">UNDER REVIEW</span>
+            </div>
+            <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">
+              Mentor: Rajesh Kumar (Class of 2018, Lead Data Eng at Freshworks)
+            </p>
+            <div class="d-flex justify-between align-center text-muted" style="font-size: var(--fs-xs);">
+              <span>Submitted: 2 days ago</span>
+              <span>Scope: Python · PostgreSQL</span>
+            </div>
+          </div>
+
+          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-2">
+              <strong style="font-size: var(--fs-sm);">E-Commerce GraphQL Microservice</strong>
+              <span class="badge badge-approved">ACCEPTED</span>
+            </div>
+            <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">
+              Mentor: Divya Swaminathan (Class of 2016, Staff Architect)
+            </p>
+            <div class="d-flex justify-between align-center text-muted" style="font-size: var(--fs-xs);">
+              <span>Active collaboration in progress</span>
+              <a href="/student/tasks" class="btn btn-sm btn-secondary">View Tasks →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Tasks -->
+      <div class="card">
+        <div class="d-flex justify-between align-center mb-4">
+          <h3 style="font-size: var(--fs-lg);">Milestone Tasks</h3>
+          <a href="/student/tasks" class="link text-secondary" style="font-size: var(--fs-xs);">View All (3)</a>
+        </div>
+
+        <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
+          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-2">
+              <strong style="font-size: var(--fs-sm);">Setup Docker Compose &amp; Redis Cache Layer</strong>
+              <span class="badge badge-active">IN PROGRESS</span>
+            </div>
+            <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">
+              Implement session caching and rate limiter with Redis in Node.js.
+            </p>
+            <div class="d-flex justify-between align-center text-muted" style="font-size: var(--fs-xs);">
+              <span>Due: Tomorrow, 11:59 PM</span>
+              <span class="text-secondary">Assigned by Mentor</span>
+            </div>
+          </div>
+
+          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-2">
+              <strong style="font-size: var(--fs-sm);">Unit Test Suite for Auth Resolvers</strong>
+              <span class="badge badge-pending">PENDING</span>
+            </div>
+            <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">
+              80%+ coverage with Jest for user authentication GraphQL mutations.
+            </p>
+            <div class="d-flex justify-between align-center text-muted" style="font-size: var(--fs-xs);">
+              <span>Due: Nov 4, 2026</span>
+              <span class="text-secondary">Milestone 2</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recommended Projects -->
+    <div class="card">
+      <div class="d-flex justify-between align-center mb-4">
+        <div>
+          <h3 style="font-size: var(--fs-lg);">Recommended MCA Projects</h3>
+          <p class="text-secondary" style="font-size: var(--fs-xs);">Curated based on your verified MCA skill tags</p>
+        </div>
+        <a href="/projects" class="btn btn-sm btn-secondary">Explore All Projects</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Project Title</th>
+              <th>Alumni Mentor</th>
+              <th>Key Skills</th>
+              <th>Duration</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <strong>Campus Placement Assessment Engine</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">Automated test generation &amp; candidate scoring</div>
+              </td>
+              <td>Karthik S. (2019) · Senior SDE</td>
+              <td>
+                <span class="tag">Node.js</span>
+                <span class="tag">MongoDB</span>
+              </td>
+              <td>4 Weeks</td>
+              <td>
+                <a href="/projects/1" class="btn btn-sm btn-primary">View &amp; Apply</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Real-Time Stock Notification Microservice</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">WebSockets &amp; Event-driven message broker</div>
+              </td>
+              <td>Anitha M. (2017) · Cloud Architect</td>
+              <td>
+                <span class="tag">Python</span>
+                <span class="tag">Kafka</span>
+              </td>
+              <td>3 Weeks</td>
+              <td>
+                <a href="/projects/2" class="btn btn-sm btn-primary">View &amp; Apply</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>Mobile Health Diagnostic Assistant</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">React Native offline-first sync client</div>
+              </td>
+              <td>Suresh P. (2020) · Lead Mobile Eng</td>
+              <td>
+                <span class="tag">React Native</span>
+                <span class="tag">SQLite</span>
+              </td>
+              <td>6 Weeks</td>
+              <td>
+                <a href="/projects/3" class="btn btn-sm btn-primary">View &amp; Apply</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
+
