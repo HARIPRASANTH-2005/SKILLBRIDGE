@@ -13,7 +13,9 @@
     <aside class="auth-panel login-panel" aria-hidden="true">
       <div class="auth-panel-inner">
         <div class="auth-panel-logo">
-          <span>🎓</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(--radius-sm);background:var(--clr-surface-elevated);border:1px solid var(--clr-border);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
           <span>Skill<strong style="color: var(--clr-text-secondary);">Bridge</strong></span>
         </div>
         <h2>Sign In to SkillBridge</h2>
@@ -21,21 +23,27 @@
 
         <div class="login-roles">
           <div class="login-role-item">
-            <span>🎒</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--clr-surface-elevated);flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </span>
             <div>
               <strong>MCA Students</strong>
               <span>Browse projects, submit proposals, complete tasks</span>
             </div>
           </div>
           <div class="login-role-item">
-            <span>🏆</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--clr-surface-elevated);flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            </span>
             <div>
               <strong>MCA Alumni</strong>
               <span>Post projects, review applicants, mentor talent</span>
             </div>
           </div>
           <div class="login-role-item">
-            <span>🛡️</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:var(--radius-sm);background:var(--clr-surface-elevated);flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </span>
             <div>
               <strong>Department Admin</strong>
               <span>Verify credentials and oversee platform activities</span>
@@ -44,7 +52,9 @@
         </div>
 
         <div class="auth-panel-note">
-          <span>ℹ️</span>
+          <span style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
           <span>Only verified PSG Tech MCA accounts can access active projects.</span>
         </div>
       </div>
@@ -55,7 +65,9 @@
       <div class="auth-form-card login-card">
 
         <div class="auth-form-header">
-          <div class="login-icon" aria-hidden="true">🔒</div>
+          <div class="login-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
           <h1 id="loginHeading">Sign In</h1>
           <p>Enter your verified email and password to access your workspace.</p>
         </div>
@@ -63,7 +75,9 @@
         <!-- Validation errors -->
         <% if (errors && errors.length > 0) { %>
           <div class="flash flash-error" role="alert">
-            <span>⚠️</span>
+            <span style="display:inline-flex;align-items:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </span>
             <div>
               <% errors.forEach(e => { %><div><%= e.msg %></div><% }); %>
             </div>
@@ -117,7 +131,9 @@
                 aria-required="true"
                 aria-describedby="loginPassword-error"
               />
-              <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="loginPassword">👁</button>
+              <button type="button" class="password-toggle" aria-label="Toggle password visibility" data-target="loginPassword">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
             </div>
             <span class="form-error" id="loginPassword-error" role="alert"></span>
           </div>
@@ -224,11 +240,11 @@
       if (!input) return;
       if (input.type === 'password') {
         input.type = 'text';
-        btn.textContent = '🙈';
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
         btn.setAttribute('aria-label', 'Hide password');
       } else {
         input.type = 'password';
-        btn.textContent = '👁';
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
         btn.setAttribute('aria-label', 'Show password');
       }
     });

@@ -30,21 +30,41 @@
     </p>
 
     <div class="hero-actions">
-      <a href="/student/register" class="btn btn-primary btn-lg" id="heroStudentBtn">
-        Current MCA Students →
-      </a>
-      <a href="/alumni/register" class="btn btn-secondary btn-lg" id="heroAlumniBtn">
-        MCA Alumni
-      </a>
-      <a href="/projects" class="btn btn-ghost btn-lg" id="heroBrowseBtn">
-        Explore Opportunities
-      </a>
+      <% if (!currentUser) { %>
+        <a href="/student/register" class="btn btn-primary btn-lg" id="heroStudentBtn">
+          Current MCA Students →
+        </a>
+        <a href="/alumni/register" class="btn btn-secondary btn-lg" id="heroAlumniBtn">
+          MCA Alumni
+        </a>
+        <a href="/projects" class="btn btn-ghost btn-lg" id="heroBrowseBtn">
+          Explore Opportunities
+        </a>
+      <% } else if (currentUser.role === 'student') { %>
+        <a href="/student/dashboard" class="btn btn-primary btn-lg" id="heroDashboardBtn">
+          Go to Dashboard →
+        </a>
+        <a href="/projects" class="btn btn-secondary btn-lg" id="heroBrowseBtn">
+          Browse Projects
+        </a>
+      <% } else if (currentUser.role === 'alumni') { %>
+        <a href="/alumni/dashboard" class="btn btn-primary btn-lg" id="heroDashboardBtn">
+          Go to Dashboard →
+        </a>
+        <a href="/projects/create" class="btn btn-secondary btn-lg" id="heroPostBtn">
+          Post a Project
+        </a>
+      <% } else { %>
+        <a href="/admin/dashboard" class="btn btn-primary btn-lg" id="heroAdminBtn">
+          Admin Console →
+        </a>
+      <% } %>
     </div>
 
     <div class="hero-trust">
-      <span><span>✓</span> Verified MCA Institutional Credentials</span>
-      <span><span>✓</span> Department-Supervised Accounts</span>
-      <span><span>✓</span> Milestone-Based Deliverables</span>
+      <span><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Verified MCA Institutional Credentials</span>
+      <span><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Department-Supervised Accounts</span>
+      <span><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Milestone-Based Deliverables</span>
     </div>
   </div>
 </section>
@@ -161,11 +181,11 @@
         <h3>For Current MCA Students</h3>
         <p class="role-desc">Enrolled in 1st or 2nd year MCA at PSG College of Technology, seeking practical industry experience beyond standard coursework.</p>
         <ul class="role-features" role="list">
-          <li><span>✓</span> Access alumni-posted development projects</li>
-          <li><span>✓</span> Submit proposals with skill self-assessments</li>
-          <li><span>✓</span> Manage task deliverables on a clear board</li>
-          <li><span>✓</span> Receive structured feedback from working professionals</li>
-          <li><span>✓</span> Build a portfolio backed by alumni endorsements</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Access alumni-posted development projects</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Submit proposals with skill self-assessments</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Manage task deliverables on a clear board</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Receive structured feedback from working professionals</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Build a portfolio backed by alumni endorsements</li>
         </ul>
         <a href="/student/register" class="btn btn-primary w-100" id="studentRegisterBtn">Student Registration</a>
       </div>
@@ -181,11 +201,11 @@
         <h3>For MCA Alumni</h3>
         <p class="role-desc">Graduated MCA professionals who want to give back to the department, mentor promising students, and delegate real tasks.</p>
         <ul class="role-features" role="list">
-          <li><span>✓</span> Publish projects with defined technical scopes</li>
-          <li><span>✓</span> Review student applicant qualifications and proposals</li>
-          <li><span>✓</span> Select candidates and assign milestone tasks</li>
-          <li><span>✓</span> Oversee development and review code/deliverables</li>
-          <li><span>✓</span> Provide ratings and support student career readiness</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Publish projects with defined technical scopes</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Review student applicant qualifications and proposals</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Select candidates and assign milestone tasks</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Oversee development and review code/deliverables</li>
+          <li><span style="display:inline-flex;align-items:center;vertical-align:middle;margin-right:4px;color:var(--clr-success-text);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>Provide ratings and support student career readiness</li>
         </ul>
         <a href="/alumni/register" class="btn btn-secondary w-100" id="alumniRegisterBtn">Alumni Registration</a>
       </div>
@@ -270,9 +290,19 @@
     <h2 id="ctaHeading">Ready to Collaborate?</h2>
     <p>Join the PSG College of Technology MCA network. Registration is straightforward and accounts are reviewed by the department administration.</p>
     <div class="cta-actions">
-      <a href="/student/register" class="btn btn-primary btn-lg" id="ctaStudentBtn">Current MCA Students</a>
-      <a href="/alumni/register" class="btn btn-secondary btn-lg" id="ctaAlumniBtn">MCA Alumni</a>
-      <a href="/login" class="btn btn-ghost btn-lg" id="ctaLoginBtn">Sign In to Account →</a>
+      <% if (!currentUser) { %>
+        <a href="/student/register" class="btn btn-primary btn-lg" id="ctaStudentBtn">Current MCA Students</a>
+        <a href="/alumni/register" class="btn btn-secondary btn-lg" id="ctaAlumniBtn">MCA Alumni</a>
+        <a href="/login" class="btn btn-ghost btn-lg" id="ctaLoginBtn">Sign In to Account →</a>
+      <% } else if (currentUser.role === 'student') { %>
+        <a href="/student/dashboard" class="btn btn-primary btn-lg" id="ctaDashBtn">Go to Dashboard →</a>
+        <a href="/projects" class="btn btn-secondary btn-lg">Browse Projects</a>
+      <% } else if (currentUser.role === 'alumni') { %>
+        <a href="/alumni/dashboard" class="btn btn-primary btn-lg" id="ctaDashBtn">Go to Dashboard →</a>
+        <a href="/projects/create" class="btn btn-secondary btn-lg">Post a Project</a>
+      <% } else { %>
+        <a href="/admin/dashboard" class="btn btn-primary btn-lg" id="ctaAdminBtn">Admin Console →</a>
+      <% } %>
     </div>
   </div>
 </section>
