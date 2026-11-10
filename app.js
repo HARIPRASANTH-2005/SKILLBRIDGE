@@ -81,10 +81,12 @@ app.use((err, req, res, next) => {
 });
 
 // ── Start server ───────────────────────────────────
+// ── Start server ───────────────────────────────────
 const PORT = process.env.PORT || 3000;
+
 if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`🚀  SkillBridge running at http://localhost:${PORT}`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 SkillBridge running on port ${PORT}`);
   });
 }
 
