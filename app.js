@@ -5,6 +5,8 @@ require('dotenv').config();          // Load .env FIRST
 const express    = require('express');
 const path       = require('path');
 const session    = require('express-session');
+const { MongoStore } = require('connect-mongo');
+const mongoose   = require('mongoose');
 const helmet     = require('helmet');
 const connectDB  = require('./config/db');
 
@@ -39,8 +41,37 @@ app.use(express.json());
 // ── Static files ───────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ── Trust Proxy (Required for secure HTTPS cookies behind reverse proxies on Render) ──
+app.set('trust proxy', 1);
+
+// ── Session store (MongoDB-backed via connect-mongo) ──
+let sessionStore;
+if (process.env.MONGO_URI) {
+  sessionStore = MongoStore.create({
+    clientPromise: mongoose.connection.asPromise().then(conn => {
+      const client = conn.getClient();
+      if (!client) throw new Error('MongoDB client connection unavailable');
+      return client;
+    }),
+    collectionName: 'sessions',
+    ttl: 24 * 60 * 60,                     // 24 hours in seconds
+    autoRemove: 'native',
+    touchAfter: 24 * 3600                  // Lazy session update
+  });
+
+  // Handle store errors and offline mode safely
+  sessionStore.collectionP?.catch(err => {
+    console.warn('⚠️  Session store offline notice:', err.message);
+  });
+
+  sessionStore.on('error', err => {
+    console.warn('⚠️  Session store error:', err.message);
+  });
+}
+
 // ── Session middleware ─────────────────────────────
 app.use(session({
+  store: sessionStore,
   name: 'skillbridge.sid',
   secret: process.env.SESSION_SECRET || 'skillbridge-graphite-secret-2025',
   resave: false,
@@ -76,6 +107,9 @@ app.use((req, res) => {
 
 // ── Global error handler ───────────────────────────
 app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
   console.error(err.stack);
   res.status(500).render('500', { title: 'Server Error — SkillBridge', error: err.message });
 });

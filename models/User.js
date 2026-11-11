@@ -142,8 +142,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index rollNumber and email for fast lookups
-userSchema.index({ email: 1 });
+// Compound & query indexes (email unique index is defined directly on the field)
 userSchema.index({ rollNumber: 1, role: 1 });
 userSchema.index({ status: 1 });
 

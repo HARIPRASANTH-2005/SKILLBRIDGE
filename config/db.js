@@ -14,10 +14,12 @@ const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
       serverSelectionTimeoutMS: 2500, // Fail fast if MongoDB is down
-      connectTimeoutMS: 3000
+      connectTimeoutMS: 3000,
+      ...(process.env.DB_NAME ? { dbName: process.env.DB_NAME } : {})
     });
     isConnected = true;
-    console.log(`✅  MongoDB connected: ${conn.connection.host}`);
+    const activeDb = conn.connection.name || 'default';
+    console.log(`✅  MongoDB connected: ${conn.connection.host} (database: "${activeDb}")`);
     return true;
   } catch (err) {
     isConnected = false;
