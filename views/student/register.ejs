@@ -104,7 +104,7 @@
         <!-- ── Success message ── -->
         <% if (typeof success !== 'undefined' && success) { %>
           <div class="flash flash-success" role="alert">
-            <span>✅</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
             <div><strong>Registration Submitted!</strong><br /><%= success %></div>
           </div>
         <% } %>
@@ -112,7 +112,7 @@
         <!-- ── Validation error block ── -->
         <% if (errors && errors.length > 0) { %>
           <div class="flash flash-error" role="alert">
-            <span>⚠️</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             <ul>
               <% errors.forEach(e => { %><li><%= e.msg %></li><% }); %>
             </ul>
@@ -308,12 +308,16 @@
                    aria-label="Upload your student document — click or drag and drop"
                    aria-describedby="doc-hint doc-error">
                 <div class="file-drop-content" id="fileDropContent">
-                  <span class="file-drop-icon">📎</span>
+                  <span class="file-drop-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  </span>
                   <p class="file-drop-title">Click to upload or drag &amp; drop</p>
                   <p class="file-drop-sub">PDF, JPG or PNG · Max 5 MB</p>
                 </div>
                 <div class="file-selected-info" id="fileSelectedInfo" style="display:none;">
-                  <span class="file-check-icon">✅</span>
+                  <span class="file-check-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
                   <span id="selectedFileName">No file chosen</span>
                   <button type="button" class="file-remove-btn" id="fileRemoveBtn" aria-label="Remove file">✕</button>
                 </div>
@@ -357,7 +361,9 @@
                   aria-required="true"
                   aria-describedby="password-error password-hint"
                 />
-                <button type="button" class="password-toggle" aria-label="Show password" data-target="password">👁</button>
+                <button type="button" class="password-toggle" aria-label="Show password" data-target="password">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
               </div>
               <!-- Strength bar -->
               <div class="password-strength-bar" aria-hidden="true">
@@ -384,7 +390,9 @@
                   aria-required="true"
                   aria-describedby="confirmPassword-error"
                 />
-                <button type="button" class="password-toggle" aria-label="Show confirm password" data-target="confirmPassword">👁</button>
+                <button type="button" class="password-toggle" aria-label="Show confirm password" data-target="confirmPassword">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
               </div>
               <span class="form-error" id="confirmPassword-error" role="alert"></span>
             </div>

@@ -109,7 +109,7 @@
         <!-- ── Success message ── -->
         <% if (typeof success !== 'undefined' && success) { %>
           <div class="flash flash-success" role="alert">
-            <span>✅</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
             <div><strong>Registration Submitted!</strong><br /><%= success %></div>
           </div>
         <% } %>
@@ -117,7 +117,7 @@
         <!-- Validation errors -->
         <% if (errors && errors.length > 0) { %>
           <div class="flash flash-error" role="alert">
-            <span>⚠️</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             <ul>
               <% errors.forEach(e => { %><li><%= e.msg %></li><% }); %>
             </ul>
@@ -319,7 +319,9 @@
                 LinkedIn Profile URL
               </label>
               <div class="input-prefix-wrap">
-                <span class="input-prefix input-prefix-sm">🔗</span>
+                <span class="input-prefix input-prefix-sm">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                </span>
                 <input
                   type="url"
                   id="a-linkedin"
@@ -343,13 +345,13 @@
 
             <!-- Accepted document types info box -->
             <div class="doc-info-box" role="note">
-              <span>ℹ️</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               <div>
                 <strong>Accepted Documents (any one):</strong>
                 <ul class="doc-list" role="list">
-                  <li>✅ MCA Degree Certificate (original or attested copy)</li>
-                  <li>✅ Provisional Certificate issued by PSG Tech</li>
-                  <li>✅ Course Completion Letter from the Department</li>
+                  <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg> MCA Degree Certificate (original or attested copy)</li>
+                  <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg> Provisional Certificate issued by PSG Tech</li>
+                  <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg> Course Completion Letter from the Department</li>
                 </ul>
               </div>
             </div>
@@ -363,12 +365,16 @@
                    aria-label="Upload your graduation certificate — click or drag and drop"
                    aria-describedby="a-doc-hint a-doc-error">
                 <div class="file-drop-content" id="aFileDropContent">
-                  <span class="file-drop-icon">📎</span>
+                  <span class="file-drop-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  </span>
                   <p class="file-drop-title">Click to upload or drag &amp; drop</p>
                   <p class="file-drop-sub">PDF, JPG or PNG · Max 5 MB</p>
                 </div>
                 <div class="file-selected-info" id="aFileSelectedInfo" style="display:none;">
-                  <span class="file-check-icon">✅</span>
+                  <span class="file-check-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
                   <span id="aSelectedFileName">No file chosen</span>
                   <button type="button" class="file-remove-btn" id="aFileRemoveBtn" aria-label="Remove file">✕</button>
                 </div>
@@ -410,7 +416,9 @@
                   aria-required="true"
                   aria-describedby="a-password-error a-password-hint"
                 />
-                <button type="button" class="password-toggle" aria-label="Show password" data-target="a-password">👁</button>
+                <button type="button" class="password-toggle" aria-label="Show password" data-target="a-password">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
               </div>
               <div class="password-strength-bar" aria-hidden="true">
                 <div class="strength-fill" id="aStrengthFill"></div>
@@ -436,7 +444,9 @@
                   aria-required="true"
                   aria-describedby="a-confirmPassword-error"
                 />
-                <button type="button" class="password-toggle" aria-label="Show confirm password" data-target="a-confirmPassword">👁</button>
+                <button type="button" class="password-toggle" aria-label="Show confirm password" data-target="a-confirmPassword">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
               </div>
               <span class="form-error" id="a-confirmPassword-error" role="alert"></span>
             </div>
