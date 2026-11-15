@@ -3,12 +3,10 @@
 
 <!-- ══════════════════════════════════════════════════════════
      ADMIN PROJECT MANAGEMENT — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
 
-  <!-- ── Sidebar ────────────────────────────────────────── -->
   <aside class="sidebar">
     <div>
       <div class="sidebar-heading">Administration</div>
@@ -20,7 +18,9 @@
         <a href="/admin/verifications" class="sidebar-link">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Verifications Queue
-          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+          <% if (typeof pendingCount !== 'undefined' && pendingCount > 0) { %>
+            <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);"><%= pendingCount %></span>
+          <% } %>
         </a>
         <a href="/admin/users" class="sidebar-link">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -28,145 +28,133 @@
         </a>
         <a href="/admin/projects" class="sidebar-link active">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          Moderation &amp; Projects
+          Projects &amp; Moderation
         </a>
       </nav>
     </div>
   </aside>
 
-  <!-- ── Main Projects Oversight ────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/admin/dashboard">Admin</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>Projects Oversight</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
-        <h1>Project Moderation &amp; Management</h1>
-        <p>Monitor technical projects posted by alumni mentors to ensure academic standards and student safety.</p>
+        <h1>Project Moderation</h1>
+        <p>Monitor alumni-posted technical projects to ensure academic standards and student safety.</p>
       </div>
       <div>
-        <a href="/projects" class="btn btn-secondary">Public Project Directory ↗</a>
+        <a href="/projects" class="btn btn-secondary" target="_blank" rel="noopener">
+          Public Directory ↗
+        </a>
       </div>
     </div>
 
     <!-- Filter Bar -->
     <div class="card mb-6">
-      <div class="d-flex flex-wrap gap-4 align-center">
+      <form method="GET" action="/admin/projects" class="d-flex flex-wrap gap-4 align-center">
         <div style="flex: 2; min-width: 240px;">
           <input
             type="text"
+            name="search"
             class="form-control"
-            placeholder="Search projects by title, mentor, or technology..."
+            placeholder="Search by title, mentor, or technology..."
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            aria-label="Search projects"
           />
         </div>
         <div style="flex: 1; min-width: 140px;">
-          <select class="form-control">
+          <select name="category" class="form-control" aria-label="Filter by category">
             <option value="">All Categories</option>
             <option value="web">Full-Stack Web</option>
             <option value="cloud">Cloud / DevOps</option>
             <option value="mobile">Mobile</option>
             <option value="data">Data Engineering</option>
+            <option value="ai">ML / AI</option>
           </select>
         </div>
         <div style="flex: 1; min-width: 140px;">
-          <select class="form-control">
+          <select name="status" class="form-control" aria-label="Filter by status">
             <option value="">All Statuses</option>
             <option value="open">Open</option>
             <option value="active">In Progress</option>
             <option value="completed">Completed</option>
           </select>
         </div>
-        <button type="button" class="btn btn-primary">Filter</button>
-      </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filter</button>
+          <a href="/admin/projects" class="btn btn-secondary">Clear</a>
+        </div>
+      </form>
     </div>
 
     <!-- Projects Table -->
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Project Title</th>
-            <th>Alumni Mentor</th>
-            <th>Category</th>
-            <th>Status</th>
-            <th>Applications</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <strong>Campus Placement Assessment Engine</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">Node.js · Docker · MongoDB</div>
-            </td>
-            <td>Karthik Subramaniam (2019)</td>
-            <td><span class="tag">Web Dev</span></td>
-            <td><span class="badge badge-active">IN PROGRESS</span></td>
-            <td>3 Proposals</td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/projects/1" class="btn btn-sm btn-secondary">Inspect</a>
-                <button type="button" class="btn btn-sm btn-ghost">Moderate</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Distributed Logging &amp; Observability Sidecar</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">Go / Python · OpenTelemetry</div>
-            </td>
-            <td>Anitha Murugan (2017)</td>
-            <td><span class="tag">Cloud</span></td>
-            <td><span class="badge badge-pending">OPEN</span></td>
-            <td>2 Proposals</td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/projects/2" class="btn btn-sm btn-secondary">Inspect</a>
-                <button type="button" class="btn btn-sm btn-ghost">Moderate</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Mobile Health Diagnostic Assistant</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">React Native · SQLite</div>
-            </td>
-            <td>Suresh Perumal (2020)</td>
-            <td><span class="tag">Mobile</span></td>
-            <td><span class="badge badge-pending">OPEN</span></td>
-            <td>1 Proposal</td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/projects/3" class="btn btn-sm btn-secondary">Inspect</a>
-                <button type="button" class="btn btn-sm btn-ghost">Moderate</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>College Attendance Management API</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">Express.js · PostgreSQL</div>
-            </td>
-            <td>Arvind Ramanathan (2017)</td>
-            <td><span class="tag">Web Dev</span></td>
-            <td><span class="badge badge-approved">COMPLETED</span></td>
-            <td>4 Proposals</td>
-            <td>
-              <a href="/reviews" class="btn btn-sm btn-secondary">View Outcomes</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <% if (typeof projects !== 'undefined' && projects && projects.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Project Title</th>
+              <th>Alumni Mentor</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Proposals</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% projects.forEach(project => { %>
+              <tr>
+                <td>
+                  <strong><%= project.title %></strong>
+                  <% if (project.skills && project.skills.length > 0) { %>
+                    <div class="text-muted" style="font-size: var(--fs-xs);"><%= project.skills.slice(0, 3).join(' · ') %></div>
+                  <% } %>
+                </td>
+                <td style="font-size: var(--fs-sm);">
+                  <%= project.creatorName || '—' %>
+                  <% if (project.creatorBatch) { %>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">Class of <%= project.creatorBatch %></div>
+                  <% } %>
+                </td>
+                <td>
+                  <span class="tag" style="text-transform: capitalize;"><%= project.category || 'General' %></span>
+                </td>
+                <td>
+                  <span class="badge <%= project.status === 'open' ? 'badge-pending' : (project.status === 'completed' ? 'badge-approved' : 'badge-active') %>">
+                    <%= (project.status || 'open').toUpperCase() %>
+                  </span>
+                </td>
+                <td style="font-size: var(--fs-sm);">
+                  <%= (project.proposals || []).length %> proposal<%= (project.proposals || []).length !== 1 ? 's' : '' %>
+                </td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <a href="/projects/<%= project._id %>" class="btn btn-sm btn-secondary" target="_blank" rel="noopener">Inspect</a>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="card text-center" style="padding: var(--sp-10) var(--sp-6);">
+        <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-2);">No Projects Found</h3>
+        <p class="text-secondary" style="font-size: var(--fs-sm); margin-bottom: var(--sp-4);">
+          No projects match your current filter criteria.
+        </p>
+        <a href="/admin/projects" class="btn btn-secondary">Clear Filters</a>
+      </div>
+    <% } %>
 
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

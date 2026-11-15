@@ -3,7 +3,7 @@
 
 <!-- ══════════════════════════════════════════════════════════
      STUDENT ASSIGNED TASKS — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     Deep Teal & Warm White Academic Workspace
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
@@ -42,20 +42,20 @@
   </aside>
 
   <!-- ── Main Tasks Content ─────────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/student/dashboard">Student</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>Assigned Tasks</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
         <h1>Assigned Milestone Tasks</h1>
-        <p>Track your technical deliverables for accepted alumni collaboration projects.</p>
+        <p>Track technical deliverables and submit milestone progress for accepted alumni collaboration projects.</p>
       </div>
       <div>
         <a href="/projects" class="btn btn-secondary">Browse More Projects</a>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Active Collaboration Banner -->
-    <div class="card mb-6" style="border-left: 3px solid var(--clr-text-secondary);">
+    <div class="card mb-6" style="border-left: 3px solid var(--clr-brand);">
       <div class="d-flex justify-between align-center flex-wrap gap-2">
         <div>
           <span class="badge badge-active">CURRENT PROJECT</span>
@@ -72,7 +72,10 @@
             Alumni Mentor: Divya Swaminathan (2016) · Total Milestones: 3 · Progress: 66%
           </div>
         </div>
-        <a href="/messages" class="btn btn-sm btn-secondary">Message Mentor 💬</a>
+        <a href="/messages" class="btn btn-sm btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Message Mentor
+        </a>
       </div>
     </div>
 
@@ -141,8 +144,7 @@
 
     </div>
 
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

@@ -3,19 +3,19 @@
 
 <!-- ══════════════════════════════════════════════════════════
      TASK MANAGEMENT & TRACKING — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     Deep Teal & Warm White Academic Collaboration Board
 ══════════════════════════════════════════════════════════ -->
 
 <section class="section" style="padding-top: var(--sp-12);">
   <div class="section-container">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/projects">Projects</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>Task Management &amp; Progress</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
@@ -24,11 +24,17 @@
           <span class="text-muted" style="font-size: var(--fs-xs);">Project: Campus Placement Assessment Engine</span>
         </div>
         <h1>Task Board &amp; Milestones</h1>
-        <p>Collaborative milestone tracking between mentor and student.</p>
+        <p>Collaborative milestone tracking and deliverable management between mentor and student.</p>
       </div>
       <div class="d-flex gap-2">
-        <a href="/messages" class="btn btn-secondary">Project Chat 💬</a>
-        <button type="button" class="btn btn-primary">+ Add New Task</button>
+        <a href="/messages" class="btn btn-secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Project Chat
+        </a>
+        <button type="button" class="btn btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add New Task
+        </button>
       </div>
     </div>
 
@@ -62,6 +68,7 @@
           <div class="card" style="padding: var(--sp-4);">
             <div class="d-flex justify-between align-center mb-2">
               <span class="badge badge-pending">TASK</span>
+              <span class="text-muted" style="font-size: 0.65rem;">Priority: Normal</span>
             </div>
             <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Swagger / OpenAPI Specs</strong>
             <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
@@ -78,12 +85,12 @@
       <!-- Column 2: In Progress -->
       <div class="card" style="background: var(--clr-bg-subtle);">
         <div class="d-flex justify-between align-center mb-4">
-          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-text);">
+          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-brand);">
             In Progress (1)
           </strong>
         </div>
 
-        <div class="card" style="padding: var(--sp-4); border-left: 2px solid var(--clr-info-text);">
+        <div class="card" style="padding: var(--sp-4); border-left: 3px solid var(--clr-brand);">
           <div class="d-flex justify-between align-center mb-2">
             <span class="badge badge-active">SPRINT</span>
             <span class="text-muted" style="font-size: 0.65rem;">Due: Tomorrow</span>
@@ -94,7 +101,7 @@
           </p>
           <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
             <span>Branch: feature/docker</span>
-            <button class="btn btn-sm btn-subtle">Ready for Review</button>
+            <button type="button" class="btn btn-sm btn-secondary">Ready for Review</button>
           </div>
         </div>
       </div>
@@ -107,7 +114,7 @@
           </strong>
         </div>
 
-        <div class="card" style="padding: var(--sp-4); border-left: 2px solid var(--clr-warning-text);">
+        <div class="card" style="padding: var(--sp-4); border-left: 3px solid var(--clr-warning-text);">
           <div class="d-flex justify-between align-center mb-2">
             <span class="badge badge-pending">NEEDS ALUMNI SIGN-OFF</span>
           </div>
@@ -117,7 +124,7 @@
           </p>
           <div class="d-flex justify-between align-center" style="font-size: 0.7rem;">
             <a href="#" class="link">View PR #4</a>
-            <button class="btn btn-sm btn-primary">Approve PR</button>
+            <button type="button" class="btn btn-sm btn-primary">Approve PR</button>
           </div>
         </div>
       </div>
@@ -131,22 +138,22 @@
         </div>
 
         <div class="d-flex flex-wrap gap-3" style="flex-direction: column;">
-          <div class="card" style="padding: var(--sp-4); opacity: 0.85;">
+          <div class="card" style="padding: var(--sp-4);">
             <div class="d-flex justify-between align-center mb-2">
               <span class="badge badge-approved">VERIFIED</span>
             </div>
             <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Project Scoping &amp; Architecture</strong>
-            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5;">
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: 0;">
               Agreed on Express.js, TypeScript, and Docker container sandbox boundaries.
             </p>
           </div>
 
-          <div class="card" style="padding: var(--sp-4); opacity: 0.85;">
+          <div class="card" style="padding: var(--sp-4);">
             <div class="d-flex justify-between align-center mb-2">
               <span class="badge badge-approved">VERIFIED</span>
             </div>
             <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Initial Repository Boilerplate</strong>
-            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5;">
+            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: 0;">
               Configured ESLint, Prettier, Jest, and GitHub Actions CI runner.
             </p>
           </div>
@@ -159,4 +166,3 @@
 </section>
 
 <%- include('../partials/footer') %>
-

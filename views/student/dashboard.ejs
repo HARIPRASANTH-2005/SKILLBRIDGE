@@ -2,72 +2,69 @@
 <%- include('../partials/navbar') %>
 
 <!-- ══════════════════════════════════════════════════════════
-     STUDENT DASHBOARD — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     STUDENT WORKSPACE DASHBOARD — SkillBridge
+     Modern Professional SaaS Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
 
   <!-- ── Dashboard Sidebar ──────────────────────────────── -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Student navigation">
     <div>
       <div class="sidebar-heading">Workspace</div>
-      <nav class="sidebar-nav" aria-label="Student navigation">
+      <nav class="sidebar-nav">
         <a href="/student/dashboard" class="sidebar-link active">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           Overview
         </a>
         <a href="/projects" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Browse Projects
         </a>
         <a href="/student/tasks" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           Assigned Tasks
         </a>
         <a href="/messages" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Project Messages
         </a>
         <a href="/reviews" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           Feedback &amp; Ratings
         </a>
         <a href="/student/profile" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Student Profile
         </a>
       </nav>
     </div>
 
-    <div>
-      <div class="sidebar-heading">Institutional Info</div>
-      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
-        <div>
-          <strong style="font-size: var(--fs-xs);">Department of CA</strong>
-          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
-            PSG College of Technology<br />MCA 2-Year Program
-          </div>
+    <div style="padding: 0 var(--sp-2);">
+      <div style="background: var(--clr-primary-light); border: 1px solid var(--clr-primary-border); border-radius: var(--radius-sm); padding: var(--sp-3);">
+        <strong style="font-size: var(--fs-xs); color: var(--clr-primary); display: block;">PSG Tech MCA</strong>
+        <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+          Student Collaboration Cell
         </div>
       </div>
     </div>
   </aside>
 
   <!-- ── Main Dashboard Content ─────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
     <div class="breadcrumbs">
       <a href="/">Home</a>
       <span>/</span>
       <a href="/student/dashboard">Student</a>
       <span>/</span>
-      <span>Dashboard</span>
+      <span>Overview</span>
     </div>
 
     <div class="dashboard-header">
       <div>
         <h1>Welcome Back, <%= currentUser && currentUser.fullName ? currentUser.fullName : 'MCA Student' %></h1>
-        <p>Roll No: <strong style="color: var(--clr-text);"><%= currentUser && currentUser.rollNumber ? currentUser.rollNumber : '24MCA018' %></strong> · 1st Year MCA · PSG College of Technology</p>
+        <p>Roll No: <strong style="color: var(--clr-text);"><%= currentUser && currentUser.rollNumber ? currentUser.rollNumber : '24MCA018' %></strong> · PSG College of Technology</p>
       </div>
       <div class="d-flex gap-2">
         <a href="/projects" class="btn btn-primary">Browse Projects →</a>
@@ -100,18 +97,18 @@
     </div>
 
     <!-- Active Proposals & Assigned Tasks -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: var(--sp-6); margin-bottom: var(--sp-8);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: var(--sp-6); margin-bottom: var(--sp-6);">
       
       <!-- Submitted Proposals -->
       <div class="card">
-        <div class="d-flex justify-between align-center mb-4">
-          <h3 style="font-size: var(--fs-lg);">Submitted Proposals</h3>
-          <a href="/projects" class="link text-secondary" style="font-size: var(--fs-xs);">Find More</a>
+        <div class="card-header">
+          <h3 class="card-title">Submitted Proposals</h3>
+          <a href="/projects" class="link" style="font-size: var(--fs-xs);">Find Projects →</a>
         </div>
 
-        <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
-          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
-            <div class="d-flex justify-between align-center mb-2">
+        <div class="d-flex flex-column gap-3">
+          <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-1">
               <strong style="font-size: var(--fs-sm);">Healthcare Inventory Analytics Pipeline</strong>
               <span class="badge badge-pending">UNDER REVIEW</span>
             </div>
@@ -124,8 +121,8 @@
             </div>
           </div>
 
-          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
-            <div class="d-flex justify-between align-center mb-2">
+          <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-1">
               <strong style="font-size: var(--fs-sm);">E-Commerce GraphQL Microservice</strong>
               <span class="badge badge-approved">ACCEPTED</span>
             </div>
@@ -142,14 +139,14 @@
 
       <!-- Current Tasks -->
       <div class="card">
-        <div class="d-flex justify-between align-center mb-4">
-          <h3 style="font-size: var(--fs-lg);">Milestone Tasks</h3>
-          <a href="/student/tasks" class="link text-secondary" style="font-size: var(--fs-xs);">View All (3)</a>
+        <div class="card-header">
+          <h3 class="card-title">Milestone Tasks</h3>
+          <a href="/student/tasks" class="link" style="font-size: var(--fs-xs);">View All (3) →</a>
         </div>
 
-        <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
-          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
-            <div class="d-flex justify-between align-center mb-2">
+        <div class="d-flex flex-column gap-3">
+          <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-1">
               <strong style="font-size: var(--fs-sm);">Setup Docker Compose &amp; Redis Cache Layer</strong>
               <span class="badge badge-active">IN PROGRESS</span>
             </div>
@@ -162,8 +159,8 @@
             </div>
           </div>
 
-          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
-            <div class="d-flex justify-between align-center mb-2">
+          <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+            <div class="d-flex justify-between align-center mb-1">
               <strong style="font-size: var(--fs-sm);">Unit Test Suite for Auth Resolvers</strong>
               <span class="badge badge-pending">PENDING</span>
             </div>
@@ -171,7 +168,7 @@
               80%+ coverage with Jest for user authentication GraphQL mutations.
             </p>
             <div class="d-flex justify-between align-center text-muted" style="font-size: var(--fs-xs);">
-              <span>Due: Nov 4, 2026</span>
+              <span>Due: Nov 20, 2026</span>
               <span class="text-secondary">Milestone 2</span>
             </div>
           </div>
@@ -182,10 +179,10 @@
 
     <!-- Recommended Projects -->
     <div class="card">
-      <div class="d-flex justify-between align-center mb-4">
+      <div class="card-header">
         <div>
-          <h3 style="font-size: var(--fs-lg);">Recommended MCA Projects</h3>
-          <p class="text-secondary" style="font-size: var(--fs-xs);">Curated based on your verified MCA skill tags</p>
+          <h3 class="card-title">Recommended Opportunities</h3>
+          <p class="card-subtitle">Curated based on your verified MCA skill tags</p>
         </div>
         <a href="/projects" class="btn btn-sm btn-secondary">Explore All Projects</a>
       </div>
@@ -214,7 +211,7 @@
               </td>
               <td>4 Weeks</td>
               <td>
-                <a href="/projects/1" class="btn btn-sm btn-primary">View &amp; Apply</a>
+                <a href="/projects" class="btn btn-sm btn-primary">View &amp; Apply</a>
               </td>
             </tr>
             <tr>
@@ -229,7 +226,7 @@
               </td>
               <td>3 Weeks</td>
               <td>
-                <a href="/projects/2" class="btn btn-sm btn-primary">View &amp; Apply</a>
+                <a href="/projects" class="btn btn-sm btn-primary">View &amp; Apply</a>
               </td>
             </tr>
             <tr>
@@ -244,7 +241,7 @@
               </td>
               <td>6 Weeks</td>
               <td>
-                <a href="/projects/3" class="btn btn-sm btn-primary">View &amp; Apply</a>
+                <a href="/projects" class="btn btn-sm btn-primary">View &amp; Apply</a>
               </td>
             </tr>
           </tbody>
@@ -252,8 +249,7 @@
       </div>
     </div>
 
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

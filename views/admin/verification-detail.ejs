@@ -3,12 +3,10 @@
 
 <!-- ══════════════════════════════════════════════════════════
      APPLICANT VERIFICATION DETAIL — SkillBridge Admin
-     Charcoal-Black & Slate-Gray Monochrome Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
 
-  <!-- ── Sidebar ────────────────────────────────────────── -->
   <aside class="sidebar">
     <div>
       <div class="sidebar-heading">Administration</div>
@@ -27,31 +25,30 @@
         </a>
         <a href="/admin/projects" class="sidebar-link">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          Moderation &amp; Projects
+          Projects &amp; Moderation
         </a>
       </nav>
     </div>
   </aside>
 
-  <!-- ── Main Content ───────────────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/admin/dashboard">Admin</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/admin/verifications">Verifications</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span><%= applicant.fullName %></span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
         <div class="d-flex align-center gap-2 mb-2">
           <%- include('../partials/trust-badge', { status: applicant.status }) %>
           <span class="tag"><%= applicant.role === 'student' ? 'Current MCA Student' : 'MCA Alumni' %></span>
-          <span class="text-muted" style="font-size: var(--fs-xs);">Applied <%= new Date(applicant.createdAt).toLocaleDateString() %></span>
+          <span class="text-muted" style="font-size: var(--fs-xs);">Applied <%= new Date(applicant.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></span>
         </div>
         <h1 style="font-size: var(--fs-2xl);"><%= applicant.fullName %></h1>
         <p>Institutional Verification Review &amp; Academic Identity Audit</p>
@@ -62,33 +59,32 @@
     </div>
 
     <% if (typeof error !== 'undefined' && error) { %>
-      <div class="doc-info-box mb-6" style="border-color: var(--clr-danger-border); background: var(--clr-danger-bg); color: var(--clr-danger-text);">
-        <span>✕</span>
-        <div>
-          <strong>Action Required:</strong>
-          <p style="font-size: var(--fs-xs); margin: 0;"><%= error %></p>
-        </div>
+      <div class="flash flash-error mb-6">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <div><strong>Action Required:</strong> <%= error %></div>
       </div>
     <% } %>
 
     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--sp-6);">
 
-      <!-- Left Column: Details & Document Preview -->
+      <!-- Left Column: Details & Document -->
       <div>
 
         <!-- Academic & Identity Profile -->
         <div class="card mb-6">
-          <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">Academic &amp; Contact Credentials</h2>
+          <div class="card-header">
+            <h2 class="card-title">Academic &amp; Contact Credentials</h2>
+          </div>
 
           <div class="form-row mb-4">
             <div>
-              <span class="text-muted" style="font-size: var(--fs-xs);">MCA Roll Number:</span>
+              <span class="text-muted" style="font-size: var(--fs-xs);">MCA Roll Number</span>
               <div style="font-size: var(--fs-base); font-weight: 700; color: var(--clr-text); font-family: monospace;">
                 <%= applicant.rollNumber %>
               </div>
             </div>
             <div>
-              <span class="text-muted" style="font-size: var(--fs-xs);">Institutional Email:</span>
+              <span class="text-muted" style="font-size: var(--fs-xs);">Institutional Email</span>
               <div style="font-size: var(--fs-sm); font-weight: 500; color: var(--clr-text);">
                 <%= applicant.email %>
               </div>
@@ -97,13 +93,13 @@
 
           <div class="form-row mb-4">
             <div>
-              <span class="text-muted" style="font-size: var(--fs-xs);">Contact Phone:</span>
+              <span class="text-muted" style="font-size: var(--fs-xs);">Contact Phone</span>
               <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                 <%= applicant.mobile || 'Not provided' %>
               </div>
             </div>
             <div>
-              <span class="text-muted" style="font-size: var(--fs-xs);">Admission Batch:</span>
+              <span class="text-muted" style="font-size: var(--fs-xs);">Admission Batch</span>
               <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                 <%= applicant.admissionBatch || '—' %>
               </div>
@@ -113,13 +109,13 @@
           <% if (applicant.role === 'student') { %>
             <div class="form-row">
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">Current Year:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Current Year</span>
                 <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                   <%= applicant.currentYear === '1' ? 'First Year (MCA I)' : (applicant.currentYear === '2' ? 'Second Year (MCA II)' : applicant.currentYear) %>
                 </div>
               </div>
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">Expected Graduation:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Expected Graduation</span>
                 <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                   <%= applicant.expectedGradYear || '—' %>
                 </div>
@@ -128,13 +124,13 @@
           <% } else { %>
             <div class="form-row mb-4">
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">Graduation Year:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Graduation Year</span>
                 <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                   Class of <%= applicant.graduationYear || '—' %>
                 </div>
               </div>
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">Current Profession:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Current Profession</span>
                 <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                   <%= applicant.profession || '—' %>
                 </div>
@@ -142,13 +138,13 @@
             </div>
             <div class="form-row">
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">Organization / Company:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">Organization / Company</span>
                 <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                   <%= applicant.company || '—' %>
                 </div>
               </div>
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">LinkedIn / Portfolio:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">LinkedIn / Portfolio</span>
                 <div style="font-size: var(--fs-sm); color: var(--clr-text);">
                   <% if (applicant.linkedin) { %>
                     <a href="<%= applicant.linkedin %>" target="_blank" rel="noopener" class="link">View Profile ↗</a>
@@ -163,50 +159,48 @@
 
         <!-- Document Verification Box -->
         <div class="card mb-6">
-          <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Uploaded Verification Document</h2>
+          <div class="card-header">
+            <h2 class="card-title">Uploaded Verification Document</h2>
+          </div>
 
           <% if (applicant.documentFilename) { %>
             <div class="d-flex justify-between align-center flex-wrap gap-4" style="background: var(--clr-bg-subtle); padding: var(--sp-4); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
               <div class="d-flex align-center gap-3">
-                <span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border);">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                  </svg>
-                </span>
+                <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--clr-surface); border: 1px solid var(--clr-border); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
                 <div>
                   <strong style="font-size: var(--fs-sm); color: var(--clr-text);">
                     <%= applicant.documentOriginalName || applicant.documentFilename %>
                   </strong>
                   <div class="text-muted" style="font-size: var(--fs-xs);">
-                    Stored in private document vault · <%= applicant.documentMimeType || 'Document' %>
+                    Private Document Vault · <%= applicant.documentMimeType || 'Document' %>
                     <% if (applicant.documentSizeBytes) { %>
                       · <%= (applicant.documentSizeBytes / 1024 / 1024).toFixed(2) %> MB
                     <% } %>
                   </div>
                 </div>
               </div>
-
-              <div>
-                <a href="/admin/documents/<%= applicant.documentFilename %>" target="_blank" rel="noopener" class="btn btn-secondary">
-                  Open Secure Document ↗
-                </a>
-              </div>
+              <a href="/admin/documents/<%= applicant.documentFilename %>" target="_blank" rel="noopener" class="btn btn-secondary">
+                Open Secure Document ↗
+              </a>
             </div>
           <% } else { %>
-            <div class="doc-info-box">
-              <span>ℹ</span>
+            <div class="flash flash-warning">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
               <div>
                 <strong>No Document Uploaded</strong>
-                <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">This applicant registered without attaching an ID document.</p>
+                <span style="display:block; font-size: var(--fs-xs);">This applicant registered without attaching an ID document.</span>
               </div>
             </div>
           <% } %>
         </div>
 
-        <!-- Verification History / Audit Trail -->
+        <!-- Audit Trail -->
         <div class="card">
-          <h2 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Audit Trail &amp; Verification History</h2>
+          <div class="card-header">
+            <h2 class="card-title">Audit Trail &amp; History</h2>
+          </div>
 
           <% if (applicant.verificationHistory && applicant.verificationHistory.length > 0) { %>
             <div class="table-responsive">
@@ -222,7 +216,7 @@
                 <tbody>
                   <% applicant.verificationHistory.forEach(h => { %>
                     <tr>
-                      <td style="font-size: var(--fs-xs); white-space: nowrap;"><%= new Date(h.timestamp).toLocaleString() %></td>
+                      <td style="font-size: var(--fs-xs); white-space: nowrap;"><%= new Date(h.timestamp).toLocaleString('en-IN') %></td>
                       <td>
                         <%- include('../partials/trust-badge', { status: h.decision }) %>
                       </td>
@@ -234,7 +228,7 @@
               </table>
             </div>
           <% } else { %>
-            <p class="text-secondary" style="font-size: var(--fs-sm); margin: 0;">No prior audit decisions recorded for this account. Initial review pending.</p>
+            <p class="text-secondary" style="font-size: var(--fs-sm); margin: 0;">No prior audit decisions recorded. Initial review pending.</p>
           <% } %>
         </div>
 
@@ -243,24 +237,27 @@
       <!-- Right Column: Verification Action Panel -->
       <div>
         <div class="card mb-6">
-          <h3 style="font-size: var(--fs-base); font-weight: 700; margin-bottom: var(--sp-3);">Verification Decision</h3>
+          <div class="card-header">
+            <h3 class="card-title" style="font-size: var(--fs-base);">Verification Decision</h3>
+          </div>
           <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
-            Approving this account grants verified status, allowing the member to post projects (alumni) or apply with technical proposals (student).
+            Approving grants verified status — alumni can post projects, students can apply with technical proposals.
           </p>
 
-          <!-- Form 1: Approve -->
+          <!-- Approve -->
           <form action="/admin/verifications/<%= applicant._id %>/approve" method="POST" class="mb-4">
             <button type="submit" class="btn btn-primary w-100" style="padding: 0.75rem;">
-              ✓ Approve &amp; Verify Account
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Approve &amp; Verify Account
             </button>
           </form>
 
           <hr style="border: none; border-top: 1px solid var(--clr-border-subtle); margin: var(--sp-5) 0;" />
 
-          <!-- Form 2: Reject with Mandatory Reason -->
+          <!-- Reject -->
           <h4 style="font-size: var(--fs-sm); font-weight: 600; margin-bottom: var(--sp-2); color: var(--clr-danger-text);">Decline Verification</h4>
           <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
-            Provide a clear institutional explanation for rejection (e.g., mismatched roll number, unreadable document). This reason will be recorded and shown to the applicant.
+            Provide a clear institutional reason. This will be recorded in the audit trail and shown to the applicant.
           </p>
 
           <form action="/admin/verifications/<%= applicant._id %>/reject" method="POST">
@@ -279,26 +276,39 @@
             </div>
 
             <button type="submit" class="btn btn-danger w-100">
-              ✕ Decline Application
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              Decline Application
             </button>
           </form>
         </div>
 
+        <!-- Checklist -->
         <div class="card">
-          <h4 style="font-size: var(--fs-sm); font-weight: 600; margin-bottom: var(--sp-2);">Verification Checklist</h4>
-          <ul class="role-features" style="font-size: var(--fs-xs);">
-            <li><span>✓</span> Roll format matches PSG Tech MCA schema (e.g., 24MCA001)</li>
-            <li><span>✓</span> Name matches ID card or provisional degree certificate</li>
-            <li><span>✓</span> Institutional email domain verified</li>
-            <li><span>✓</span> Uploaded document is legible and unexpired</li>
+          <h4 style="font-size: var(--fs-sm); font-weight: 600; margin-bottom: var(--sp-3);">Verification Checklist</h4>
+          <ul style="display: flex; flex-direction: column; gap: var(--sp-2);">
+            <li style="font-size: var(--fs-xs); display: flex; align-items: flex-start; gap: var(--sp-2); color: var(--clr-text-secondary);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Roll format matches PSG Tech MCA schema (e.g., 24MCA001)
+            </li>
+            <li style="font-size: var(--fs-xs); display: flex; align-items: flex-start; gap: var(--sp-2); color: var(--clr-text-secondary);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Name matches ID card or provisional degree certificate
+            </li>
+            <li style="font-size: var(--fs-xs); display: flex; align-items: flex-start; gap: var(--sp-2); color: var(--clr-text-secondary);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Institutional email domain verified
+            </li>
+            <li style="font-size: var(--fs-xs); display: flex; align-items: flex-start; gap: var(--sp-2); color: var(--clr-text-secondary);">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              Uploaded document is legible and unexpired
+            </li>
           </ul>
         </div>
       </div>
 
     </div>
 
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

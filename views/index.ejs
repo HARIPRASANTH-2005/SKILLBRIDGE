@@ -41,14 +41,14 @@
           Explore Opportunities
         </a>
       <% } else if (currentUser.role === 'student') { %>
-        <a href="/student/dashboard" class="btn btn-primary btn-lg" id="heroDashboardBtn">
+        <a href="/student/dashboard" class="btn btn-primary btn-lg" id="heroStudentDashboardBtn">
           Go to Dashboard →
         </a>
-        <a href="/projects" class="btn btn-secondary btn-lg" id="heroBrowseBtn">
+        <a href="/projects" class="btn btn-secondary btn-lg" id="heroBrowseProjectsBtn">
           Browse Projects
         </a>
       <% } else if (currentUser.role === 'alumni') { %>
-        <a href="/alumni/dashboard" class="btn btn-primary btn-lg" id="heroDashboardBtn">
+        <a href="/alumni/dashboard" class="btn btn-primary btn-lg" id="heroAlumniDashboardBtn">
           Go to Dashboard →
         </a>
         <a href="/projects/create" class="btn btn-secondary btn-lg" id="heroPostBtn">
@@ -295,10 +295,10 @@
         <a href="/alumni/register" class="btn btn-outline-white btn-lg" id="ctaAlumniBtn">MCA Alumni</a>
         <a href="/login" class="btn btn-ghost-white btn-lg" id="ctaLoginBtn">Sign In to Account →</a>
       <% } else if (currentUser.role === 'student') { %>
-        <a href="/student/dashboard" class="btn btn-white btn-lg" id="ctaDashBtn">Go to Dashboard →</a>
+        <a href="/student/dashboard" class="btn btn-white btn-lg" id="ctaStudentDashBtn">Go to Dashboard →</a>
         <a href="/projects" class="btn btn-outline-white btn-lg">Browse Projects</a>
       <% } else if (currentUser.role === 'alumni') { %>
-        <a href="/alumni/dashboard" class="btn btn-white btn-lg" id="ctaDashBtn">Go to Dashboard →</a>
+        <a href="/alumni/dashboard" class="btn btn-white btn-lg" id="ctaAlumniDashBtn">Go to Dashboard →</a>
         <a href="/projects/create" class="btn btn-outline-white btn-lg">Post a Project</a>
       <% } else { %>
         <a href="/admin/dashboard" class="btn btn-white btn-lg" id="ctaAdminBtn">Admin Console →</a>

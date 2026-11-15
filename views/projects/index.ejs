@@ -3,17 +3,17 @@
 
 <!-- ══════════════════════════════════════════════════════════
      EXPLORE OPPORTUNITIES — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     Deep Teal & Warm White Academic SaaS Catalog
 ══════════════════════════════════════════════════════════ -->
 
 <section class="section" style="padding-top: var(--sp-12);">
   <div class="section-container">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>Explore Opportunities</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
@@ -22,7 +22,10 @@
       </div>
       <div>
         <% if (currentUser && currentUser.role === 'alumni') { %>
-          <a href="/projects/create" class="btn btn-primary">+ Post New Opportunity</a>
+          <a href="/projects/create" class="btn btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Post Opportunity
+          </a>
         <% } else if (!currentUser) { %>
           <a href="/student/register" class="btn btn-primary">Join as Student to Apply</a>
         <% } %>
@@ -37,12 +40,13 @@
             type="text"
             name="search"
             class="form-control"
-            placeholder="Search title, technical stack, or project domain..."
+            placeholder="Search by title, technical stack, or domain..."
             value="<%= typeof search !== 'undefined' ? search : '' %>"
+            aria-label="Search opportunities"
           />
         </div>
         <div style="flex: 1; min-width: 170px;">
-          <select name="category" class="form-control">
+          <select name="category" class="form-control" aria-label="Filter by category">
             <option value="">All Categories</option>
             <option value="web" <%= category === 'web' ? 'selected' : '' %>>Full-Stack Web</option>
             <option value="cloud" <%= category === 'cloud' ? 'selected' : '' %>>Cloud &amp; DevOps</option>
@@ -53,7 +57,7 @@
           </select>
         </div>
         <div style="flex: 1; min-width: 150px;">
-          <select name="sort" class="form-control">
+          <select name="sort" class="form-control" aria-label="Sort opportunities">
             <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>Newest First</option>
             <option value="deadline" <%= sort === 'deadline' ? 'selected' : '' %>>Closing Soon</option>
           </select>
@@ -69,9 +73,9 @@
 
     <!-- ── State 1: Database Unavailable (HTTP 503) ────────── -->
     <% if (typeof dbUnavailable !== 'undefined' && dbUnavailable) { %>
-      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6); border: 1px solid var(--clr-border);">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
+      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="8" x2="12" y2="12"></line>
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -79,7 +83,7 @@
         </div>
         <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Service Temporarily Unavailable</h2>
         <p class="text-secondary" style="max-width: 520px; margin: 0 auto var(--sp-6); line-height: 1.6;">
-          Opportunities are temporarily unavailable. The platform administrator has been notified. Try again in a few moments.
+          Opportunities are temporarily unavailable. The platform administrator has been notified. Please try again shortly.
         </p>
         <a href="/projects" class="btn btn-secondary">Retry Loading Opportunities</a>
       </div>
@@ -87,15 +91,15 @@
     <!-- ── State 2: Empty Filter Results ───────────────────── -->
     <% } else if (projects.length === 0 && (search || category || skill)) { %>
       <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </div>
-        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">No Opportunities Match Your Criteria</h2>
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">No Opportunities Match Criteria</h2>
         <p class="text-secondary" style="max-width: 480px; margin: 0 auto var(--sp-6); line-height: 1.6;">
-          No opportunities match your current filters. Try broadening your search keywords or clearing active category filters.
+          No projects match your current filters. Try broadening your keywords or clearing selected category filters.
         </p>
         <a href="/projects" class="btn btn-secondary">Clear All Filters</a>
       </div>
@@ -103,15 +107,15 @@
     <!-- ── State 3: Empty Open Opportunities List ──────────── -->
     <% } else if (projects.length === 0) { %>
       <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
             <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
           </svg>
         </div>
         <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">No Opportunities Currently Open</h2>
         <p class="text-secondary" style="max-width: 500px; margin: 0 auto var(--sp-6); line-height: 1.6;">
-          No opportunities currently open. Verified MCA alumni post new projects regularly — check back soon or set up an alert.
+          Verified MCA alumni post new projects regularly. Check back soon or register as an alumni mentor to create the first opportunity.
         </p>
         <% if (currentUser && currentUser.role === 'alumni') { %>
           <a href="/projects/create" class="btn btn-primary">Post the First Opportunity</a>
@@ -164,7 +168,10 @@
                     <%= p.creatorCompany ? '· ' + p.creatorCompany : '' %>
                   </div>
                 </div>
-                <a href="/projects/<%= p._id %>" class="btn btn-sm btn-primary">View &amp; Apply →</a>
+                <a href="/projects/<%= p._id %>" class="btn btn-sm btn-primary">
+                  View &amp; Apply
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
               </div>
             </div>
           </div>

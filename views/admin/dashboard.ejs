@@ -2,68 +2,65 @@
 <%- include('../partials/navbar') %>
 
 <!-- ══════════════════════════════════════════════════════════
-     ADMIN DASHBOARD — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     ADMIN CONSOLE DASHBOARD — SkillBridge
+     Modern Professional SaaS Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
 
   <!-- ── Sidebar ────────────────────────────────────────── -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Admin navigation">
     <div>
       <div class="sidebar-heading">Administration</div>
-      <nav class="sidebar-nav" aria-label="Admin navigation">
+      <nav class="sidebar-nav">
         <a href="/admin/dashboard" class="sidebar-link active">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           Overview
         </a>
         <a href="/admin/verifications" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Verifications Queue
-          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Verifications
+          <span class="sidebar-badge">3</span>
         </a>
         <a href="/admin/users" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           User Directory
         </a>
         <a href="/admin/projects" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
           Moderation &amp; Projects
         </a>
       </nav>
     </div>
 
-    <div>
-      <div class="sidebar-heading">System Status</div>
-      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
-        <div>
-          <strong style="font-size: var(--fs-xs);">Department Admin Cell</strong>
-          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
-            PSG Tech MCA Platform<br />Production Node Active
-          </div>
+    <div style="padding: 0 var(--sp-2);">
+      <div style="background: var(--clr-primary-light); border: 1px solid var(--clr-primary-border); border-radius: var(--radius-sm); padding: var(--sp-3);">
+        <strong style="font-size: var(--fs-xs); color: var(--clr-primary); display: block;">Department Cell</strong>
+        <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+          Institutional Oversight
         </div>
       </div>
     </div>
   </aside>
 
   <!-- ── Main Admin Content ─────────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
     <div class="breadcrumbs">
       <a href="/">Home</a>
       <span>/</span>
       <a href="/admin/dashboard">Admin</a>
       <span>/</span>
-      <span>Dashboard</span>
+      <span>Overview</span>
     </div>
 
     <div class="dashboard-header">
       <div>
-        <h1>Department Administration Overview</h1>
+        <h1>Administration Overview</h1>
         <p>Institutional oversight for MCA student credentials, alumni verifications, and project integrity.</p>
       </div>
       <div>
-        <a href="/admin/verifications" class="btn btn-primary">Review Verification Queue (3) →</a>
+        <a href="/admin/verifications" class="btn btn-primary">Review Queue (3) →</a>
       </div>
     </div>
 
@@ -92,11 +89,11 @@
     </div>
 
     <!-- Pending Verification Table Preview -->
-    <div class="card mb-8">
-      <div class="d-flex justify-between align-center mb-4">
+    <div class="card">
+      <div class="card-header">
         <div>
-          <h3 style="font-size: var(--fs-lg);">Priority Verification Requests</h3>
-          <p class="text-secondary" style="font-size: var(--fs-xs);">Review institutional ID cards and degree provisional certificates</p>
+          <h3 class="card-title">Priority Verification Requests</h3>
+          <p class="card-subtitle">Review institutional ID cards and degree provisional certificates</p>
         </div>
         <a href="/admin/verifications" class="btn btn-sm btn-secondary">Open Full Queue</a>
       </div>
@@ -127,8 +124,7 @@
               <td>Today, 09:15 AM</td>
               <td>
                 <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
-                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
+                  <a href="/admin/verifications" class="btn btn-sm btn-primary">Inspect &amp; Clear</a>
                 </div>
               </td>
             </tr>
@@ -138,33 +134,31 @@
                 <div class="text-muted" style="font-size: var(--fs-xs);">venkatesh.n@gmail.com</div>
               </td>
               <td><span class="tag">Alumni</span></td>
-              <td>16MCA014 (Class of 2019)</td>
+              <td>18MCA045</td>
               <td>
-                <span class="text-secondary" style="font-size: var(--fs-xs);">PSG_MCA_Provisional.pdf</span>
+                <span class="text-secondary" style="font-size: var(--fs-xs);">PSG_Provisional_Certificate.pdf</span>
               </td>
-              <td>Yesterday</td>
+              <td>Yesterday, 04:30 PM</td>
               <td>
                 <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
-                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
+                  <a href="/admin/verifications" class="btn btn-sm btn-primary">Inspect &amp; Clear</a>
                 </div>
               </td>
             </tr>
             <tr>
               <td>
-                <strong>Prashanth Balaji</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">prashanth.b@psgtech.ac.in</div>
+                <strong>Siddharth Ramachandran</strong>
+                <div class="text-muted" style="font-size: var(--fs-xs);">siddharth.r@psgtech.ac.in</div>
               </td>
               <td><span class="tag">Student</span></td>
-              <td>24MCA042</td>
+              <td>23MCA012</td>
               <td>
-                <span class="text-secondary" style="font-size: var(--fs-xs);">Bonafide_Certificate.pdf</span>
+                <span class="text-secondary" style="font-size: var(--fs-xs);">PSG_Tech_ID_Card.png</span>
               </td>
-              <td>2 days ago</td>
+              <td>Nov 1, 2026</td>
               <td>
                 <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
-                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
+                  <a href="/admin/verifications" class="btn btn-sm btn-primary">Inspect &amp; Clear</a>
                 </div>
               </td>
             </tr>
@@ -173,41 +167,7 @@
       </div>
     </div>
 
-    <!-- Quick Navigation to Admin Modules -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-6);">
-      
-      <div class="card">
-        <div class="d-flex align-center gap-3 mb-3">
-          <div style="font-size: 1.5rem;">👥</div>
-          <div>
-            <h3 style="font-size: var(--fs-base);">User Management</h3>
-            <div class="text-muted" style="font-size: var(--fs-xs);">210 Registered Institutional Users</div>
-          </div>
-        </div>
-        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
-          Manage accounts, view roll number records, inspect submitted documents, and toggle user active/suspended states.
-        </p>
-        <a href="/admin/users" class="btn btn-sm btn-secondary w-100">Access User Directory →</a>
-      </div>
-
-      <div class="card">
-        <div class="d-flex align-center gap-3 mb-3">
-          <div style="font-size: 1.5rem;">📁</div>
-          <div>
-            <h3 style="font-size: var(--fs-base);">Project Oversight</h3>
-            <div class="text-muted" style="font-size: var(--fs-xs);">48 Published Projects</div>
-          </div>
-        </div>
-        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
-          Moderate alumni postings, verify compliance with academic guidelines, and monitor student completion progress.
-        </p>
-        <a href="/admin/projects" class="btn btn-sm btn-secondary w-100">Manage Projects →</a>
-      </div>
-
-    </div>
-
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

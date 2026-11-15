@@ -59,7 +59,7 @@
     </aside>
 
     <!-- ── Right panel (form) ─────────────────────────────── -->
-    <main class="auth-form-panel">
+    <div class="auth-form-panel">
       <div class="auth-form-card">
 
         <!-- Progress steps -->
@@ -92,7 +92,9 @@
 
         <!-- Admin approval notice -->
         <div class="approval-notice" role="note" aria-label="Approval notice">
-          <span class="notice-icon">⏳</span>
+          <span class="notice-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </span>
           <div>
             <strong>Admin Approval Required</strong>
             <p>After you submit this form, our admin team will review your details and uploaded document. You will be able to log in only after your account is approved. This usually takes 1–2 working days.</p>
@@ -435,7 +437,7 @@
         </form><!-- end #studentRegForm -->
 
       </div><!-- end .auth-form-card -->
-    </main><!-- end .auth-form-panel -->
+    </div><!-- end .auth-form-panel -->
 
   </div><!-- end .auth-layout -->
 </section>
