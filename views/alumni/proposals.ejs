@@ -1,3 +1,4 @@
+
 <%- include('../partials/head', { title: title }) %>
 <%- include('../partials/navbar') %>
 
@@ -7,43 +8,91 @@
 
 <div class="dashboard-layout">
 
-  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <!-- Sidebar -->
   <aside class="sidebar">
     <div>
       <div class="sidebar-heading">Alumni Portal</div>
+
       <nav class="sidebar-nav" aria-label="Alumni navigation">
+
         <a href="/alumni/dashboard" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
           Overview
         </a>
+
         <a href="/projects/create" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
           Post Project
         </a>
+
         <a href="/alumni/proposals" class="sidebar-link active">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
           Review Proposals
+
           <% if (typeof proposals !== 'undefined' && proposals && proposals.length > 0) { %>
             <span class="sidebar-badge"><%= proposals.length %></span>
           <% } %>
         </a>
+
         <a href="/messages" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
           Mentee Messages
         </a>
+
         <a href="/reviews" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
           Student Endorsements
         </a>
+
         <a href="/alumni/profile" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
           Alumni Profile
         </a>
+
       </nav>
     </div>
   </aside>
 
-  <!-- ── Main Content ───────────────────────────────────── -->
+  <!-- Main Content -->
   <div class="dashboard-main">
 
     <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -57,141 +106,357 @@
     <div class="dashboard-header">
       <div>
         <h1>Student Proposals</h1>
-        <p>Review applicant proposals for your posted projects and select qualified student collaborators.</p>
+        <p>
+          Review applicant proposals for your posted projects and select
+          qualified student collaborators.
+        </p>
       </div>
+
       <div>
         <a href="/projects/create" class="btn btn-primary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
           Post Another Project
         </a>
       </div>
     </div>
 
-    <!-- Flash messages -->
+    <!-- Success messages -->
     <% if (typeof message !== 'undefined' && message === 'accepted') { %>
       <div class="flash flash-success mb-6">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-        <div><strong>Proposal Accepted.</strong> The student has been notified and collaboration is now active.</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <div>
+          <strong>Proposal Accepted.</strong>
+          The student has been notified and collaboration is now active.
+        </div>
       </div>
+
     <% } else if (typeof message !== 'undefined' && message === 'declined') { %>
       <div class="flash flash-warning mb-6">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div>Proposal declined. The student has been notified.</div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div>
+          Proposal declined. The student has been notified.
+        </div>
       </div>
     <% } %>
 
-    <!-- Proposal Cards List -->
+    <!-- Error message -->
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="flash flash-warning mb-6">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div><%= error %></div>
+      </div>
+    <% } %>
+
+    <!-- Proposal Cards -->
     <% if (typeof proposals === 'undefined' || !proposals || proposals.length === 0) { %>
-      <!-- Empty state -->
-      <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+
+      <div class="card text-center"
+        style="padding: var(--sp-12) var(--sp-6);">
+
+        <div style="
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          background: var(--clr-bg-subtle);
+          border: 1px solid var(--clr-border);
+          margin-bottom: var(--sp-4);
+        ">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="var(--clr-text-muted)" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
         </div>
-        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">No Proposals Yet</h2>
-        <p class="text-secondary" style="max-width: 460px; margin: 0 auto var(--sp-6);">
-          Once verified students apply to your posted projects, their technical proposals will appear here for your review.
+
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">
+          No Proposals Yet
+        </h2>
+
+        <p class="text-secondary"
+          style="max-width: 460px; margin: 0 auto var(--sp-6);">
+          Once verified students apply to your posted projects, their
+          technical proposals will appear here for your review.
         </p>
-        <a href="/projects/create" class="btn btn-primary">Post a New Project</a>
+
+        <a href="/projects/create" class="btn btn-primary">
+          Post a New Project
+        </a>
       </div>
 
     <% } else { %>
-      <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+
+      <div class="d-flex flex-wrap gap-6"
+        style="flex-direction: column;">
+
         <% proposals.forEach(proposal => { %>
+
           <div class="card">
+
+            <!-- Applicant information -->
             <div class="d-flex justify-between align-center flex-wrap gap-2 mb-3">
+
               <div>
-                <% const statusBadge = proposal.status === 'accepted' ? 'badge-approved' : (proposal.status === 'declined' ? 'badge-rejected' : 'badge-pending'); %>
-                <span class="badge <%= statusBadge %>"><%= (proposal.status || 'pending').toUpperCase() %></span>
-                <h2 style="font-size: var(--fs-xl); margin-top: var(--sp-1);"><%= proposal.studentName || 'Student Applicant' %></h2>
+                <% const statusBadge =
+                  proposal.status === 'accepted'
+                    ? 'badge-approved'
+                    : proposal.status === 'declined'
+                      ? 'badge-rejected'
+                      : 'badge-pending';
+                %>
+
+                <span class="badge <%= statusBadge %>">
+                  <%= (proposal.status || 'pending').toUpperCase() %>
+                </span>
+
+                <h2 style="font-size: var(--fs-xl); margin-top: var(--sp-1);">
+                  <%= proposal.studentName || 'Student Applicant' %>
+                </h2>
+
                 <div class="text-secondary" style="font-size: var(--fs-xs);">
-                  <% if (proposal.rollNumber) { %>Roll No: <strong style="color: var(--clr-text);"><%= proposal.rollNumber %></strong> · <% } %>
-                  <% if (proposal.currentYear) { %><%= proposal.currentYear === '1' ? '1st' : '2nd' %> Year MCA · PSG Tech<% } %>
+                  <% if (proposal.studentRoll) { %>
+                    Roll No:
+                    <strong style="color: var(--clr-text);">
+                      <%= proposal.studentRoll %>
+                    </strong>
+                    ·
+                  <% } %>
+
+                  <% if (proposal.currentYear) { %>
+                    <%= proposal.currentYear === '1' ? '1st' : '2nd' %>
+                    Year MCA · PSG Tech
+                  <% } %>
                 </div>
               </div>
+
               <div class="text-muted" style="font-size: var(--fs-xs);">
-                Submitted: <%= proposal.createdAt ? new Date(proposal.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently' %>
+                Submitted:
+                <%= proposal.submittedAt
+                  ? new Date(proposal.submittedAt).toLocaleDateString(
+                      'en-IN',
+                      { day: 'numeric', month: 'short', year: 'numeric' }
+                    )
+                  : 'Recently'
+                %>
               </div>
+
             </div>
 
-            <!-- Applied project context -->
-            <div style="background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4); margin-bottom: var(--sp-4);">
-              <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Applied Project</div>
-              <strong style="color: var(--clr-text); font-size: var(--fs-base);"><%= proposal.projectTitle || 'Project' %></strong>
-              <% if (proposal.skills && proposal.skills.length > 0) { %>
-                <div class="text-secondary" style="font-size: var(--fs-xs); margin-top: 2px;">
-                  Stack: <%= proposal.skills.slice(0, 4).join(' · ') %>
+            <!-- Applied project -->
+            <div style="
+              background: var(--clr-bg-subtle);
+              border: 1px solid var(--clr-border);
+              border-radius: var(--radius-md);
+              padding: var(--sp-4);
+              margin-bottom: var(--sp-4);
+            ">
+
+              <div class="text-muted" style="
+                font-size: var(--fs-xs);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin-bottom: 4px;
+              ">
+                Applied Project
+              </div>
+
+              <strong style="color: var(--clr-text); font-size: var(--fs-base);">
+                <%= proposal.projectTitle || 'Project' %>
+              </strong>
+
+              <% if (proposal.projectSkills && proposal.projectSkills.length > 0) { %>
+                <div class="text-secondary"
+                  style="font-size: var(--fs-xs); margin-top: 2px;">
+                  Stack:
+                  <%= proposal.projectSkills.slice(0, 4).join(' · ') %>
                 </div>
               <% } %>
+
             </div>
 
-            <!-- Pitch -->
+            <!-- Technical proposal -->
             <div class="mb-4">
-              <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Technical Proposal &amp; Approach</div>
-              <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.7; background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4); margin: 0;">
+
+              <div class="text-muted" style="
+                font-size: var(--fs-xs);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                margin-bottom: var(--sp-2);
+              ">
+                Technical Proposal &amp; Approach
+              </div>
+
+              <p class="text-secondary" style="
+                font-size: var(--fs-sm);
+                line-height: 1.7;
+                background: var(--clr-bg-subtle);
+                border: 1px solid var(--clr-border);
+                border-radius: var(--radius-md);
+                padding: var(--sp-4);
+                margin: 0;
+              ">
                 "<%= proposal.pitch || 'No pitch provided.' %>"
               </p>
+
             </div>
 
             <!-- Availability -->
             <% if (proposal.hoursPerWeek || proposal.targetWeeks) { %>
-              <div class="d-flex gap-6 mb-4" style="font-size: var(--fs-xs);">
+
+              <div class="d-flex gap-6 mb-4"
+                style="font-size: var(--fs-xs);">
+
                 <% if (proposal.hoursPerWeek) { %>
                   <div>
                     <span class="text-muted">Weekly Availability:</span>
-                    <strong style="color: var(--clr-text); margin-left: 4px;"><%= proposal.hoursPerWeek %> hrs/week</strong>
+                    <strong style="color: var(--clr-text); margin-left: 4px;">
+                      <%= proposal.hoursPerWeek %> hrs/week
+                    </strong>
                   </div>
                 <% } %>
+
                 <% if (proposal.targetWeeks) { %>
                   <div>
                     <span class="text-muted">Estimated Duration:</span>
-                    <strong style="color: var(--clr-text); margin-left: 4px;"><%= proposal.targetWeeks %> weeks</strong>
+                    <strong style="color: var(--clr-text); margin-left: 4px;">
+                      <%= proposal.targetWeeks %> weeks
+                    </strong>
                   </div>
                 <% } %>
+
                 <% if (proposal.repoUrl) { %>
                   <div>
-                    <a href="<%= proposal.repoUrl %>" target="_blank" rel="noopener" class="link" style="font-size: var(--fs-xs);">View Code Sample ↗</a>
+                    <a href="<%= proposal.repoUrl %>"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="link"
+                      style="font-size: var(--fs-xs);">
+                      View Code Sample ↗
+                    </a>
                   </div>
                 <% } %>
+
               </div>
+
             <% } %>
 
-            <!-- Actions -->
-            <div class="d-flex justify-between align-center flex-wrap gap-4" style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-4);">
+            <!-- Skills and actions -->
+            <div class="d-flex justify-between align-center flex-wrap gap-4"
+              style="
+                border-top: 1px solid var(--clr-border-subtle);
+                padding-top: var(--sp-4);
+              ">
+
               <div class="d-flex align-center gap-2">
+
                 <% if (proposal.studentSkills && proposal.studentSkills.length > 0) { %>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Skills:</span>
+
+                  <span class="text-muted" style="font-size: var(--fs-xs);">
+                    Skills:
+                  </span>
+
                   <% proposal.studentSkills.slice(0, 4).forEach(sk => { %>
                     <span class="tag"><%= sk %></span>
                   <% }) %>
+
                 <% } %>
+
               </div>
 
               <div class="d-flex gap-2">
+
                 <% if (proposal.status === 'pending') { %>
-                  <form action="/alumni/proposals/<%= proposal._id %>/accept" method="POST" style="display:inline;">
+
+                  <!-- Accept -->
+                  <form
+                    action="/alumni/proposals/<%= proposal._id %>/accept"
+                    method="POST"
+                    style="display:inline;"
+                  >
                     <button type="submit" class="btn btn-sm btn-primary">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
                       Accept
                     </button>
                   </form>
-                  <a href="/messages" class="btn btn-sm btn-secondary">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    Message
-                  </a>
-                  <form action="/alumni/proposals/<%= proposal._id %>/decline" method="POST" style="display:inline;">
-                    <button type="submit" class="btn btn-sm btn-danger">Decline</button>
+
+                  <!-- Decline -->
+                  <form
+                    action="/alumni/proposals/<%= proposal._id %>/decline"
+                    method="POST"
+                    style="display:inline;"
+                  >
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      Decline
+                    </button>
                   </form>
+
                 <% } else if (proposal.status === 'accepted') { %>
+
                   <span class="badge badge-approved">Accepted</span>
-                  <a href="/messages" class="btn btn-sm btn-secondary">Message Student</a>
+
+                  <!-- Project messaging is available after acceptance -->
+                  <a
+                    href="/messages/project/<%= proposal.projectId %>"
+                    class="btn btn-sm btn-secondary"
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" aria-hidden="true">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    Message Project Team
+                  </a>
+
                 <% } else { %>
+
                   <span class="badge badge-rejected">Declined</span>
+
                 <% } %>
+
               </div>
             </div>
+
           </div>
+
         <% }) %>
+
       </div>
+
     <% } %>
 
   </div>

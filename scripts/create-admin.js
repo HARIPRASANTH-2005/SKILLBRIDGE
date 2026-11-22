@@ -1,79 +1,126 @@
-// ─────────────────────────────────────────────
-//  scripts/create-admin.js  —  CLI Seed for Platform Administrator
-// ─────────────────────────────────────────────
+
+
+
+
+
+
+
+
+
+// new changes
+
 require('dotenv').config();
+
 const mongoose = require('mongoose');
-const bcrypt   = require('bcryptjs');
-const User     = require('../models/User');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 async function createAdmin() {
   const mongoUri = process.env.MONGO_URI;
+  const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+  const rawPassword = process.env.ADMIN_PASSWORD || '';
+  const fullName = (
+    process.env.ADMIN_NAME ||
+    'Department Platform Administrator'
+  ).trim();
+
+  // 1. Validate environment configuration
   if (!mongoUri) {
-    console.error('❌ Error: MONGO_URI is not set in environment or .env file.');
-    process.exit(1);
+    throw new Error('MONGO_URI is not configured.');
   }
 
-  // Parse command line arguments or fall back to env / defaults
-  const args = process.argv.slice(2);
-  const getArg = (key, defaultVal) => {
-    const idx = args.indexOf(`--${key}`);
-    if (idx !== -1 && args[idx + 1]) return args[idx + 1];
-    return defaultVal;
-  };
-
-  const email = getArg('email', process.env.ADMIN_EMAIL || 'admin@psgtech.ac.in').toLowerCase().trim();
-  const rawPassword = getArg('password', process.env.ADMIN_PASSWORD || 'Admin@PSG2025');
-  const fullName = getArg('name', process.env.ADMIN_NAME || 'Department Platform Administrator').trim();
-  const rollNumber = getArg('roll', process.env.ADMIN_ROLL || 'ADMIN-01').trim().toUpperCase();
-
-  if (!email || !rawPassword || rawPassword.length < 8) {
-    console.error('❌ Error: Admin password must be at least 8 characters.');
-    process.exit(1);
+  if (!email || !isValidEmail(email)) {
+    throw new Error('A valid ADMIN_EMAIL must be configured.');
   }
 
-  console.log('Connecting to MongoDB...');
+  if (rawPassword.length < 12) {
+    throw new Error(
+      'ADMIN_PASSWORD must contain at least 12 characters.'
+    );
+  }
+
+  if (fullName.length < 2 || fullName.length > 120) {
+    throw new Error('ADMIN_NAME must contain 2–120 characters.');
+  }
+
   try {
+    console.log('Connecting to MongoDB...');
+
     await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 4000
+      serverSelectionTimeoutMS: 5000,
+      ...(process.env.DB_NAME
+        ? { dbName: process.env.DB_NAME }
+        : {})
     });
+
     console.log('Connected to MongoDB.');
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(rawPassword, salt);
+    // 2. Enforce one-time administrator bootstrap
+    const existingAdmin = await User.exists({
+      role: 'admin'
+    });
 
-    const adminUser = await User.findOneAndUpdate(
-      { email },
-      {
-        fullName,
-        email,
-        password: hashedPassword,
-        rollNumber,
-        role: 'admin',
-        status: 'approved',
-        rejectionReason: '',
-        skills: ['System Administration', 'Academic Verification', 'MCA Coordination']
-      },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
+    if (existingAdmin) {
+      throw new Error(
+        'An administrator already exists. Bootstrap has been refused.'
+      );
+    }
 
-    console.log('----------------------------------------------------');
-    console.log('✅  Platform Administrator initialized successfully:');
-    console.log(`    User ID:     ${adminUser._id}`);
-    console.log(`    Name:        ${adminUser.fullName}`);
-    console.log(`    Email:       ${adminUser.email}`);
-    console.log(`    Roll/ID:     ${adminUser.rollNumber}`);
-    console.log(`    Role:        ${adminUser.role}`);
-    console.log(`    Status:      ${adminUser.status}`);
-    console.log('    Password:    [CONFIGURED]');
-    console.log('----------------------------------------------------');
+    // 3. Never promote an existing student/alumni account
+    const existingAccount = await User.findOne({
+      email
+    }).select('_id role');
 
-    await mongoose.disconnect();
-    process.exit(0);
-  } catch (err) {
-    console.error('❌  Failed to initialize administrator:', err.message);
-    process.exit(1);
+    if (existingAccount) {
+      throw new Error(
+        `This email already belongs to an existing ${existingAccount.role} account. Choose another administrator email.`
+      );
+    }
+
+    // 4. Hash the administrator password
+    const hashedPassword = await bcrypt.hash(rawPassword, 12);
+
+    // 5. Create a new administrator
+    const adminUser = new User({
+      fullName,
+      email,
+      password: hashedPassword,
+      role: 'admin',
+      status: 'approved',
+      rejectionReason: '',
+      skills: [
+        'System Administration',
+        'Academic Verification',
+        'MCA Coordination'
+      ]
+    });
+
+    await adminUser.save();
+
+    console.log('\n--------------------------------------------');
+    console.log('Administrator created successfully.');
+    console.log('--------------------------------------------');
+    console.log(`Name:   ${adminUser.fullName}`);
+    console.log(`Email:  ${adminUser.email}`);
+    console.log(`Role:   ${adminUser.role}`);
+    console.log(`Status: ${adminUser.status}`);
+    console.log('Password: Configured securely');
+    console.log('--------------------------------------------');
+    console.log('Sign in through the shared /login page.');
+
+  } finally {
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.disconnect();
+    }
   }
 }
 
-createAdmin();
-
+createAdmin().catch(error => {
+  console.error('\nAdministrator bootstrap failed:');
+  console.error(error.message);
+  process.exitCode = 1;
+});
