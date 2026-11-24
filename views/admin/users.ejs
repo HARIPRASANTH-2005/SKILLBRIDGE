@@ -136,7 +136,7 @@
                     <% if (user.status === 'pending') { %>
                       <a href="/admin/verifications/<%= user._id %>" class="btn btn-sm btn-primary">Verify</a>
                     <% } else { %>
-                      <a href="<%= user.role === 'student' ? '/student/profile' : '/alumni/profile' %>" class="btn btn-sm btn-secondary">Profile</a>
+                    <a href="/admin/users/<%= user._id %>" class="btn btn-sm btn-secondary">Profile</a>
                     <% } %>
                   </div>
                 </td>
