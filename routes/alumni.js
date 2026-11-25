@@ -530,9 +530,10 @@ router.get(
 );
 
 
+
 // ─────────────────────────────────────────────
 // GET /alumni/profile
-// Alumni profile
+// Dynamic MongoDB-backed alumni profile
 // ─────────────────────────────────────────────
 
 router.get(
@@ -540,12 +541,655 @@ router.get(
   requireAuth,
   requireApproved,
   requireRole('alumni'),
-  (req, res) => {
-    res.render('alumni/profile', {
-      title: 'Alumni Profile — SkillBridge'
-    });
+  async (req, res) => {
+
+    if (!isDbConnected()) {
+      return res.status(503).render('500', {
+        title: '503 — Service Unavailable',
+        error: 'Your alumni profile is temporarily unavailable because the database is disconnected.'
+      });
+    }
+
+    try {
+      const alumniId = req.session.user._id;
+
+      // 1. Fetch the logged-in alumni account.
+      const alumni = await User.findOne({
+        _id: alumniId,
+        role: 'alumni',
+        status: 'approved'
+      })
+        .select('-password')
+        .lean();
+
+      if (!alumni) {
+        return res.status(404).render('404', {
+          title: 'Alumni Profile Not Found — SkillBridge'
+        });
+      }
+
+      // 2. Fetch projects created by this alumni.
+      const createdProjects = await Project.find({
+        creatorId: alumniId
+      })
+        .sort({ createdAt: -1 })
+        .lean();
+
+      const projectIds = createdProjects.map(
+        project => project._id
+      );
+
+      // 3. Fetch proposal statistics and project memberships.
+      const [
+        proposalStatistics,
+        projectMembers
+      ] = await Promise.all([
+
+        Proposal.aggregate([
+          {
+            $match: {
+              projectId: { $in: projectIds }
+            }
+          },
+          {
+            $group: {
+              _id: {
+                projectId: '$projectId',
+                status: '$status'
+              },
+              count: { $sum: 1 }
+            }
+          }
+        ]),
+
+        ProjectMember.find({
+          projectId: { $in: projectIds },
+          status: { $in: ['active', 'completed'] }
+        })
+          .populate({
+            path: 'studentId',
+            select: 'fullName rollNumber'
+          })
+          .sort({ joinedAt: -1 })
+          .lean()
+
+      ]);
+
+      // 4. Organize proposal statistics by project.
+      const proposalStatsMap = new Map();
+
+      for (const item of proposalStatistics) {
+        const projectId = item._id.projectId.toString();
+
+        if (!proposalStatsMap.has(projectId)) {
+          proposalStatsMap.set(projectId, {
+            total: 0,
+            pending: 0,
+            accepted: 0,
+            declined: 0
+          });
+        }
+
+        const stats = proposalStatsMap.get(projectId);
+
+        stats.total += item.count;
+
+        if (
+          Object.prototype.hasOwnProperty.call(
+            stats,
+            item._id.status
+          )
+        ) {
+          stats[item._id.status] += item.count;
+        }
+      }
+
+      // 5. Organize student memberships by project.
+      const membersMap = new Map();
+
+      for (const member of projectMembers) {
+        const projectId = member.projectId.toString();
+
+        if (!membersMap.has(projectId)) {
+          membersMap.set(projectId, []);
+        }
+
+        const student =
+          member.studentId &&
+          typeof member.studentId === 'object'
+            ? member.studentId
+            : null;
+
+        membersMap.get(projectId).push({
+          fullName: student?.fullName || 'Student',
+          rollNumber: student?.rollNumber || '',
+          role: member.role,
+          status: member.status,
+          joinedAt: member.joinedAt,
+          completedAt: member.completedAt
+        });
+      }
+
+      // 6. Prepare project cards for profile.ejs.
+      const alumniProjects = createdProjects.map(project => {
+        const projectId = project._id.toString();
+
+        const proposalStats =
+          proposalStatsMap.get(projectId) || {
+            total: 0,
+            pending: 0,
+            accepted: 0,
+            declined: 0
+          };
+
+        const members = membersMap.get(projectId) || [];
+
+        const activeMembers = members.filter(
+          member => member.status === 'active'
+        );
+
+        const completedMembers = members.filter(
+          member => member.status === 'completed'
+        );
+
+        return {
+          ...project,
+
+          proposalStats,
+
+          members,
+
+          memberStats: {
+            active: activeMembers.length,
+            completed: completedMembers.length
+          },
+
+          activeMenteeCount: activeMembers.length,
+          completedMenteeCount: completedMembers.length
+        };
+      });
+
+      // 7. Calculate overall profile statistics.
+      const activeStudentIds = new Set(
+        projectMembers
+          .filter(member => member.status === 'active')
+          .map(member => {
+            const student = member.studentId;
+
+            if (!student) return null;
+
+            return student._id
+              ? student._id.toString()
+              : student.toString();
+          })
+          .filter(Boolean)
+      );
+
+      const profileStats = {
+        projectCount: createdProjects.length,
+
+        completedProjectCount: createdProjects.filter(
+          project => project.status === 'completed'
+        ).length,
+
+        totalProposalCount: proposalStatistics.reduce(
+          (total, item) => total + item.count,
+          0
+        ),
+
+        pendingProposalCount: proposalStatistics
+          .filter(item => item._id.status === 'pending')
+          .reduce(
+            (total, item) => total + item.count,
+            0
+          ),
+
+        activeMenteeCount: activeStudentIds.size
+      };
+
+      // 8. Retrieve the latest verification record.
+      const verificationHistory = [
+        ...(alumni.verificationHistory || [])
+      ].sort(
+        (a, b) =>
+          new Date(b.timestamp || 0) -
+          new Date(a.timestamp || 0)
+      );
+
+      const latestVerification =
+        verificationHistory[0] || null;
+
+      // 9. Render the alumni profile.
+      return res.render('alumni/profile', {
+        title: 'Alumni Profile — SkillBridge',
+
+        alumni,
+
+        createdProjects: alumniProjects,
+
+        profileStats,
+
+        latestVerification,
+
+        // These names match the EJS template.
+        success:
+          req.query.success === 'updated'
+            ? 'updated'
+            : '',
+
+        error: req.query.error || ''
+      });
+
+    } catch (err) {
+      console.error('Alumni profile error:', err);
+
+      return res.status(500).render('500', {
+        title: '500 — Internal Server Error',
+        error: 'Unable to load your alumni profile. Please try again later.'
+      });
+    }
   }
 );
+
+
+
+// ─────────────────────────────────────────────
+// POST /alumni/profile/update
+// Securely update permitted alumni profile fields
+// ─────────────────────────────────────────────
+
+router.post(
+  '/profile/update',
+  requireAuth,
+  requireApproved,
+  requireRole('alumni'),
+  async (req, res) => {
+    const redirectWithError = (message) => {
+      return res.redirect(
+        `/alumni/profile?error=${encodeURIComponent(message)}`
+      );
+    };
+
+    if (!isDbConnected()) {
+      return redirectWithError(
+        'Database is unavailable. Your profile was not updated.'
+      );
+    }
+
+    try {
+      const {
+        fullName,
+        mobile,
+        profession,
+        company,
+        linkedin,
+        skills
+      } = req.body;
+
+      // 1. Validate and normalize the full name.
+      const cleanName =
+        typeof fullName === 'string'
+          ? fullName.trim()
+          : '';
+
+      if (cleanName.length < 2 || cleanName.length > 120) {
+        return redirectWithError(
+          'Full name must contain between 2 and 120 characters.'
+        );
+      }
+
+      // 2. Validate the mobile number.
+      const cleanMobile =
+        typeof mobile === 'string'
+          ? mobile.trim()
+          : '';
+
+      if (cleanMobile) {
+        const digitsOnly = cleanMobile.replace(/\D/g, '');
+
+        if (
+          !/^[+]?[\d\s().-]+$/.test(cleanMobile) ||
+          digitsOnly.length < 7 ||
+          digitsOnly.length > 15
+        ) {
+          return redirectWithError(
+            'Please enter a valid mobile number.'
+          );
+        }
+      }
+
+      // 3. Validate professional information.
+      const cleanProfession =
+        typeof profession === 'string'
+          ? profession.trim()
+          : '';
+
+      const cleanCompany =
+        typeof company === 'string'
+          ? company.trim()
+          : '';
+
+      if (cleanProfession.length > 120) {
+        return redirectWithError(
+          'Profession cannot exceed 120 characters.'
+        );
+      }
+
+      if (cleanCompany.length > 120) {
+        return redirectWithError(
+          'Company name cannot exceed 120 characters.'
+        );
+      }
+
+      // 4. Validate LinkedIn URL.
+      const cleanLinkedin =
+        typeof linkedin === 'string'
+          ? linkedin.trim()
+          : '';
+
+      if (cleanLinkedin) {
+        try {
+          const parsedUrl = new URL(cleanLinkedin);
+
+          if (
+            !['http:', 'https:'].includes(parsedUrl.protocol) ||
+            !['linkedin.com', 'www.linkedin.com'].includes(
+              parsedUrl.hostname.toLowerCase()
+            )
+          ) {
+            return redirectWithError(
+              'Please provide a valid LinkedIn profile URL.'
+            );
+          }
+        } catch {
+          return redirectWithError(
+            'Please provide a valid LinkedIn profile URL, including https://.'
+          );
+        }
+      }
+
+      // 5. Normalize skills.
+      let submittedSkills = [];
+
+      if (Array.isArray(skills)) {
+        submittedSkills = skills;
+      } else if (typeof skills === 'string') {
+        submittedSkills = skills.split(',');
+      }
+
+      if (submittedSkills.length > 20) {
+        return redirectWithError(
+          'You can add a maximum of 20 mentorship skills.'
+        );
+      }
+
+      const cleanSkills = submittedSkills
+        .filter(skill => typeof skill === 'string')
+        .map(skill => skill.trim())
+        .filter(Boolean);
+
+      if (cleanSkills.some(skill => skill.length > 50)) {
+        return redirectWithError(
+          'Each skill must contain no more than 50 characters.'
+        );
+      }
+
+      // Remove duplicate skills without changing their display names.
+      const uniqueSkills = [
+        ...new Map(
+          cleanSkills.map(skill => [
+            skill.toLowerCase(),
+            skill
+          ])
+        ).values()
+      ];
+
+      // 6. Update only explicitly permitted fields.
+      // Email, roll number, academic records, role, status,
+      // documents and verification history are never updated here.
+      const updatedAlumni = await User.findOneAndUpdate(
+        {
+          _id: req.session.user._id,
+          role: 'alumni',
+          status: 'approved'
+        },
+        {
+          $set: {
+            fullName: cleanName,
+            mobile: cleanMobile,
+            profession: cleanProfession,
+            company: cleanCompany,
+            linkedin: cleanLinkedin,
+            skills: uniqueSkills
+          }
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      )
+        .select('_id fullName')
+        .lean();
+
+      if (!updatedAlumni) {
+        return redirectWithError(
+          'Your alumni account could not be found or is no longer approved.'
+        );
+      }
+
+      // Keep the current session name synchronized.
+      req.session.user.fullName = updatedAlumni.fullName;
+
+      return res.redirect(
+        '/alumni/profile?success=updated'
+      );
+
+    } catch (err) {
+      console.error('Alumni profile update error:', err);
+
+      if (err.name === 'ValidationError') {
+        const message = Object.values(err.errors)
+          .map(item => item.message)
+          .join(' ');
+
+        return redirectWithError(message);
+      }
+
+      return redirectWithError(
+        'Unable to update your profile. Please try again later.'
+      );
+    }
+  }
+);
+
+
+
+// // ─────────────────────────────────────────────
+// // POST /alumni/profile/update
+// // Secure alumni profile update
+// // ─────────────────────────────────────────────
+
+// router.post(
+//   '/profile/update',
+//   requireAuth,
+//   requireApproved,
+//   requireRole('alumni'),
+//   async (req, res) => {
+
+//     const redirectWithError = (message) => {
+//       return res.redirect(
+//         `/alumni/profile?error=${encodeURIComponent(message)}`
+//       );
+//     };
+
+//     if (!isDbConnected()) {
+//       return res.status(503).render('500', {
+//         title: '503 — Service Unavailable',
+//         error: 'Profile updates are temporarily unavailable.'
+//       });
+//     }
+
+//     try {
+//       const {
+//         fullName,
+//         mobile,
+//         profession,
+//         company,
+//         linkedin,
+//         skills
+//       } = req.body;
+
+//       // Validate and normalize editable fields.
+//       const cleanName =
+//         typeof fullName === 'string' ? fullName.trim() : '';
+
+//       const cleanMobile =
+//         typeof mobile === 'string' ? mobile.trim() : '';
+
+//       const cleanProfession =
+//         typeof profession === 'string' ? profession.trim() : '';
+
+//       const cleanCompany =
+//         typeof company === 'string' ? company.trim() : '';
+
+//       const cleanLinkedin =
+//         typeof linkedin === 'string' ? linkedin.trim() : '';
+
+//       if (cleanName.length < 2 || cleanName.length > 120) {
+//         return redirectWithError(
+//           'Full name must contain between 2 and 120 characters.'
+//         );
+//       }
+
+//       if (cleanMobile.length > 20) {
+//         return redirectWithError(
+//           'Mobile number cannot exceed 20 characters.'
+//         );
+//       }
+
+//       if (cleanProfession.length > 120) {
+//         return redirectWithError(
+//           'Profession cannot exceed 120 characters.'
+//         );
+//       }
+
+//       if (cleanCompany.length > 120) {
+//         return redirectWithError(
+//           'Company name cannot exceed 120 characters.'
+//         );
+//       }
+
+//       // Validate LinkedIn URL.
+//       if (cleanLinkedin) {
+//         try {
+//           const parsedUrl = new URL(cleanLinkedin);
+
+//           if (
+//             !['http:', 'https:'].includes(parsedUrl.protocol) ||
+//             !['linkedin.com', 'www.linkedin.com'].includes(
+//               parsedUrl.hostname.toLowerCase()
+//             )
+//           ) {
+//             return redirectWithError(
+//               'Please enter a valid LinkedIn profile URL.'
+//             );
+//           }
+//         } catch {
+//           return redirectWithError(
+//             'Please enter a valid LinkedIn profile URL.'
+//           );
+//         }
+
+//         if (cleanLinkedin.length > 2048) {
+//           return redirectWithError(
+//             'LinkedIn URL is too long.'
+//           );
+//         }
+//       }
+
+//       // Accept either an array or comma-separated skills input.
+//       let cleanSkills = [];
+
+//       if (Array.isArray(skills)) {
+//         cleanSkills = skills;
+//       } else if (typeof skills === 'string') {
+//         cleanSkills = skills.split(',');
+//       } else if (skills !== undefined) {
+//         return redirectWithError(
+//           'Invalid mentorship skills format.'
+//         );
+//       }
+
+//       cleanSkills = [
+//         ...new Set(
+//           cleanSkills
+//             .filter(skill => typeof skill === 'string')
+//             .map(skill => skill.trim())
+//             .filter(Boolean)
+//             .map(skill => skill.slice(0, 50))
+//         )
+//       ];
+
+//       if (cleanSkills.length > 30) {
+//         return redirectWithError(
+//           'You can add a maximum of 30 skills.'
+//         );
+//       }
+
+//       // Update only explicitly permitted fields.
+//       // Academic identity, email, role and verification
+//       // fields cannot be changed through this endpoint.
+//       const updatedAlumni = await User.findOneAndUpdate(
+//         {
+//           _id: req.session.user._id,
+//           role: 'alumni',
+//           status: 'approved'
+//         },
+//         {
+//           $set: {
+//             fullName: cleanName,
+//             mobile: cleanMobile,
+//             profession: cleanProfession,
+//             company: cleanCompany,
+//             linkedin: cleanLinkedin,
+//             skills: cleanSkills
+//           }
+//         },
+//         {
+//           new: true,
+//           runValidators: true,
+//           select: 'fullName mobile profession company linkedin skills'
+//         }
+//       );
+
+//       if (!updatedAlumni) {
+//         return redirectWithError(
+//           'Your alumni account could not be found or updated.'
+//         );
+//       }
+
+//       // Keep the session display name synchronized.
+//       req.session.user.fullName = updatedAlumni.fullName;
+
+//       return res.redirect(
+//         '/alumni/profile?success=updated'
+//       );
+
+//     } catch (err) {
+//       console.error('Alumni profile update error:', err);
+
+//       if (err.name === 'ValidationError') {
+//         return redirectWithError(
+//           'Some profile details are invalid. Please check your entries.'
+//         );
+//       }
+
+//       return redirectWithError(
+//         'Profile update failed. Please try again.'
+//       );
+//     }
+//   }
+// );
 
 
 // ─────────────────────────────────────────────

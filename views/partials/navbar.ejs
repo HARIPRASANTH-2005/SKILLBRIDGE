@@ -20,7 +20,7 @@
 
       <!-- Nav links -->
       <ul class="nav-links" id="navLinks" role="list">
-        <% if (!currentUser) { %>
+        <% if (typeof currentUser === 'undefined' || !currentUser) { %>
           <!-- Guest Navigation -->
           <li><a href="/" class="nav-link">Home</a></li>
           <li><a href="/projects" class="nav-link">Explore Opportunities</a></li>
