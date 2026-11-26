@@ -25,6 +25,7 @@ const adminRoutes = require('./routes/admin');
 const messageRoutes = require('./routes/messages');
 const reviewRoutes = require('./routes/reviews');
 const authRoutes = require('./routes/auth');
+const otpRoutes = require('./routes/otp');
 
 const app = express();
 
@@ -178,6 +179,9 @@ app.use('/projects', projectRoutes);
 app.use('/admin', adminRoutes);
 app.use('/messages', messageRoutes);
 app.use('/reviews', reviewRoutes);
+
+// OTP verification routes (must be before shared auth routes).
+app.use('/', otpRoutes);
 
 // Shared authentication for all account roles.
 app.use('/', authRoutes);

@@ -342,6 +342,7 @@ const renderLogin = (
     errors = [],
     formData = {},
     returnTo = '',
+    verifiedSuccess = null,
     statusCode = 200
   } = {}
 ) => {
@@ -349,6 +350,7 @@ const renderLogin = (
     title: 'Sign In — SkillBridge',
     errors,
     formData,
+    verifiedSuccess,
     returnTo
   });
 };
@@ -379,10 +381,15 @@ router.get('/login', (req, res) => {
     );
   }
 
+  const isVerified = req.query.verified === 'true' || req.query.registered === 'success';
+
   res.render('auth/login', {
     title: 'Sign In — SkillBridge',
     errors: [],
     formData: {},
+    verifiedSuccess: isVerified
+      ? 'Email verified successfully! Your application has been submitted for administrator verification. You can log in once approved.'
+      : null,
     returnTo: isSafeReturnTo(req.query.returnTo)
       ? req.query.returnTo
       : ''

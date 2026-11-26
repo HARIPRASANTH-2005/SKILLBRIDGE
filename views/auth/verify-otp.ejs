@@ -1,0 +1,425 @@
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<!-- ══════════════════════════════════════════════════════════
+     OTP VERIFICATION PAGE
+     Matches SkillBridge off-white & green professional theme.
+     Responsive for desktop and mobile.
+══════════════════════════════════════════════════════════ -->
+
+<section class="auth-page" aria-labelledby="otpHeading">
+  <div class="auth-layout">
+
+    <!-- ── Left panel (branding) ─────────────────────────── -->
+    <aside class="auth-panel" aria-hidden="true">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-logo">
+          <span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          <span>Skill<strong>Bridge</strong></span>
+        </div>
+        <h2>One Last Step</h2>
+        <p>We sent a 6-digit verification code to your email. Enter it to confirm your identity and complete registration.</p>
+
+        <ul class="auth-panel-perks" role="list">
+          <li>
+            <span class="perk-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <div>
+              <strong>Secure Verification</strong>
+              <span>OTP is valid for 5 minutes and can only be used once.</span>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <div>
+              <strong>Check Your Inbox</strong>
+              <span>Look for an email from SkillBridge. Check your spam folder too.</span>
+            </div>
+          </li>
+          <li>
+            <span class="perk-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <div>
+              <strong>Resend After 60s</strong>
+              <span>If you didn't receive the code, you can request a new one.</span>
+            </div>
+          </li>
+        </ul>
+
+        <div class="auth-panel-note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>PSG College of Technology · Department of Computer Applications · MCA Programme</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Right panel (form) ─────────────────────────────── -->
+    <div class="auth-form-panel">
+      <div class="auth-form-card">
+
+        <div class="auth-form-header">
+          <h1 id="otpHeading">Email Verification</h1>
+          <p>
+            Enter the 6-digit code sent to
+            <strong><%= maskedEmail %></strong>
+          </p>
+        </div>
+
+        <!-- ── Error message ── -->
+        <% if (error) { %>
+          <div class="flash flash-error" role="alert">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span><%= error %></span>
+          </div>
+        <% } %>
+
+        <!-- ── Info message ── -->
+        <% if (info) { %>
+          <div class="flash flash-info" role="alert">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span><%= info %></span>
+          </div>
+        <% } %>
+
+        <!-- ── OTP form ── -->
+        <form
+          id="otpForm"
+          action="/verify-otp"
+          method="POST"
+          novalidate
+          aria-label="OTP verification form"
+        >
+          <!-- CSRF token placeholder (session-bound) -->
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+          <!-- OTP digit inputs -->
+          <div class="otp-input-group" aria-label="Enter your 6-digit verification code">
+            <% for (let i = 1; i <= 6; i++) { %>
+              <input
+                type="text"
+                class="otp-digit"
+                id="otp-<%= i %>"
+                maxlength="1"
+                inputmode="numeric"
+                pattern="[0-9]"
+                autocomplete="<%= i === 1 ? 'one-time-code' : 'off' %>"
+                aria-label="Digit <%= i %> of 6"
+                aria-required="true"
+              />
+            <% } %>
+            <!-- Hidden combined input submitted to server -->
+            <input type="hidden" id="otpValue" name="otp" value="" />
+          </div>
+
+          <div class="otp-timer" id="otpTimer" aria-live="polite" aria-atomic="true">
+            Code expires in <span id="countdownDisplay">5:00</span>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-submit w-100"
+            id="otpSubmitBtn"
+          >
+            <span class="btn-text">Verify & Complete Registration</span>
+            <span class="btn-spinner" aria-hidden="true" style="display:none;">⏳</span>
+          </button>
+        </form>
+
+        <!-- ── Resend OTP form ── -->
+        <div class="otp-resend-wrap">
+          <p>Didn't receive the code?</p>
+          <form
+            id="resendForm"
+            action="/resend-otp"
+            method="POST"
+            style="display:inline;"
+          >
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button
+              type="submit"
+              class="btn-link"
+              id="resendBtn"
+              <% if (resendCooldownSeconds > 0) { %>disabled aria-disabled="true"<% } %>
+            >
+              <% if (resendCooldownSeconds > 0) { %>
+                Resend OTP in <span id="resendCountdown"><%= resendCooldownSeconds %></span>s
+              <% } else { %>
+                Resend OTP
+              <% } %>
+            </button>
+          </form>
+        </div>
+
+        <div class="otp-cancel-wrap">
+          <a href="/<%= role %>/register" class="link otp-cancel-link">
+            ← Cancel and go back to registration
+          </a>
+        </div>
+
+      </div><!-- end .auth-form-card -->
+    </div><!-- end .auth-form-panel -->
+
+  </div><!-- end .auth-layout -->
+</section>
+
+<style>
+/* ── OTP page styles ─────────────────────────── */
+
+.otp-input-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 24px 0 12px;
+}
+
+.otp-digit {
+  width: 48px;
+  height: 56px;
+  border: 2px solid var(--clr-border, #d0d5dd);
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--clr-text, #1a1a1a);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  caret-color: var(--clr-primary, #1a6b3c);
+}
+
+.otp-digit:focus {
+  border-color: var(--clr-primary, #1a6b3c);
+  box-shadow: 0 0 0 3px rgba(26, 107, 60, 0.15);
+}
+
+.otp-digit.filled {
+  border-color: var(--clr-primary, #1a6b3c);
+  background: #f0faf4;
+}
+
+.otp-digit.error {
+  border-color: #d9534f;
+  background: #fff8f8;
+  animation: otp-shake 0.3s ease;
+}
+
+@keyframes otp-shake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+.otp-timer {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.otp-timer.expiring {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.otp-resend-wrap {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #666;
+}
+
+.otp-resend-wrap p {
+  margin-bottom: 4px;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--clr-primary, #1a6b3c);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.15s;
+}
+
+.btn-link:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.otp-cancel-wrap {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.otp-cancel-link {
+  font-size: 13px;
+  color: #888;
+}
+
+.flash-info {
+  background: #e8f4fd;
+  border: 1px solid #bee3f8;
+  color: #2b6cb0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .otp-digit {
+    width: 40px;
+    height: 48px;
+    font-size: 20px;
+  }
+  .otp-input-group {
+    gap: 7px;
+  }
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── OTP digit inputs ──────────────────────────
+  const digits      = document.querySelectorAll('.otp-digit');
+  const hiddenInput = document.getElementById('otpValue');
+  const form        = document.getElementById('otpForm');
+  const submitBtn   = document.getElementById('otpSubmitBtn');
+
+  function syncHidden() {
+    hiddenInput.value = Array.from(digits)
+      .map(d => d.value)
+      .join('');
+  }
+
+  digits.forEach((digit, index) => {
+    digit.addEventListener('input', (e) => {
+      const val = e.target.value.replace(/\D/g, '');
+      e.target.value = val.slice(-1);
+
+      if (val) {
+        digit.classList.add('filled');
+        digit.classList.remove('error');
+        if (index < digits.length - 1) {
+          digits[index + 1].focus();
+        }
+      } else {
+        digit.classList.remove('filled');
+      }
+
+      syncHidden();
+    });
+
+    digit.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace') {
+        if (!digit.value && index > 0) {
+          digits[index - 1].focus();
+          digits[index - 1].value = '';
+          digits[index - 1].classList.remove('filled');
+          syncHidden();
+        }
+      }
+    });
+
+    digit.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData)
+        .getData('text')
+        .replace(/\D/g, '')
+        .slice(0, 6);
+
+      pasted.split('').forEach((ch, i) => {
+        if (digits[i]) {
+          digits[i].value = ch;
+          digits[i].classList.add('filled');
+        }
+      });
+      syncHidden();
+
+      const nextEmpty = Array.from(digits).findIndex(d => !d.value);
+      if (nextEmpty !== -1) digits[nextEmpty].focus();
+      else digits[digits.length - 1].focus();
+    });
+  });
+
+  // ── Form submit validation ────────────────────
+  form.addEventListener('submit', (e) => {
+    syncHidden();
+    if (hiddenInput.value.length !== 6 || !/^\d{6}$/.test(hiddenInput.value)) {
+      e.preventDefault();
+      digits.forEach(d => d.classList.add('error'));
+      digits[0].focus();
+      return;
+    }
+    submitBtn.querySelector('.btn-text').style.display = 'none';
+    submitBtn.querySelector('.btn-spinner').style.display = 'inline';
+    submitBtn.disabled = true;
+  });
+
+  // ── Countdown timer (OTP expiry) ─────────────
+  const expiresAt = Date.now() + (<%= remainingSeconds %> * 1000);
+  const timerEl   = document.getElementById('otpTimer');
+  const countdownEl = document.getElementById('countdownDisplay');
+
+  function updateCountdown() {
+    const remaining = Math.max(0, expiresAt - Date.now());
+    const mins = Math.floor(remaining / 60000);
+    const secs = Math.floor((remaining % 60000) / 1000);
+    countdownEl.textContent = `${mins}:${String(secs).padStart(2, '0')}`;
+
+    if (remaining <= 60000) {
+      timerEl.classList.add('expiring');
+    }
+    if (remaining === 0) {
+      clearInterval(timerInterval);
+      countdownEl.textContent = 'Expired';
+      submitBtn.disabled = true;
+    }
+  }
+
+  updateCountdown();
+  const timerInterval = setInterval(updateCountdown, 1000);
+
+  // ── Resend cooldown counter ───────────────────
+  const resendBtn = document.getElementById('resendBtn');
+  const resendCountdownEl = document.getElementById('resendCountdown');
+
+  if (resendBtn && resendCountdownEl) {
+    let resendSeconds = parseInt(resendCountdownEl.textContent, 10) || 0;
+
+    if (resendSeconds > 0) {
+      const resendInterval = setInterval(() => {
+        resendSeconds--;
+        resendCountdownEl.textContent = resendSeconds;
+
+        if (resendSeconds <= 0) {
+          clearInterval(resendInterval);
+          resendBtn.disabled = false;
+          resendBtn.removeAttribute('aria-disabled');
+          resendBtn.textContent = 'Resend OTP';
+        }
+      }, 1000);
+    }
+  }
+
+  // Auto-focus first digit
+  if (digits[0]) digits[0].focus();
+})();
+</script>
+
+<%- include('../partials/footer') %>

@@ -9,6 +9,9 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const fs = require('fs/promises');
 
+const { generateOtp, hashOtp, buildOtpSession } = require('../utils/otp');
+const { sendOtpEmail } = require('../utils/mailer');
+
 const upload = require('../middleware/upload');
 const User = require('../models/User');
 const Proposal = require('../models/Proposal');
@@ -75,6 +78,20 @@ function renderRegistration(res, errors = [], formData = {}) {
 router.get('/register', (req, res) => {
   if (req.session.user?.role === 'student') {
     return res.redirect('/student/dashboard');
+  }
+
+  // After OTP verified — show permanent success message
+  if (req.query.otpSuccess === '1') {
+    const roll = typeof req.query.roll === 'string'
+      ? req.query.roll.toUpperCase()
+      : '';
+
+    return res.render('student/register', {
+      title: REGISTRATION_TITLE,
+      errors: [],
+      formData: {},
+      success: `Email verified! Your application (Roll: ${roll}) has been submitted for administrator verification. You can check your status at /status.`
+    });
   }
 
   return renderRegistration(res);
@@ -215,13 +232,14 @@ router.post(
     if (!isDbConnected()) {
       await removeUploadedFile(req.file);
 
-      return res.status(503).render('503', {
+      return res.status(503).render('500', {
         title: 'Service Temporarily Unavailable',
-        message: 'Registration is temporarily unavailable. Please try again later.'
+        error: 'Registration is temporarily unavailable. Please try again later.'
       });
     }
 
     try {
+      // Check for duplicate before sending OTP — avoids wasted emails.
       const existingUser = await User.findOne({
         $or: [
           { email: cleanEmail },
@@ -244,35 +262,64 @@ router.post(
         );
       }
 
+      // Hash password now — store hash in session, not plain text.
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      const newStudent = new User({
-        fullName: cleanName,
-        email: cleanEmail,
-        password: hashedPassword,
-        mobile: cleanMobile,
-        role: 'student',
-        status: 'pending',
-        rollNumber: cleanRoll,
+      // Generate OTP and hash it before storing in session.
+      const otp       = generateOtp();
+      const otpHash   = await hashOtp(otp);
+
+      // Store registration payload in session (no file on disk path at risk).
+      const fileInfo = {
+        filename:     req.file.filename,
+        originalname: req.file.originalname,
+        mimetype:     req.file.mimetype,
+        size:         req.file.size,
+        savedPath:    req.file.path   // needed for cleanup on failure
+      };
+
+      const formPayload = {
+        fullName:        cleanName,
+        email:           cleanEmail,
+        hashedPassword,
+        mobile:          cleanMobile,
+        rollNumber:      cleanRoll,
         currentYear,
-        admissionBatch: cleanBatch,
-        expectedGradYear: cleanGradYear,
-        documentFilename: req.file.filename,
-        documentOriginalName: req.file.originalname,
-        documentMimeType: req.file.mimetype,
-        documentSizeBytes: req.file.size
+        admissionBatch:  cleanBatch,
+        expectedGradYear: cleanGradYear
+      };
+
+      const sessionData = buildOtpSession(
+        otpHash,
+        cleanEmail,
+        'student',
+        formPayload,
+        fileInfo
+      );
+
+      // Store in both session properties for total compatibility
+      req.session.pendingRegistration = sessionData;
+      req.session.otpSession          = sessionData;
+
+      // Send OTP email — if it fails, do not proceed.
+      await sendOtpEmail(cleanEmail, otp, 'student', cleanName);
+
+      // CRITICAL: Explicitly await session save to guarantee connect-mongo
+      // has persisted the session to MongoDB before sending the 302 redirect.
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) return reject(err);
+          resolve();
+        });
       });
 
-      await newStudent.save();
-
-      return res.render('student/register', {
-        title: REGISTRATION_TITLE,
-        errors: [],
-        formData: {},
-        success: `Registration received! Your application (Roll: ${cleanRoll}) has been submitted for administrator verification. You can check your status at /status.`
-      });
+      return res.redirect('/verify-otp');
 
     } catch (error) {
+      if (req.session) {
+        delete req.session.pendingRegistration;
+        delete req.session.otpSession;
+      }
       await removeUploadedFile(req.file);
 
       console.error('Student registration error:', error.message);

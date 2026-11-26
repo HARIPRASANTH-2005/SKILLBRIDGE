@@ -31,6 +31,9 @@ const {
   requireRole
 } = require('../middleware/auth');
 
+const { generateOtp, hashOtp, buildOtpSession } = require('../utils/otp');
+const { sendOtpEmail } = require('../utils/mailer');
+
 
 // ─────────────────────────────────────────────
 // HELPERS
@@ -91,6 +94,20 @@ router.get('/register', (req, res) => {
     if (req.session.user.role === 'alumni') {
       return res.redirect('/alumni/dashboard');
     }
+  }
+
+  // After OTP verified — show permanent success message
+  if (req.query.otpSuccess === '1') {
+    const roll = typeof req.query.roll === 'string'
+      ? req.query.roll.toUpperCase()
+      : '';
+
+    return res.render('alumni/register', {
+      title: 'MCA Alumni Registration — SkillBridge',
+      errors: [],
+      formData: {},
+      success: `Email verified! Your degree proof and alumni credentials (Roll: ${roll}) have been submitted for administrator verification. You can check your verification status at /status.`
+    });
   }
 
   res.render('alumni/register', {
@@ -253,48 +270,65 @@ router.post('/register', upload.single('document'), async (req, res) => {
       });
     }
 
+    // Hash password now — store hash in session, not plain text.
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newAlumni = new User({
-      fullName: cleanName,
-      email: cleanEmail,
-      password: hashedPassword,
-      mobile:
-        typeof mobile === 'string' ? mobile.trim() : '',
+    // Generate OTP and hash it before storing in session.
+    const otp     = generateOtp();
+    const otpHash = await hashOtp(otp);
 
-      role: 'alumni',
-      status: 'pending',
+    const fileInfo = {
+      filename:     req.file.filename,
+      originalname: req.file.originalname,
+      mimetype:     req.file.mimetype,
+      size:         req.file.size,
+      savedPath:    req.file.path
+    };
 
-      rollNumber: cleanRoll,
+    const formPayload = {
+      fullName:       cleanName,
+      email:          cleanEmail,
+      hashedPassword,
+      mobile:         typeof mobile === 'string' ? mobile.trim() : '',
+      rollNumber:     cleanRoll,
       admissionBatch: cleanAdmissionBatch,
       graduationYear: cleanGraduationYear,
+      profession:     typeof profession === 'string' ? profession.trim() : '',
+      company:        typeof company === 'string' ? company.trim() : '',
+      linkedin:       typeof linkedin === 'string' ? linkedin.trim() : ''
+    };
 
-      profession:
-        typeof profession === 'string' ? profession.trim() : '',
+    const sessionData = buildOtpSession(
+      otpHash,
+      cleanEmail,
+      'alumni',
+      formPayload,
+      fileInfo
+    );
 
-      company:
-        typeof company === 'string' ? company.trim() : '',
+    // Store in both session properties for total compatibility
+    req.session.pendingRegistration = sessionData;
+    req.session.otpSession          = sessionData;
 
-      linkedin:
-        typeof linkedin === 'string' ? linkedin.trim() : '',
+    // Send OTP email — if it fails, do not proceed.
+    await sendOtpEmail(cleanEmail, otp, 'alumni', cleanName);
 
-      documentFilename: req.file.filename,
-      documentOriginalName: req.file.originalname,
-      documentMimeType: req.file.mimetype,
-      documentSizeBytes: req.file.size
+    // CRITICAL: Explicitly await session save to guarantee connect-mongo
+    // has persisted the session to MongoDB before sending the 302 redirect.
+    await new Promise((resolve, reject) => {
+      req.session.save((err) => {
+        if (err) return reject(err);
+        resolve();
+      });
     });
 
-    await newAlumni.save();
-
-    return res.render('alumni/register', {
-      title: 'MCA Alumni Registration — SkillBridge',
-      errors: [],
-      formData: {},
-      success:
-        `Registration received! Your degree proof and alumni credentials (Roll: ${cleanRoll}) have been submitted for administrator verification. You can check your verification status at /status.`
-    });
+    return res.redirect('/verify-otp');
 
   } catch (err) {
+    if (req.session) {
+      delete req.session.pendingRegistration;
+      delete req.session.otpSession;
+    }
     console.error('Alumni registration error:', err.message);
 
     await removeUploadedFile(req.file);
