@@ -1,0 +1,635 @@
+
+<%- include('../partials/head', { title: title }) %>
+<%- include('../partials/navbar') %>
+
+<%
+  const isStudent = user.role === 'student';
+  const isAlumni = user.role === 'alumni';
+
+  const displayName = user.fullName || 'Unnamed User';
+  const status = user.status || 'pending';
+
+  const formatDate = (date) => {
+    if (!date) return '—';
+    const parsed = new Date(date);
+    return Number.isNaN(parsed.getTime())
+      ? '—'
+      : parsed.toLocaleDateString('en-IN', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric'
+        });
+  };
+
+  const formatYear = (year) => {
+    if (!year) return '—';
+    return String(year);
+  };
+
+  const skills = Array.isArray(user.skills) ? user.skills : [];
+  const history = Array.isArray(user.verificationHistory)
+    ? [...user.verificationHistory].reverse()
+    : [];
+
+  const statusClass = (value) => {
+    if (value === 'approved' || value === 'completed' || value === 'active') {
+      return 'badge-approved';
+    }
+    if (value === 'rejected' || value === 'archived' || value === 'removed') {
+      return 'badge-rejected';
+    }
+    return 'badge-pending';
+  };
+%>
+
+<!-- =========================================================
+     ADMIN USER PROFILE — SKILLBRIDGE
+========================================================= -->
+
+<div class="dashboard-layout">
+
+  <!-- ADMIN SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-heading">Administration</div>
+
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+
+        <a href="/admin/dashboard" class="sidebar-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Overview
+        </a>
+
+        <a href="/admin/verifications" class="sidebar-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Verifications Queue
+        </a>
+
+        <a href="/admin/users" class="sidebar-link active">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          User Directory
+        </a>
+
+        <a href="/admin/projects" class="sidebar-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          Projects &amp; Moderation
+        </a>
+
+      </nav>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="dashboard-main">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="/admin/dashboard">Admin</a>
+      <span aria-hidden="true">/</span>
+      <a href="/admin/users">User Directory</a>
+      <span aria-hidden="true">/</span>
+      <span>User Profile</span>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <div class="dashboard-header">
+      <div>
+        <h1>User Profile</h1>
+        <p>View institutional account information and platform activity.</p>
+      </div>
+
+      <a href="/admin/users" class="btn btn-secondary">
+        &larr; Back to User Directory
+      </a>
+    </div>
+
+    <!-- PROFILE OVERVIEW -->
+    <section class="card mb-6">
+
+      <div class="d-flex flex-wrap justify-between align-center gap-4">
+
+        <div>
+          <div class="d-flex flex-wrap align-center gap-2 mb-2">
+            <h2 style="font-size: var(--fs-xl); margin: 0;">
+              <%= displayName %>
+            </h2>
+
+            <span class="tag" style="text-transform: capitalize;">
+              <%= user.role %>
+            </span>
+          </div>
+
+          <p class="text-secondary mb-2">
+            <%= user.email || 'No email available' %>
+          </p>
+
+          <p class="text-muted" style="font-size: var(--fs-xs);">
+            Account created: <%= formatDate(user.createdAt) %>
+          </p>
+        </div>
+
+        <div>
+          <span class="badge <%= statusClass(status) %>">
+            <%= status.toUpperCase() %>
+          </span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PROFILE DETAILS -->
+    <div class="card mb-6">
+
+      <h3 class="mb-4">Personal Information</h3>
+
+      <div class="grid grid-2 gap-4">
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Full Name</div>
+          <strong><%= user.fullName || '—' %></strong>
+        </div>
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Email Address</div>
+          <strong><%= user.email || '—' %></strong>
+        </div>
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Mobile Number</div>
+          <strong><%= user.mobile || '—' %></strong>
+        </div>
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Roll Number</div>
+          <strong><%= user.rollNumber || '—' %></strong>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ACADEMIC INFORMATION -->
+    <div class="card mb-6">
+
+      <h3 class="mb-4">Academic Information</h3>
+
+      <div class="grid grid-2 gap-4">
+
+        <% if (isStudent) { %>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Current Year</div>
+            <strong>
+              <%= user.currentYear ? 'MCA ' + user.currentYear : '—' %>
+            </strong>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Admission Batch</div>
+            <strong><%= user.admissionBatch || '—' %></strong>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Expected Graduation Year</div>
+            <strong><%= formatYear(user.expectedGradYear) %></strong>
+          </div>
+
+        <% } else if (isAlumni) { %>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Graduation Year</div>
+            <strong><%= formatYear(user.graduationYear) %></strong>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Admission Batch</div>
+            <strong><%= user.admissionBatch || '—' %></strong>
+          </div>
+
+        <% } %>
+
+      </div>
+
+    </div>
+
+    <!-- ALUMNI PROFESSIONAL INFORMATION -->
+    <% if (isAlumni) { %>
+
+      <div class="card mb-6">
+
+        <h3 class="mb-4">Professional Information</h3>
+
+        <div class="grid grid-2 gap-4">
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Profession</div>
+            <strong><%= user.profession || '—' %></strong>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Company</div>
+            <strong><%= user.company || '—' %></strong>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">LinkedIn</div>
+
+            <% if (user.linkedin) { %>
+              <a href="<%= user.linkedin %>" target="_blank" rel="noopener noreferrer">
+                View LinkedIn Profile
+              </a>
+            <% } else { %>
+              <span class="text-muted">Not provided</span>
+            <% } %>
+          </div>
+
+        </div>
+
+      </div>
+
+    <% } %>
+
+    <!-- SKILLS -->
+    <div class="card mb-6">
+
+      <h3 class="mb-3">Skills</h3>
+
+      <% if (skills.length > 0) { %>
+
+        <div class="d-flex flex-wrap gap-2">
+          <% skills.forEach(skill => { %>
+            <span class="tag"><%= skill %></span>
+          <% }) %>
+        </div>
+
+      <% } else { %>
+
+        <p class="text-secondary">
+          No skills have been added to this profile.
+        </p>
+
+      <% } %>
+
+    </div>
+
+    <!-- VERIFICATION INFORMATION -->
+    <div class="card mb-6">
+
+      <h3 class="mb-4">Verification Information</h3>
+
+      <div class="grid grid-2 gap-4 mb-4">
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Verification Status</div>
+          <span class="badge <%= statusClass(status) %>">
+            <%= status.toUpperCase() %>
+          </span>
+        </div>
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Document Name</div>
+          <strong><%= user.documentOriginalName || 'No document uploaded' %></strong>
+        </div>
+
+        <div>
+          <div class="text-muted" style="font-size: var(--fs-xs);">Document Size</div>
+          <strong>
+            <%= user.documentSizeBytes
+              ? (user.documentSizeBytes / 1024).toFixed(1) + ' KB'
+              : '—' %>
+          </strong>
+        </div>
+
+      </div>
+
+      <% if (user.documentFilename) { %>
+        <a
+          href="/admin/documents/<%= encodeURIComponent(user.documentFilename) %>"
+          class="btn btn-secondary btn-sm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View Uploaded Document
+        </a>
+      <% } %>
+
+      <div class="divider my-4"></div>
+
+      <h4 class="mb-3">Verification History</h4>
+
+      <% if (history.length > 0) { %>
+
+        <div class="d-flex flex-column gap-3">
+
+          <% history.forEach(item => { %>
+
+            <div style="padding: var(--sp-3); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+
+              <div class="d-flex flex-wrap justify-between align-center gap-2 mb-2">
+
+                <strong>
+                  <%= item.reviewerName || 'Administrator' %>
+                </strong>
+
+                <span class="badge <%= statusClass(item.decision) %>">
+                  <%= (item.decision || 'unknown').toUpperCase() %>
+                </span>
+
+              </div>
+
+              <p class="text-muted" style="font-size: var(--fs-xs);">
+                <%= formatDate(item.timestamp) %>
+              </p>
+
+              <% if (item.reason) { %>
+                <p class="text-secondary" style="font-size: var(--fs-sm);">
+                  <%= item.reason %>
+                </p>
+              <% } %>
+
+            </div>
+
+          <% }) %>
+
+        </div>
+
+      <% } else { %>
+
+        <p class="text-secondary">
+          No verification history is available.
+        </p>
+
+      <% } %>
+
+    </div>
+
+    <!-- STUDENT ACTIVITY -->
+    <% if (isStudent) { %>
+
+      <section class="card mb-6">
+
+        <h3 class="mb-4">Student Platform Activity</h3>
+
+        <div class="grid grid-2 gap-4 mb-5">
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Completed Projects</div>
+            <h2 style="font-size: var(--fs-2xl); margin: 0;">
+              <%= completedProjectCount %>
+            </h2>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Approved Tasks</div>
+            <h2 style="font-size: var(--fs-2xl); margin: 0;">
+              <%= approvedTaskCount %>
+            </h2>
+          </div>
+
+        </div>
+
+        <div class="divider my-4"></div>
+
+        <h4 class="mb-3">Completed Collaborations</h4>
+
+        <% if (completedProjects.length > 0) { %>
+
+          <div class="d-flex flex-column gap-4">
+
+            <% completedProjects.forEach(entry => { %>
+
+              <div style="padding: var(--sp-4); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+
+                <div class="d-flex flex-wrap justify-between align-center gap-2 mb-2">
+
+                  <h4 style="margin: 0;">
+                    <%= entry.project.title || 'Untitled Project' %>
+                  </h4>
+
+                  <span class="badge badge-approved">COMPLETED</span>
+
+                </div>
+
+                <% if (entry.project.description) { %>
+                  <p class="text-secondary mb-3">
+                    <%= entry.project.description %>
+                  </p>
+                <% } %>
+
+                <div class="text-muted" style="font-size: var(--fs-xs);">
+                  Category: <%= entry.project.category || '—' %>
+                </div>
+
+                <div class="text-muted" style="font-size: var(--fs-xs);">
+                  Mentor: <%= entry.project.creatorName || '—' %>
+                </div>
+
+                <div class="text-muted mb-3" style="font-size: var(--fs-xs);">
+                  Completed: <%= formatDate(entry.membership.completedAt || entry.membership.updatedAt) %>
+                </div>
+
+                <h5 class="mb-2">Approved Tasks</h5>
+
+                <% if (entry.tasks && entry.tasks.length > 0) { %>
+
+                  <div class="d-flex flex-column gap-3">
+
+                    <% entry.tasks.forEach(task => { %>
+
+                      <div style="padding: var(--sp-3); background: var(--clr-surface); border-radius: var(--radius-md);">
+
+                        <strong><%= task.title || 'Untitled Task' %></strong>
+
+                        <% if (task.repositoryUrl) { %>
+                          <p style="font-size: var(--fs-xs); margin-top: var(--sp-2);">
+                            <a href="<%= task.repositoryUrl %>" target="_blank" rel="noopener noreferrer">
+                              GitHub Repository
+                            </a>
+                          </p>
+                        <% } %>
+
+                        <% if (task.deliverableUrl) { %>
+                          <p style="font-size: var(--fs-xs);">
+                            <a href="<%= task.deliverableUrl %>" target="_blank" rel="noopener noreferrer">
+                              View Deliverable
+                            </a>
+                          </p>
+                        <% } %>
+
+                        <% if (task.reviewFeedback) { %>
+                          <p class="text-secondary" style="font-size: var(--fs-xs);">
+                            Review: <%= task.reviewFeedback %>
+                          </p>
+                        <% } %>
+
+                      </div>
+
+                    <% }) %>
+
+                  </div>
+
+                <% } else { %>
+
+                  <p class="text-muted" style="font-size: var(--fs-sm);">
+                    No approved task details are available for this project.
+                  </p>
+
+                <% } %>
+
+              </div>
+
+            <% }) %>
+
+          </div>
+
+        <% } else { %>
+
+          <p class="text-secondary">
+            This student has no completed collaborations yet.
+          </p>
+
+        <% } %>
+
+      </section>
+
+    <% } %>
+
+    <!-- ALUMNI ACTIVITY -->
+    <% if (isAlumni) { %>
+
+      <section class="card mb-6">
+
+        <h3 class="mb-4">Alumni Mentorship Activity</h3>
+
+        <div class="grid grid-2 gap-4 mb-5">
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Projects Created</div>
+            <h2 style="font-size: var(--fs-2xl); margin: 0;">
+              <%= createdProjects.length %>
+            </h2>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Active Mentees</div>
+            <h2 style="font-size: var(--fs-2xl); margin: 0;">
+              <%= activeMenteeCount %>
+            </h2>
+          </div>
+
+          <div>
+            <div class="text-muted" style="font-size: var(--fs-xs);">Reviews Submitted</div>
+            <h2 style="font-size: var(--fs-2xl); margin: 0;">
+              <%= reviewCount %>
+            </h2>
+          </div>
+
+        </div>
+
+        <div class="divider my-4"></div>
+
+        <h4 class="mb-3">Projects Created by Alumni</h4>
+
+        <% if (createdProjects.length > 0) { %>
+
+          <div class="d-flex flex-column gap-3">
+
+            <% createdProjects.forEach(project => { %>
+
+              <div style="padding: var(--sp-4); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+
+                <div class="d-flex flex-wrap justify-between align-center gap-2 mb-2">
+
+                  <h4 style="margin: 0;">
+                    <%= project.title || 'Untitled Project' %>
+                  </h4>
+
+                  <span class="badge <%= statusClass(project.status) %>">
+                    <%= (project.status || 'unknown').toUpperCase() %>
+                  </span>
+
+                </div>
+
+                <% if (project.description) { %>
+                  <p class="text-secondary mb-3">
+                    <%= project.description %>
+                  </p>
+                <% } %>
+
+                <div class="grid grid-2 gap-3">
+
+                  <div>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">Category</div>
+                    <strong><%= project.category || '—' %></strong>
+                  </div>
+
+                  <div>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">Mentees</div>
+                    <strong>
+                      <%= project.activeStudentCount || 0 %> /
+                      <%= project.maxStudents || '—' %>
+                    </strong>
+                  </div>
+
+                  <div>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">Created</div>
+                    <strong><%= formatDate(project.createdAt) %></strong>
+                  </div>
+
+                  <div>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">Last Updated</div>
+                    <strong><%= formatDate(project.updatedAt) %></strong>
+                  </div>
+
+                </div>
+
+              </div>
+
+            <% }) %>
+
+          </div>
+
+        <% } else { %>
+
+          <p class="text-secondary">
+            This alumni has not created any mentoring projects yet.
+          </p>
+
+        <% } %>
+
+      </section>
+
+    <% } %>
+
+    <!-- READ-ONLY NOTICE -->
+    <div class="text-muted text-center mb-6" style="font-size: var(--fs-xs);">
+      This is an administrator read-only view. Profile information is retrieved from the SkillBridge database.
+    </div>
+
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

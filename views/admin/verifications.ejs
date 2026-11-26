@@ -3,7 +3,6 @@
 
 <!-- ══════════════════════════════════════════════════════════
      ADMIN VERIFICATION QUEUE — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
@@ -14,10 +13,12 @@
       <div class="sidebar-heading">Administration</div>
       <nav class="sidebar-nav" aria-label="Admin navigation">
         <a href="/admin/dashboard" class="sidebar-link">
-          <span>🛡️</span> Overview
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Overview
         </a>
         <a href="/admin/verifications" class="sidebar-link active">
-          <span>⏳</span> Verifications Queue
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Verifications Queue
           <% if (typeof pendingCount !== 'undefined' && pendingCount > 0) { %>
             <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">
               <%= pendingCount %>
@@ -25,63 +26,59 @@
           <% } %>
         </a>
         <a href="/admin/users" class="sidebar-link">
-          <span>👥</span> User Directory
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          User Directory
         </a>
         <a href="/admin/projects" class="sidebar-link">
-          <span>📁</span> Moderation &amp; Projects
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Projects &amp; Moderation
         </a>
       </nav>
     </div>
   </aside>
 
   <!-- ── Main Verification Queue ────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/admin/dashboard">Admin</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>Verifications</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
-        <h1>Registration Verification Queue</h1>
-        <p>Review uploaded institutional proof documents and verify genuine PSG Tech MCA applicants.</p>
+        <h1>Verification Queue</h1>
+        <p>Review uploaded institutional documents and verify genuine PSG Tech MCA applicants.</p>
       </div>
       <div>
-        <a href="/admin/dashboard" class="btn btn-secondary">← Back to Dashboard</a>
+        <a href="/admin/dashboard" class="btn btn-secondary">← Dashboard</a>
       </div>
     </div>
 
     <!-- Alert Messages -->
     <% if (typeof message !== 'undefined' && message === 'approved') { %>
-      <div class="doc-info-box mb-6" style="border-color: var(--clr-success-border); background: var(--clr-success-bg); color: var(--clr-success-text);">
-        <span>✓</span>
-        <div>
-          <strong>Account Approved &amp; Verified</strong>
-          <p style="font-size: var(--fs-xs); margin: 0;">The member now has verified access to platform collaboration.</p>
-        </div>
+      <div class="flash flash-success mb-6">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <div><strong>Account Approved &amp; Verified.</strong> The member now has verified access to platform collaboration.</div>
       </div>
     <% } else if (typeof message !== 'undefined' && message === 'rejected') { %>
-      <div class="doc-info-box mb-6" style="border-color: var(--clr-danger-border); background: var(--clr-danger-bg); color: var(--clr-danger-text);">
-        <span>✕</span>
-        <div>
-          <strong>Verification Declined</strong>
-          <p style="font-size: var(--fs-xs); margin: 0;">The application status has been updated to rejected and the audit reason recorded.</p>
-        </div>
+      <div class="flash flash-error mb-6">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <div><strong>Verification Declined.</strong> Application status updated and audit reason recorded.</div>
       </div>
     <% } %>
 
     <!-- Verification Protocol Notice -->
-    <div class="doc-info-box mb-6">
-      <span>🛡️</span>
+    <div class="flash flash-info mb-6">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       <div>
-        <strong>Department Verification Protocol:</strong>
-        <p class="text-muted" style="font-size: var(--fs-xs); margin: 0; line-height: 1.5;">
-          Verify applicant MCA roll number against the college official roll database. Ensure student ID cards display valid active academic year and alumni certificates show degree provisional or course completion stamp.
-        </p>
+        <strong>Verification Protocol:</strong>
+        <span style="font-size: var(--fs-xs); display: block; margin-top: 2px;">
+          Verify MCA roll number against the college registrar. Ensure student ID cards display valid active academic year. Alumni certificates must show degree provisional or course completion stamp.
+        </span>
       </div>
     </div>
 
@@ -90,7 +87,7 @@
       <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
         <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Database Service Offline</h2>
         <p class="text-secondary" style="max-width: 500px; margin: 0 auto var(--sp-6); line-height: 1.6;">
-          Verification queue data is temporarily unavailable because the database service is currently offline. Verification decisions cannot be processed right now.
+          Verification queue data is temporarily unavailable. Verification decisions cannot be processed right now.
         </p>
         <a href="/admin/verifications" class="btn btn-secondary">Retry Loading Queue</a>
       </div>
@@ -98,16 +95,14 @@
     <!-- ── State 2: Empty Queue ───────────────────────────── -->
     <% } else if (!applications || applications.length === 0) { %>
       <div class="card text-center" style="padding: var(--sp-12) var(--sp-6);">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); margin-bottom: var(--sp-4);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: var(--clr-success-bg); border: 1px solid var(--clr-success-border); margin-bottom: var(--sp-4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--clr-success-text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Verification Queue Cleared</h2>
+        <h2 style="font-size: var(--fs-xl); margin-bottom: var(--sp-2);">Queue Cleared</h2>
         <p class="text-secondary" style="max-width: 480px; margin: 0 auto var(--sp-6); line-height: 1.6;">
-          There are no pending registrations requiring review at this time. All submitted student and alumni applications have been processed.
+          No pending registrations require review. All submitted student and alumni applications have been processed.
         </p>
-        <a href="/admin/users" class="btn btn-secondary">View Verified User Directory</a>
+        <a href="/admin/users" class="btn btn-secondary">View Verified Directory</a>
       </div>
 
     <!-- ── State 3: Populated Queue ───────────────────────── -->
@@ -119,68 +114,61 @@
               <div>
                 <div class="d-flex align-center gap-2 mb-1">
                   <span class="badge badge-pending">PENDING REVIEW</span>
-                  <span class="tag"><%= appItem.role === 'student' ? 'Student Registration' : 'Alumni Registration' %></span>
+                  <span class="tag"><%= appItem.role === 'student' ? 'Student' : 'Alumni' %></span>
                 </div>
                 <h2 style="font-size: var(--fs-xl);"><%= appItem.fullName %></h2>
                 <div class="text-secondary" style="font-size: var(--fs-xs);">
-                  Email: <code><%= appItem.email %></code> · Mobile: <%= appItem.mobile || '—' %>
+                  <code><%= appItem.email %></code>
+                  <% if (appItem.mobile) { %> · <%= appItem.mobile %><% } %>
                 </div>
               </div>
               <div class="text-muted" style="font-size: var(--fs-xs);">
-                Submitted: <%= new Date(appItem.createdAt).toLocaleDateString() %>
+                Submitted: <%= new Date(appItem.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %>
               </div>
             </div>
 
+            <!-- Academic details grid -->
             <div class="form-row mb-4" style="background: var(--clr-bg-subtle); padding: var(--sp-4); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
               <div>
-                <span class="text-muted" style="font-size: var(--fs-xs);">MCA Roll Number:</span>
+                <span class="text-muted" style="font-size: var(--fs-xs);">MCA Roll Number</span>
                 <div style="font-size: var(--fs-base); font-weight: 700; color: var(--clr-text); font-family: monospace;">
                   <%= appItem.rollNumber %>
                 </div>
               </div>
               <% if (appItem.role === 'student') { %>
                 <div>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Current Year:</span>
+                  <span class="text-muted" style="font-size: var(--fs-xs);">Current Year</span>
                   <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);">
                     <%= appItem.currentYear === '1' ? 'First Year (MCA I)' : (appItem.currentYear === '2' ? 'Second Year (MCA II)' : appItem.currentYear) %>
                   </div>
                 </div>
                 <div>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Admission Batch:</span>
+                  <span class="text-muted" style="font-size: var(--fs-xs);">Admission Batch</span>
                   <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);"><%= appItem.admissionBatch || '—' %></div>
-                </div>
-                <div>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Expected Graduation:</span>
-                  <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);"><%= appItem.expectedGradYear || '—' %></div>
                 </div>
               <% } else { %>
                 <div>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Graduation Year:</span>
+                  <span class="text-muted" style="font-size: var(--fs-xs);">Graduation Year</span>
                   <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);">Class of <%= appItem.graduationYear || '—' %></div>
                 </div>
                 <div>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Current Profession:</span>
-                  <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);"><%= appItem.profession || '—' %></div>
-                </div>
-                <div>
-                  <span class="text-muted" style="font-size: var(--fs-xs);">Organization:</span>
-                  <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);"><%= appItem.company || '—' %></div>
+                  <span class="text-muted" style="font-size: var(--fs-xs);">Profession / Company</span>
+                  <div style="font-size: var(--fs-sm); font-weight: 600; color: var(--clr-text);">
+                    <%= appItem.profession || '—' %><% if (appItem.company) { %> · <%= appItem.company %><% } %>
+                  </div>
                 </div>
               <% } %>
             </div>
 
-            <!-- Document Info & Action Buttons -->
+            <!-- Document & action row -->
             <div class="d-flex justify-between align-center flex-wrap gap-4" style="border-top: 1px solid var(--clr-border-subtle); padding-top: var(--sp-4);">
               <div class="d-flex align-center gap-3">
-                <span style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border);">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                  </svg>
-                </span>
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--clr-surface-elevated); border: 1px solid var(--clr-border); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--clr-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
                 <div>
                   <strong style="font-size: var(--fs-sm);">
-                    <%= appItem.documentOriginalName || (appItem.documentFilename ? 'Verification_Document.pdf' : 'No document attached') %>
+                    <%= appItem.documentOriginalName || (appItem.documentFilename ? 'Verification Document' : 'No document attached') %>
                   </strong>
                   <div class="text-muted" style="font-size: var(--fs-xs);">
                     <%= appItem.documentFilename ? 'Private Document Vault' : 'Pending upload' %>
@@ -204,7 +192,7 @@
       </div>
     <% } %>
 
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>

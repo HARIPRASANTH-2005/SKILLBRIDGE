@@ -1,42 +1,106 @@
+
 <%- include('../partials/head', { title: title }) %>
 <%- include('../partials/navbar') %>
 
 <!-- ══════════════════════════════════════════════════════════
      STUDENT PROFILE — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     Database-backed Student Profile with Editing
 ══════════════════════════════════════════════════════════ -->
+
+<%
+  const student = currentUser || {};
+  const skills = Array.isArray(student.skills) ? student.skills : [];
+  const projects = Array.isArray(completedProjects) ? completedProjects : [];
+
+  const yearLabel = student.currentYear === '1'
+    ? 'First Year (MCA I)'
+    : student.currentYear === '2'
+      ? 'Second Year (MCA II)'
+      : 'Not provided';
+
+  const batchLabel = student.admissionBatch && student.expectedGradYear
+    ? `${student.admissionBatch} – ${student.expectedGradYear}`
+    : student.admissionBatch || 'Not provided';
+
+  const verificationLabel = student.status
+    ? student.status.charAt(0).toUpperCase() + student.status.slice(1)
+    : 'Not available';
+%>
 
 <div class="dashboard-layout">
 
   <!-- ── Sidebar ────────────────────────────────────────── -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Student navigation">
     <div>
       <div class="sidebar-heading">Workspace</div>
-      <nav class="sidebar-nav" aria-label="Student navigation">
+
+      <nav class="sidebar-nav">
+
         <a href="/student/dashboard" class="sidebar-link">
-          <span>📊</span> Overview
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Overview
         </a>
+
         <a href="/projects" class="sidebar-link">
-          <span>🔍</span> Browse Projects
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          Browse Projects
         </a>
+
         <a href="/student/tasks" class="sidebar-link">
-          <span>✅</span> Assigned Tasks
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          Assigned Tasks
         </a>
+
         <a href="/messages" class="sidebar-link">
-          <span>💬</span> Project Messages
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          Project Messages
         </a>
+
         <a href="/reviews" class="sidebar-link">
-          <span>⭐</span> Feedback &amp; Ratings
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          Feedback &amp; Ratings
         </a>
+
         <a href="/student/profile" class="sidebar-link active">
-          <span>👤</span> Student Profile
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Student Profile
         </a>
+
       </nav>
+    </div>
+
+    <div style="padding: 0 var(--sp-2);">
+      <div style="background: var(--clr-primary-light); border: 1px solid var(--clr-primary-border); border-radius: var(--radius-sm); padding: var(--sp-3);">
+        <strong style="font-size: var(--fs-xs); color: var(--clr-primary); display: block;">
+          SkillBridge
+        </strong>
+        <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+          Student Collaboration Cell
+        </div>
+      </div>
     </div>
   </aside>
 
   <!-- ── Main Profile Content ───────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
     <div class="breadcrumbs">
       <a href="/">Home</a>
@@ -46,164 +110,616 @@
       <span>Profile &amp; Skills</span>
     </div>
 
+    <!-- Page Header -->
     <div class="dashboard-header">
       <div>
         <h1>Student Profile</h1>
-        <p>Manage your academic credentials, verified skills, and portfolio presence.</p>
+        <p>
+          Manage your profile, update your skills, and view your completed collaborations.
+        </p>
       </div>
+
       <div>
-        <span class="badge badge-approved" style="padding: 0.35rem 0.85rem; font-size: var(--fs-xs);">
-          ✓ VERIFIED PSG TECH MCA STUDENT
+        <span class="badge <%= student.status === 'approved' ? 'badge-approved' : '' %>"
+              style="padding: 0.35rem 0.85rem; font-size: var(--fs-xs);">
+          <%= verificationLabel.toUpperCase() %>
         </span>
       </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 320px 1fr; gap: var(--sp-6);">
-      
-      <!-- Left Column: Personal & Academic Info -->
-      <div class="card" style="height: fit-content;">
-        <div class="text-center mb-4">
-          <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--clr-surface-elevated); border: 2px solid var(--clr-border); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto var(--sp-3);">
-            🎓
-          </div>
-          <h2 style="font-size: var(--fs-xl); font-weight: 700;"><%= currentUser && currentUser.fullName ? currentUser.fullName : 'Hari Prasanth M' %></h2>
-          <div class="text-secondary" style="font-size: var(--fs-xs); margin-top: 2px;">
-            Roll Number: <strong style="color: var(--clr-text);"><%= currentUser && currentUser.rollNumber ? currentUser.rollNumber : '24MCA018' %></strong>
-          </div>
-          <div class="text-muted" style="font-size: var(--fs-xs);">
-            PSG College of Technology · Dept of CA
-          </div>
-        </div>
+    <!-- Profile Update Message -->
+    <% if (profileMessage) { %>
 
-        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4); margin-bottom: var(--sp-4);">
-          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
-            <span class="text-muted">Degree:</span>
-            <span>Master of Computer Applications</span>
-          </div>
-          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
-            <span class="text-muted">Current Year:</span>
-            <span>First Year (MCA I)</span>
-          </div>
-          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
-            <span class="text-muted">Batch:</span>
-            <span>2024 – 2026</span>
-          </div>
-          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs);">
-            <span class="text-muted">Email:</span>
-            <span class="text-secondary"><%= currentUser && currentUser.email ? currentUser.email : '24mca018@psgtech.ac.in' %></span>
-          </div>
-        </div>
+      <div class="card"
+           role="alert"
+           style="margin-bottom: var(--sp-4); border-left: 4px solid <%= profileMessageType === 'error' ? '#dc2626' : '#16a34a' %>;">
 
-        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4);">
-          <div class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">Verification Document</div>
-          <div class="doc-info-box" style="margin: 0; padding: var(--sp-2) var(--sp-3);">
-            <span>📄</span>
-            <div style="font-size: var(--fs-xs);">
-              <strong>Student_ID_Card.pdf</strong>
-              <div class="text-muted" style="font-size: 0.65rem;">Approved by Department Admin</div>
-            </div>
-          </div>
-        </div>
+        <p style="font-size: var(--fs-sm); margin: 0; color: <%= profileMessageType === 'error' ? '#dc2626' : '#16a34a' %>;">
+          <%= profileMessage %>
+        </p>
+
       </div>
 
-      <!-- Right Column: Skills, Bio, & Portfolio -->
-      <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+    <% } %>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--sp-6);">
+
+      <!-- ── Left Column: Personal & Academic Information ── -->
+      <div class="card" style="height: fit-content;">
+
+        <div class="text-center mb-4">
+
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--clr-primary-light); border: 2px solid var(--clr-primary-border); color: var(--clr-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto var(--sp-3);">
+
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+
+          </div>
+
+          <h2 style="font-size: var(--fs-xl); font-weight: 700;">
+            <%= student.fullName || 'Name not provided' %>
+          </h2>
+
+          <div class="text-secondary" style="font-size: var(--fs-xs); margin-top: 2px;">
+            Roll Number:
+            <strong style="color: var(--clr-text);">
+              <%= student.rollNumber || 'Not provided' %>
+            </strong>
+          </div>
+
+          <div class="text-muted" style="font-size: var(--fs-xs);">
+            Student Account
+          </div>
+
+        </div>
+
+        <!-- Academic and contact details -->
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4); margin-bottom: var(--sp-4);">
+
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs); gap: var(--sp-3);">
+            <span class="text-muted">Course:</span>
+            <strong>Master of Computer Applications</strong>
+          </div>
+
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs); gap: var(--sp-3);">
+            <span class="text-muted">Current Year:</span>
+            <strong><%= yearLabel %></strong>
+          </div>
+
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs); gap: var(--sp-3);">
+            <span class="text-muted">Batch:</span>
+            <strong><%= batchLabel %></strong>
+          </div>
+
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs); gap: var(--sp-3);">
+            <span class="text-muted">Email:</span>
+            <span class="text-secondary" style="text-align: right; overflow-wrap: anywhere;">
+              <%= student.email || 'Not provided' %>
+            </span>
+          </div>
+
+          <div class="d-flex justify-between mb-2" style="font-size: var(--fs-xs); gap: var(--sp-3);">
+            <span class="text-muted">Mobile:</span>
+            <span class="text-secondary">
+              <%= student.mobile || 'Not provided' %>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Verification document -->
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4);">
+
+          <div class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--sp-2);">
+            Verification Document
+          </div>
+
+          <% if (student.documentOriginalName || student.documentFilename) { %>
+
+            <div class="doc-info-box" style="margin: 0; padding: var(--sp-2) var(--sp-3); display: flex; align-items: center; gap: var(--sp-2);">
+
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: var(--clr-primary);">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+
+              <div style="font-size: var(--fs-xs); min-width: 0; overflow-wrap: anywhere;">
+
+                <strong>
+                  <%= student.documentOriginalName || student.documentFilename %>
+                </strong>
+
+                <div class="text-muted" style="font-size: 0.65rem;">
+                  <% if (student.documentSizeBytes) { %>
+                    <%= (student.documentSizeBytes / 1024).toFixed(1) %> KB
+                  <% } else { %>
+                    Uploaded document
+                  <% } %>
+                </div>
+
+              </div>
+
+            </div>
+
+          <% } else { %>
+
+            <p class="text-muted" style="font-size: var(--fs-xs);">
+              No verification document information is available.
+            </p>
+
+          <% } %>
+
+          <% if (latestVerification) { %>
+
+            <div style="margin-top: var(--sp-3); font-size: var(--fs-xs);">
+
+              <div class="text-muted">
+                Latest verification decision:
+                <strong><%= latestVerification.decision || 'Not available' %></strong>
+              </div>
+
+              <% if (latestVerification.reviewerName) { %>
+                <div class="text-muted" style="margin-top: 4px;">
+                  Reviewed by: <%= latestVerification.reviewerName %>
+                </div>
+              <% } %>
+
+              <% if (latestVerification.timestamp) { %>
+                <div class="text-muted" style="margin-top: 4px;">
+                  Date:
+                  <%= new Date(latestVerification.timestamp).toLocaleDateString('en-IN') %>
+                </div>
+              <% } %>
+
+            </div>
+
+          <% } else { %>
+
+            <div class="text-muted" style="font-size: var(--fs-xs); margin-top: var(--sp-2);">
+              Account status: <strong><%= verificationLabel %></strong>
+            </div>
+
+          <% } %>
+
+        </div>
+
+        <!-- Edit Contact Information -->
+        <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-4); margin-top: var(--sp-4);">
+
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Update Contact Information</h3>
+              <p class="card-subtitle">
+                Keep your contact details up to date
+              </p>
+            </div>
+          </div>
+
+          <form action="/student/profile/update" method="POST">
+
+            <!-- Preserve existing skills when updating contact details -->
+            <input
+              type="hidden"
+              name="skills"
+              value="<%= skills.join(', ') %>"
+            >
+
+            <div class="form-group mb-3">
+
+              <label for="profileMobile">
+                Mobile Number
+              </label>
+
+              <input
+                type="tel"
+                id="profileMobile"
+                name="mobile"
+                value="<%= student.mobile || '' %>"
+                maxlength="20"
+                placeholder="Enter your mobile number"
+                class="form-control"
+              >
+
+            </div>
+
+            <div class="form-group mb-3">
+
+              <label for="profileLinkedin">
+                LinkedIn Profile URL
+              </label>
+
+              <input
+                type="url"
+                id="profileLinkedin"
+                name="linkedin"
+                value="<%= student.linkedin || '' %>"
+                maxlength="500"
+                placeholder="https://www.linkedin.com/in/your-profile"
+                class="form-control"
+              >
+
+              <small class="text-muted">
+                Enter your LinkedIn profile URL. Leave empty if you do not have one.
+              </small>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              Save Contact Details
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- ── Right Column ────────────────────────────────── -->
+      <div class="d-flex flex-column gap-6">
 
         <!-- Technical Skills -->
         <div class="card">
-          <div class="d-flex justify-between align-center mb-4">
+
+          <div class="card-header">
             <div>
-              <h3 style="font-size: var(--fs-lg);">Technical Skills Inventory</h3>
-              <p class="text-secondary" style="font-size: var(--fs-xs);">Used by alumni to evaluate proposal match</p>
+              <h3 class="card-title">Technical Skills Inventory</h3>
+              <p class="card-subtitle">
+                Skills saved in your student account
+              </p>
             </div>
-            <button type="button" class="btn btn-sm btn-secondary">+ Add Skill</button>
           </div>
 
-          <div class="mb-4">
-            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Languages</div>
+          <% if (skills.length > 0) { %>
+
             <div class="d-flex flex-wrap gap-2">
-              <span class="tag">JavaScript (ES6+)</span>
-              <span class="tag">TypeScript</span>
-              <span class="tag">Python</span>
-              <span class="tag">Java</span>
-              <span class="tag">SQL</span>
-            </div>
-          </div>
 
-          <div class="mb-4">
-            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Frameworks &amp; Backend</div>
-            <div class="d-flex flex-wrap gap-2">
-              <span class="tag">Node.js</span>
-              <span class="tag">Express.js</span>
-              <span class="tag">React.js</span>
-              <span class="tag">GraphQL</span>
-              <span class="tag">FastAPI</span>
-            </div>
-          </div>
+              <% skills.forEach(skill => { %>
 
-          <div>
-            <div class="text-muted" style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--sp-2);">Databases &amp; Tools</div>
-            <div class="d-flex flex-wrap gap-2">
-              <span class="tag">PostgreSQL</span>
-              <span class="tag">MongoDB</span>
-              <span class="tag">Docker</span>
-              <span class="tag">Git &amp; GitHub</span>
-              <span class="tag">Linux</span>
-            </div>
-          </div>
-        </div>
+                <% if (typeof skill === 'string' && skill.trim()) { %>
+                  <span class="tag"><%= skill %></span>
+                <% } %>
 
-        <!-- External Profiles -->
-        <div class="card">
-          <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-4);">External Profiles &amp; Repositories</h3>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="profileGithub">GitHub Username / URL</label>
-              <div class="input-prefix-wrap">
-                <span class="input-prefix">github.com/</span>
-                <input type="text" id="profileGithub" class="form-control with-prefix" value="hariprasanth-m" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="profileLinkedin">LinkedIn URL</label>
-              <div class="input-prefix-wrap">
-                <span class="input-prefix">linkedin.com/in/</span>
-                <input type="text" id="profileLinkedin" class="form-control with-prefix" value="hari-prasanth" />
-              </div>
-            </div>
-          </div>
-          <button type="button" class="btn btn-sm btn-primary">Save Profile Links</button>
-        </div>
+              <% }) %>
 
-        <!-- Verified Collaboration History -->
-        <div class="card">
-          <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-3);">Completed Collaborations</h3>
-          <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
-            <div class="d-flex justify-between align-center mb-2">
-              <strong>College Attendance Management API</strong>
-              <span class="badge badge-approved">VERIFIED COMPLETE</span>
             </div>
-            <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
-              Built RESTful microservice with Express.js and PostgreSQL. Designed JWT auth, role validation for professors, and CSV bulk upload parser.
+
+          <% } else { %>
+
+            <div style="padding: var(--sp-3); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+
+              <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">
+                You have not added any skills to your profile yet.
+              </p>
+
+            </div>
+
+          <% } %>
+
+          <!-- Edit Technical Skills -->
+          <div style="border-top: 1px solid var(--clr-border); margin-top: var(--sp-4); padding-top: var(--sp-4);">
+
+            <h4 style="font-size: var(--fs-sm); margin-bottom: var(--sp-2);">
+              Update Your Skills
+            </h4>
+
+            <p class="text-muted" style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
+              Add your technical skills below. Separate skills with commas or enter one skill per line.
             </p>
-            <div class="doc-info-box" style="margin: 0;">
-              <span>💬</span>
-              <div>
-                <strong style="font-size: var(--fs-xs);">Mentor Endorsement — Arvind Ramanathan (Class of 2017):</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">
-                  "Demonstrated exceptional commitment to unit test coverage and clean API documentation. Code ready for production."
-                </div>
+
+            <form action="/student/profile/update" method="POST">
+
+              <!-- Preserve existing contact details when updating skills -->
+              <input
+                type="hidden"
+                name="mobile"
+                value="<%= student.mobile || '' %>"
+              >
+
+              <input
+                type="hidden"
+                name="linkedin"
+                value="<%= student.linkedin || '' %>"
+              >
+
+              <div class="form-group mb-3">
+
+                <label for="profileSkills">
+                  Technical Skills
+                </label>
+
+                <textarea
+                  id="profileSkills"
+                  name="skills"
+                  rows="5"
+                  maxlength="2000"
+                  placeholder="Java, JavaScript, React, Node.js, MongoDB"
+                  class="form-control"
+                ><%= skills.join('\n') %></textarea>
+
               </div>
+
+              <small class="text-muted" style="display: block; margin-bottom: var(--sp-3);">
+                Maximum 30 skills. Each skill can contain up to 50 characters.
+              </small>
+
+              <button type="submit" class="btn btn-primary">
+                Save Skills
+              </button>
+
+            </form>
+
+          </div>
+
+        </div>
+
+        <!-- Professional Profile -->
+        <div class="card">
+
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Professional Profile</h3>
+              <p class="card-subtitle">
+                External profile information available in your account
+              </p>
             </div>
           </div>
+
+          <% if (student.linkedin) { %>
+
+            <div style="font-size: var(--fs-xs);">
+
+              <span class="text-muted">LinkedIn:</span>
+
+              <a
+                href="<%= /^https?:\/\//i.test(student.linkedin) ? student.linkedin : 'https://' + student.linkedin %>"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="overflow-wrap: anywhere;"
+              >
+                <%= student.linkedin %>
+              </a>
+
+            </div>
+
+          <% } else { %>
+
+            <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">
+              No professional profile links have been added to your account.
+            </p>
+
+          <% } %>
+
+          <p class="text-muted" style="font-size: 0.7rem; margin-top: var(--sp-3);">
+            GitHub repositories submitted for completed project tasks are listed below.
+          </p>
+
+        </div>
+
+        <!-- Completed Collaborations -->
+        <div class="card">
+
+          <div class="card-header">
+
+            <div>
+              <h3 class="card-title">Completed Collaborations</h3>
+              <p class="card-subtitle">
+                Projects marked completed and recorded in your account
+              </p>
+            </div>
+
+            <span class="badge badge-approved">
+              <%= completedProjectCount || 0 %> COMPLETED
+            </span>
+
+          </div>
+
+          <% if (projects.length > 0) { %>
+
+            <% projects.forEach(item => { %>
+
+              <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md); margin-bottom: var(--sp-3);">
+
+                <div class="d-flex justify-between align-center mb-2" style="gap: var(--sp-2); flex-wrap: wrap;">
+
+                  <strong style="font-size: var(--fs-sm);">
+                    <%= item.project.title || 'Untitled Project' %>
+                  </strong>
+
+                  <span class="badge badge-approved">
+                    COMPLETED
+                  </span>
+
+                </div>
+
+                <% if (item.project.description) { %>
+
+                  <p class="text-secondary" style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
+                    <%= item.project.description %>
+                  </p>
+
+                <% } %>
+
+                <div style="font-size: var(--fs-xs); margin-bottom: var(--sp-3);">
+
+                  <% if (item.project.category) { %>
+
+                    <div class="text-muted mb-2">
+                      Category: <strong><%= item.project.category %></strong>
+                    </div>
+
+                  <% } %>
+
+                  <% if (item.project.duration) { %>
+
+                    <div class="text-muted mb-2">
+                      Duration: <strong><%= item.project.duration %></strong>
+                    </div>
+
+                  <% } %>
+
+                  <% if (item.membership.completedAt) { %>
+
+                    <div class="text-muted mb-2">
+                      Completed on:
+                      <strong>
+                        <%= new Date(item.membership.completedAt).toLocaleDateString('en-IN') %>
+                      </strong>
+                    </div>
+
+                  <% } %>
+
+                  <% if (item.project.creatorName) { %>
+
+                    <div class="text-muted mb-2">
+                      Project mentor:
+                      <strong><%= item.project.creatorName %></strong>
+                    </div>
+
+                  <% } %>
+
+                </div>
+
+                <% if (Array.isArray(item.project.skills) && item.project.skills.length > 0) { %>
+
+                  <div class="d-flex flex-wrap gap-2 mb-3">
+
+                    <% item.project.skills.forEach(skill => { %>
+                      <span class="tag"><%= skill %></span>
+                    <% }) %>
+
+                  </div>
+
+                <% } %>
+
+                <!-- Approved task submissions -->
+                <div style="border-top: 1px solid var(--clr-border); padding-top: var(--sp-3);">
+
+                  <strong style="font-size: var(--fs-xs); display: block; margin-bottom: var(--sp-2);">
+                    Approved Task Submissions
+                  </strong>
+
+                  <% if (item.tasks.length > 0) { %>
+
+                    <% item.tasks.forEach(task => { %>
+
+                      <div style="padding: var(--sp-3); border: 1px solid var(--clr-border); border-radius: var(--radius-sm); margin-bottom: var(--sp-2);">
+
+                        <div class="d-flex justify-between align-center" style="gap: var(--sp-2); flex-wrap: wrap;">
+
+                          <strong style="font-size: var(--fs-xs);">
+                            <%= task.title %>
+                          </strong>
+
+                          <span class="badge badge-approved">
+                            APPROVED
+                          </span>
+
+                        </div>
+
+                        <% if (task.submissionNotes) { %>
+
+                          <p class="text-secondary" style="font-size: var(--fs-xs); margin-top: var(--sp-2); margin-bottom: var(--sp-2);">
+                            <%= task.submissionNotes %>
+                          </p>
+
+                        <% } %>
+
+                        <% if (task.repositoryUrl) { %>
+
+                          <div style="font-size: var(--fs-xs); margin-top: var(--sp-2);">
+
+                            <a
+                              href="<%= task.repositoryUrl %>"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              View GitHub Repository
+                            </a>
+
+                          </div>
+
+                        <% } %>
+
+                        <% if (task.deliverableUrl) { %>
+
+                          <div style="font-size: var(--fs-xs); margin-top: var(--sp-2);">
+
+                            <a
+                              href="<%= task.deliverableUrl %>"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              View Deliverable
+                            </a>
+
+                          </div>
+
+                        <% } %>
+
+                        <% if (task.reviewedBy && task.reviewedBy.fullName) { %>
+
+                          <div class="text-muted" style="font-size: 0.7rem; margin-top: var(--sp-2);">
+                            Reviewed by: <%= task.reviewedBy.fullName %>
+                          </div>
+
+                        <% } %>
+
+                        <% if (task.reviewFeedback) { %>
+
+                          <div style="margin-top: var(--sp-2); padding: var(--sp-2); background: var(--clr-surface); border-radius: var(--radius-sm);">
+
+                            <div class="text-muted" style="font-size: 0.7rem; margin-bottom: 3px;">
+                              Review Feedback
+                            </div>
+
+                            <p class="text-secondary" style="font-size: var(--fs-xs); margin: 0;">
+                              <%= task.reviewFeedback %>
+                            </p>
+
+                          </div>
+
+                        <% } %>
+
+                      </div>
+
+                    <% }) %>
+
+                  <% } else { %>
+
+                    <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">
+                      No approved task submissions were found for this project.
+                    </p>
+
+                  <% } %>
+
+                </div>
+
+              </div>
+
+            <% }) %>
+
+          <% } else { %>
+
+            <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+
+              <p class="text-muted" style="font-size: var(--fs-xs); margin: 0;">
+                You do not have any completed collaborations yet. Once an alumni mentor marks a project as completed, it will appear here.
+              </p>
+
+            </div>
+
+          <% } %>
+
         </div>
 
       </div>
 
     </div>
 
-  </main>
+  </div>
+
 </div>
 
 <%- include('../partials/footer') %>
-

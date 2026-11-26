@@ -1,156 +1,1085 @@
+
 <%- include('../partials/head', { title: title }) %>
 <%- include('../partials/navbar') %>
 
-<!-- ══════════════════════════════════════════════════════════
-     TASK MANAGEMENT & TRACKING — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
-══════════════════════════════════════════════════════════ -->
+<%
+  const todoTasks = tasks.filter(task => task.status === 'todo');
+  const inProgressTasks = tasks.filter(task => task.status === 'in_progress');
+  const reviewTasks = tasks.filter(task => task.status === 'review');
+  const completedTasks = tasks.filter(task => task.status === 'completed');
+
+  const safeReviewMembers = Array.isArray(reviewMembers)
+    ? reviewMembers
+    : [];
+
+  const approvedTasksCount = completedTasks.filter(
+    task => task.reviewDecision === 'approved'
+  ).length;
+
+  const canCompleteProject =
+    isOwner &&
+    project.status !== 'completed' &&
+    project.status !== 'archived' &&
+    tasks.length > 0 &&
+    approvedTasksCount === tasks.length;
+
+  const isProjectClosed =
+    project.status === 'completed' ||
+    project.status === 'archived';
+
+  const formatDate = (date) => {
+    if (!date) return 'No deadline';
+
+    return new Date(date).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
+
+  const priorityLabel = (priority) => {
+    if (!priority) return 'Medium';
+
+    return priority.charAt(0).toUpperCase() + priority.slice(1);
+  };
+
+  const messageLabels = {
+    project_completed: 'Project completed successfully!',
+    completion_error: 'Something went wrong while completing the project.',
+    already_completed: 'This project has already been completed.',
+    archived: 'An archived project cannot be completed.',
+    no_tasks: 'Add at least one task before completing this project.',
+    tasks_pending: 'All project tasks must be completed and approved first.'
+  };
+
+  const displayMessage = messageLabels[message] || message;
+%>
 
 <section class="section" style="padding-top: var(--sp-12);">
   <div class="section-container">
 
-    <div class="breadcrumbs">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/projects">Projects</a>
-      <span>/</span>
-      <span>Task Management &amp; Progress</span>
-    </div>
+      <span aria-hidden="true">/</span>
+      <span>Task Management</span>
+    </nav>
 
+    <!-- Project Header -->
     <div class="dashboard-header">
       <div>
         <div class="d-flex align-center gap-2 mb-2">
-          <span class="badge badge-active">ACTIVE WORKSPACE</span>
-          <span class="text-muted" style="font-size: var(--fs-xs);">Project: Campus Placement Assessment Engine</span>
+          <span class="badge badge-active">PROJECT WORKSPACE</span>
+
+          <span class="text-muted" style="font-size: var(--fs-xs);">
+            <%= isOwner ? 'Alumni / Project Owner' : 'Student / Project Member' %>
+          </span>
         </div>
+
         <h1>Task Board &amp; Milestones</h1>
-        <p>Collaborative milestone tracking between mentor and student.</p>
+
+        <p>
+          <strong><%= project.title %></strong>
+        </p>
+
+        <p class="text-secondary">
+          Track project milestones, assignments and deliverables.
+        </p>
       </div>
-      <div class="d-flex gap-2">
-        <a href="/messages" class="btn btn-secondary">Project Chat 💬</a>
-        <button type="button" class="btn btn-primary">+ Add New Task</button>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="/projects/<%= projectId %>" class="btn btn-secondary">
+          Back to Project
+        </a>
+
+        <a href="/messages" class="btn btn-secondary">
+          Project Chat
+        </a>
+
+        <% if (isOwner && !isProjectClosed) { %>
+          <a href="#create-task-form" class="btn btn-primary">
+            + Add New Task
+          </a>
+        <% } %>
       </div>
     </div>
 
-    <!-- Kanban Columns Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--sp-6);">
+    <!-- Feedback Message -->
+    <% if (message) { %>
+      <div
+        class="card mb-4"
+        role="status"
+        style="border-left: 4px solid var(--clr-brand);"
+      >
+        <p style="margin: 0;">
+          <%= displayMessage %>
+        </p>
+      </div>
+    <% } %>
 
-      <!-- Column 1: Backlog / To Do -->
-      <div class="card" style="background: var(--clr-bg-subtle);">
-        <div class="d-flex justify-between align-center mb-4">
-          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-text-muted);">
-            To Do (2)
-          </strong>
-        </div>
-
-        <div class="d-flex flex-wrap gap-3" style="flex-direction: column;">
-          <div class="card" style="padding: var(--sp-4);">
-            <div class="d-flex justify-between align-center mb-2">
-              <span class="badge badge-pending">TASK</span>
-              <span class="text-muted" style="font-size: 0.65rem;">Priority: High</span>
-            </div>
-            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Memory Leaks Profiler</strong>
-            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
-              Stress-test sandboxed runner with 50 concurrent infinite-loop submissions.
-            </p>
-            <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
-              <span>Assignee: Hari (Student)</span>
-              <span>Nov 6</span>
-            </div>
-          </div>
-
-          <div class="card" style="padding: var(--sp-4);">
-            <div class="d-flex justify-between align-center mb-2">
-              <span class="badge badge-pending">TASK</span>
-            </div>
-            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Swagger / OpenAPI Specs</strong>
-            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
-              Document all problem upload and runner endpoints using JSDoc comments.
-            </p>
-            <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
-              <span>Assignee: Hari (Student)</span>
-              <span>Nov 10</span>
-            </div>
-          </div>
-        </div>
+    <!-- Task Summary -->
+    <div
+      style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: var(--sp-4);
+        margin-bottom: var(--sp-8);
+      "
+    >
+      <div class="card">
+        <span class="text-muted" style="font-size: var(--fs-xs);">
+          Total Tasks
+        </span>
+        <h2><%= tasks.length %></h2>
       </div>
 
-      <!-- Column 2: In Progress -->
-      <div class="card" style="background: var(--clr-bg-subtle);">
-        <div class="d-flex justify-between align-center mb-4">
-          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-text);">
-            In Progress (1)
-          </strong>
-        </div>
+      <div class="card">
+        <span class="text-muted" style="font-size: var(--fs-xs);">
+          To Do
+        </span>
+        <h2><%= todoTasks.length %></h2>
+      </div>
 
-        <div class="card" style="padding: var(--sp-4); border-left: 2px solid var(--clr-info-text);">
-          <div class="d-flex justify-between align-center mb-2">
-            <span class="badge badge-active">SPRINT</span>
-            <span class="text-muted" style="font-size: 0.65rem;">Due: Tomorrow</span>
+      <div class="card">
+        <span class="text-muted" style="font-size: var(--fs-xs);">
+          In Progress
+        </span>
+        <h2><%= inProgressTasks.length %></h2>
+      </div>
+
+      <div class="card">
+        <span class="text-muted" style="font-size: var(--fs-xs);">
+          Under Review
+        </span>
+        <h2><%= reviewTasks.length %></h2>
+      </div>
+
+      <div class="card">
+        <span class="text-muted" style="font-size: var(--fs-xs);">
+          Completed
+        </span>
+        <h2><%= completedTasks.length %></h2>
+      </div>
+    </div>
+
+    <!-- Project Completion: Alumni / Project Owner Only -->
+    <% if (isOwner) { %>
+
+      <div class="card mb-8">
+
+        <h2>Project Completion</h2>
+
+        <% if (project.status === 'completed') { %>
+
+          <div class="card mt-3" style="background: var(--clr-bg-subtle);">
+            <strong>Project Successfully Completed</strong>
+
+            <p class="text-secondary mt-2">
+              All project tasks have been approved. Students can still
+              access this project board to view their completed work.
+            </p>
           </div>
-          <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Docker Sandbox Daemon</strong>
-          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
-            Wire Dockerode SDK in Express to spawn isolated Alpine containers with memory constraints.
+
+        <% } else if (project.status === 'archived') { %>
+
+          <p class="text-secondary mt-3">
+            This project is archived and cannot be completed.
           </p>
-          <div class="d-flex justify-between align-center text-muted" style="font-size: 0.7rem;">
-            <span>Branch: feature/docker</span>
-            <button class="btn btn-sm btn-subtle">Ready for Review</button>
-          </div>
-        </div>
-      </div>
 
-      <!-- Column 3: In Review -->
-      <div class="card" style="background: var(--clr-bg-subtle);">
-        <div class="d-flex justify-between align-center mb-4">
-          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-warning-text);">
-            Under Review (1)
-          </strong>
-        </div>
+        <% } else { %>
 
-        <div class="card" style="padding: var(--sp-4); border-left: 2px solid var(--clr-warning-text);">
-          <div class="d-flex justify-between align-center mb-2">
-            <span class="badge badge-pending">NEEDS ALUMNI SIGN-OFF</span>
-          </div>
-          <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">MongoDB Schema for Test Runs</strong>
-          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5; margin-bottom: var(--sp-3);">
-            Pull request #4 submitted with indexing strategies for fast student percentile queries.
+          <p class="text-secondary mt-2">
+            Complete this project after all assigned tasks have been
+            submitted and approved.
           </p>
-          <div class="d-flex justify-between align-center" style="font-size: 0.7rem;">
-            <a href="#" class="link">View PR #4</a>
-            <button class="btn btn-sm btn-primary">Approve PR</button>
-          </div>
-        </div>
+
+          <p class="mt-3">
+            Approved tasks:
+            <strong><%= approvedTasksCount %> / <%= tasks.length %></strong>
+          </p>
+
+          <% if (canCompleteProject) { %>
+
+            <form
+              action="/alumni/projects/<%= projectId %>/complete"
+              method="POST"
+              class="mt-4"
+              onsubmit="return confirm('Are you sure you want to complete this project?');"
+            >
+              <button type="submit" class="btn btn-primary">
+                Complete Project
+              </button>
+            </form>
+
+          <% } else if (tasks.length === 0) { %>
+
+            <p class="text-muted mt-3">
+              Create at least one task before completing the project.
+            </p>
+
+          <% } else { %>
+
+            <p class="text-muted mt-3">
+              Complete and approve all remaining tasks before completing
+              the project.
+            </p>
+
+          <% } %>
+
+        <% } %>
+
       </div>
 
-      <!-- Column 4: Done -->
+    <% } %>
+
+    <!-- NEW: Student Project Reviews -->
+    <% if (isOwner && project.status === 'completed') { %>
+
+      <div class="card mb-8">
+
+        <div class="mb-4">
+          <span class="badge badge-approved">PROJECT COMPLETED</span>
+
+          <h2 class="mt-3">Student Feedback &amp; Reviews</h2>
+
+          <p class="text-secondary mt-2">
+            Recognize each student's contribution and provide constructive
+            feedback to motivate their future growth.
+          </p>
+        </div>
+
+        <% if (safeReviewMembers.length === 0) { %>
+
+          <div class="card" style="background: var(--clr-bg-subtle);">
+            <p style="margin: 0;">
+              No completed student memberships were found for this project.
+            </p>
+          </div>
+
+        <% } else { %>
+
+          <% safeReviewMembers.forEach((member, index) => { %>
+
+            <% if (member.studentId) { %>
+
+              <div
+                class="card mb-4"
+                style="
+                  border: 1px solid var(--clr-border);
+                  padding: var(--sp-5);
+                "
+              >
+
+                <!-- Student Information -->
+                <div class="d-flex justify-between align-center flex-wrap gap-3 mb-4">
+
+                  <div>
+                    <span class="text-muted" style="font-size: var(--fs-xs);">
+                      STUDENT <%= index + 1 %>
+                    </span>
+
+                    <h3 class="mt-1">
+                      <%= member.studentId.fullName %>
+                    </h3>
+
+                    <p class="text-secondary" style="font-size: var(--fs-sm);">
+                      <% if (member.studentId.rollNumber) { %>
+                        Roll Number: <%= member.studentId.rollNumber %>
+                      <% } %>
+                    </p>
+
+                    <% if (member.studentId.email) { %>
+                      <p class="text-muted" style="font-size: var(--fs-xs);">
+                        <%= member.studentId.email %>
+                      </p>
+                    <% } %>
+                  </div>
+
+                  <% if (member.review) { %>
+                    <span class="badge badge-approved">
+                      REVIEW SUBMITTED
+                    </span>
+                  <% } else { %>
+                    <span class="badge badge-pending">
+                      AWAITING REVIEW
+                    </span>
+                  <% } %>
+
+                </div>
+
+                <!-- Existing Review -->
+                <% if (member.review) { %>
+
+                  <div
+                    class="card"
+                    style="background: var(--clr-bg-subtle);"
+                  >
+
+                    <div class="d-flex justify-between align-center flex-wrap gap-2">
+                      <h4>Review Submitted</h4>
+
+                      <span class="badge badge-approved">
+                        <%= member.review.rating %> / 5 Overall
+                      </span>
+                    </div>
+
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                        gap: var(--sp-3);
+                        margin-top: var(--sp-4);
+                      "
+                    >
+
+                      <div>
+                        <span class="text-muted" style="font-size: var(--fs-xs);">
+                          Technical Skills
+                        </span>
+                        <p>
+                          <strong>
+                            <%= member.review.technicalSkills || 'N/A' %> / 5
+                          </strong>
+                        </p>
+                      </div>
+
+                      <div>
+                        <span class="text-muted" style="font-size: var(--fs-xs);">
+                          Communication
+                        </span>
+                        <p>
+                          <strong>
+                            <%= member.review.communication || 'N/A' %> / 5
+                          </strong>
+                        </p>
+                      </div>
+
+                      <div>
+                        <span class="text-muted" style="font-size: var(--fs-xs);">
+                          Teamwork
+                        </span>
+                        <p>
+                          <strong>
+                            <%= member.review.teamwork || 'N/A' %> / 5
+                          </strong>
+                        </p>
+                      </div>
+
+                    </div>
+
+                    <div class="mt-4">
+                      <strong>Alumni Feedback</strong>
+
+                      <p
+                        class="text-secondary mt-2"
+                        style="white-space: pre-wrap;"
+                      ><%= member.review.feedback %></p>
+                    </div>
+
+                    <p class="text-muted mt-3" style="font-size: var(--fs-xs);">
+                      Submitted on: <%= formatDate(member.review.createdAt) %>
+                    </p>
+
+                  </div>
+
+                <% } else { %>
+
+                  <!-- New Individual Student Review Form -->
+                  <form
+                    action="/alumni/projects/<%= projectId %>/reviews/<%= member.studentId._id %>"
+                    method="POST"
+                    class="mt-3"
+                  >
+
+                    <h4 class="mb-3">
+                      Evaluate Student Contribution
+                    </h4>
+
+                    <p class="text-secondary mb-4" style="font-size: var(--fs-sm);">
+                      Rate the student's contribution based on their work
+                      throughout this project.
+                    </p>
+
+                    <!-- Overall Rating -->
+                    <div class="form-group mb-4">
+                      <label for="overall-rating-<%= member.studentId._id %>">
+                        Overall Performance Rating *
+                      </label>
+
+                      <select
+                        id="overall-rating-<%= member.studentId._id %>"
+                        name="rating"
+                        class="form-control"
+                        required
+                      >
+                        <option value="">Select overall rating</option>
+                        <option value="1">1 - Needs Improvement</option>
+                        <option value="2">2 - Below Expectations</option>
+                        <option value="3">3 - Good</option>
+                        <option value="4">4 - Very Good</option>
+                        <option value="5">5 - Excellent</option>
+                      </select>
+                    </div>
+
+                    <!-- Category Ratings -->
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                        gap: var(--sp-4);
+                      "
+                    >
+
+                      <div class="form-group">
+                        <label for="technical-<%= member.studentId._id %>">
+                          Technical Skills *
+                        </label>
+
+                        <select
+                          id="technical-<%= member.studentId._id %>"
+                          name="technicalSkills"
+                          class="form-control"
+                          required
+                        >
+                          <option value="">Select rating</option>
+                          <option value="1">1 - Needs Improvement</option>
+                          <option value="2">2 - Below Expectations</option>
+                          <option value="3">3 - Good</option>
+                          <option value="4">4 - Very Good</option>
+                          <option value="5">5 - Excellent</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="communication-<%= member.studentId._id %>">
+                          Communication *
+                        </label>
+
+                        <select
+                          id="communication-<%= member.studentId._id %>"
+                          name="communication"
+                          class="form-control"
+                          required
+                        >
+                          <option value="">Select rating</option>
+                          <option value="1">1 - Needs Improvement</option>
+                          <option value="2">2 - Below Expectations</option>
+                          <option value="3">3 - Good</option>
+                          <option value="4">4 - Very Good</option>
+                          <option value="5">5 - Excellent</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="teamwork-<%= member.studentId._id %>">
+                          Teamwork *
+                        </label>
+
+                        <select
+                          id="teamwork-<%= member.studentId._id %>"
+                          name="teamwork"
+                          class="form-control"
+                          required
+                        >
+                          <option value="">Select rating</option>
+                          <option value="1">1 - Needs Improvement</option>
+                          <option value="2">2 - Below Expectations</option>
+                          <option value="3">3 - Good</option>
+                          <option value="4">4 - Very Good</option>
+                          <option value="5">5 - Excellent</option>
+                        </select>
+                      </div>
+
+                    </div>
+
+                    <!-- Written Feedback -->
+                    <div class="form-group mt-3">
+                      <label for="feedback-<%= member.studentId._id %>">
+                        Feedback &amp; Motivational Message *
+                      </label>
+
+                      <textarea
+                        id="feedback-<%= member.studentId._id %>"
+                        name="feedback"
+                        class="form-control"
+                        rows="5"
+                        minlength="10"
+                        maxlength="3000"
+                        placeholder="Describe the student's contribution, strengths, areas for improvement and encouragement for future growth."
+                        required
+                      ></textarea>
+
+                      <p class="text-muted mt-2" style="font-size: var(--fs-xs);">
+                        Minimum 10 characters and maximum 3000 characters.
+                      </p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">
+                      Submit Student Review
+                    </button>
+
+                  </form>
+
+                <% } %>
+
+              </div>
+
+            <% } %>
+
+          <% }) %>
+
+        <% } %>
+
+      </div>
+
+    <% } %>
+
+    <!-- Create Task Form: Alumni / Project Owner Only -->
+    <% if (isOwner && !isProjectClosed) { %>
+
+      <div
+        class="card mb-8"
+        id="create-task-form"
+        style="scroll-margin-top: 100px;"
+      >
+        <div class="mb-4">
+          <h2>Create New Task</h2>
+
+          <p class="text-secondary">
+            Assign a milestone to an active student in this project.
+          </p>
+        </div>
+
+        <% if (members.length === 0) { %>
+
+          <div class="card" style="background: var(--clr-bg-subtle);">
+            <p style="margin: 0;">
+              No active project members are available for assignment yet.
+              Accept a student proposal before creating an assigned task.
+            </p>
+          </div>
+
+        <% } else { %>
+
+          <form
+            action="/alumni/projects/<%= projectId %>/tasks"
+            method="POST"
+          >
+
+            <div class="form-group mb-4">
+              <label for="task-title">Task Title *</label>
+
+              <input
+                type="text"
+                id="task-title"
+                name="title"
+                class="form-control"
+                minlength="2"
+                maxlength="160"
+                placeholder="Example: Build the user authentication module"
+                required
+              >
+            </div>
+
+            <div class="form-group mb-4">
+              <label for="task-description">Task Description</label>
+
+              <textarea
+                id="task-description"
+                name="description"
+                class="form-control"
+                rows="4"
+                maxlength="5000"
+                placeholder="Explain the expected work, requirements and deliverables."
+              ></textarea>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: var(--sp-4);
+              "
+            >
+
+              <div class="form-group">
+                <label for="task-assignee">Assign To *</label>
+
+                <select
+                  id="task-assignee"
+                  name="assignedTo"
+                  class="form-control"
+                  required
+                >
+                  <option value="">Select an active student</option>
+
+                  <% members.forEach(member => { %>
+                    <% if (member.studentId) { %>
+                      <option value="<%= member.studentId._id %>">
+                        <%= member.studentId.fullName %>
+
+                        <% if (member.studentId.rollNumber) { %>
+                          — <%= member.studentId.rollNumber %>
+                        <% } %>
+                      </option>
+                    <% } %>
+                  <% }) %>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="task-priority">Priority *</label>
+
+                <select
+                  id="task-priority"
+                  name="priority"
+                  class="form-control"
+                  required
+                >
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="task-due-date">Deadline</label>
+
+                <input
+                  type="date"
+                  id="task-due-date"
+                  name="dueDate"
+                  class="form-control"
+                >
+              </div>
+
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn btn-primary">
+                Create &amp; Assign Task
+              </button>
+
+              <a
+                href="/projects/<%= projectId %>/tasks"
+                class="btn btn-secondary"
+              >
+                Cancel
+              </a>
+            </div>
+
+          </form>
+
+        <% } %>
+      </div>
+
+    <% } %>
+
+    <!-- Kanban Board -->
+    <div
+      style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--sp-5);
+        align-items: start;
+      "
+    >
+
+      <!-- TO DO -->
       <div class="card" style="background: var(--clr-bg-subtle);">
+
         <div class="d-flex justify-between align-center mb-4">
-          <strong style="font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--clr-success-text);">
-            Completed (2)
-          </strong>
+          <strong>To Do</strong>
+          <span class="badge badge-pending"><%= todoTasks.length %></span>
         </div>
 
-        <div class="d-flex flex-wrap gap-3" style="flex-direction: column;">
-          <div class="card" style="padding: var(--sp-4); opacity: 0.85;">
+        <% if (todoTasks.length === 0) { %>
+          <p class="text-muted" style="font-size: var(--fs-sm);">
+            No tasks waiting to start.
+          </p>
+        <% } %>
+
+        <% todoTasks.forEach(task => { %>
+
+          <div class="card mb-3" style="padding: var(--sp-4);">
+
             <div class="d-flex justify-between align-center mb-2">
-              <span class="badge badge-approved">VERIFIED</span>
+              <span class="badge badge-pending">TO DO</span>
+
+              <span class="text-muted" style="font-size: 0.7rem;">
+                <%= priorityLabel(task.priority) %> Priority
+              </span>
             </div>
-            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Project Scoping &amp; Architecture</strong>
-            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5;">
-              Agreed on Express.js, TypeScript, and Docker container sandbox boundaries.
+
+            <h3 style="font-size: var(--fs-sm);">
+              <%= task.title %>
+            </h3>
+
+            <p class="text-secondary" style="font-size: var(--fs-xs);">
+              <%= task.description || 'No description provided.' %>
             </p>
+
+            <div class="text-muted" style="font-size: 0.75rem;">
+              <p>
+                Assigned to:
+                <strong>
+                  <%= task.assignedTo
+                    ? task.assignedTo.fullName
+                    : 'Unassigned' %>
+                </strong>
+              </p>
+
+              <p>
+                Deadline: <%= formatDate(task.dueDate) %>
+              </p>
+            </div>
+
           </div>
 
-          <div class="card" style="padding: var(--sp-4); opacity: 0.85;">
-            <div class="d-flex justify-between align-center mb-2">
-              <span class="badge badge-approved">VERIFIED</span>
-            </div>
-            <strong style="font-size: var(--fs-sm); display: block; margin-bottom: 4px;">Initial Repository Boilerplate</strong>
-            <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.5;">
-              Configured ESLint, Prettier, Jest, and GitHub Actions CI runner.
-            </p>
-          </div>
+        <% }) %>
+
+      </div>
+
+      <!-- IN PROGRESS -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+
+        <div class="d-flex justify-between align-center mb-4">
+          <strong>In Progress</strong>
+          <span class="badge badge-active"><%= inProgressTasks.length %></span>
         </div>
+
+        <% if (inProgressTasks.length === 0) { %>
+          <p class="text-muted" style="font-size: var(--fs-sm);">
+            No tasks currently in progress.
+          </p>
+        <% } %>
+
+        <% inProgressTasks.forEach(task => { %>
+
+          <div
+            class="card mb-3"
+            style="padding: var(--sp-4); border-left: 3px solid var(--clr-brand);"
+          >
+
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-active">IN PROGRESS</span>
+
+              <span class="text-muted" style="font-size: 0.7rem;">
+                <%= priorityLabel(task.priority) %> Priority
+              </span>
+            </div>
+
+            <h3 style="font-size: var(--fs-sm);">
+              <%= task.title %>
+            </h3>
+
+            <p class="text-secondary" style="font-size: var(--fs-xs);">
+              <%= task.description || 'No description provided.' %>
+            </p>
+
+            <div class="text-muted" style="font-size: 0.75rem;">
+              <p>
+                Assigned to:
+                <strong>
+                  <%= task.assignedTo
+                    ? task.assignedTo.fullName
+                    : 'Unassigned' %>
+                </strong>
+              </p>
+
+              <p>
+                Deadline: <%= formatDate(task.dueDate) %>
+              </p>
+            </div>
+
+            <% if (task.reviewDecision === 'revision_requested' && task.reviewFeedback) { %>
+              <div
+                class="card mt-3"
+                style="background: var(--clr-bg-subtle); border-left: 3px solid var(--clr-warning-text);"
+              >
+                <strong style="font-size: var(--fs-xs);">
+                  Revision Requested
+                </strong>
+
+                <p class="text-secondary mt-2" style="font-size: var(--fs-xs);">
+                  <%= task.reviewFeedback %>
+                </p>
+              </div>
+            <% } %>
+
+          </div>
+
+        <% }) %>
+
+      </div>
+
+      <!-- UNDER REVIEW -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+
+        <div class="d-flex justify-between align-center mb-4">
+          <strong>Under Review</strong>
+          <span class="badge badge-pending"><%= reviewTasks.length %></span>
+        </div>
+
+        <% if (reviewTasks.length === 0) { %>
+          <p class="text-muted" style="font-size: var(--fs-sm);">
+            No tasks waiting for review.
+          </p>
+        <% } %>
+
+        <% reviewTasks.forEach(task => { %>
+
+          <div
+            class="card mb-3"
+            style="padding: var(--sp-4); border-left: 3px solid var(--clr-warning-text);"
+          >
+
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-pending">UNDER REVIEW</span>
+
+              <span class="text-muted" style="font-size: 0.7rem;">
+                <%= priorityLabel(task.priority) %> Priority
+              </span>
+            </div>
+
+            <h3 style="font-size: var(--fs-sm);">
+              <%= task.title %>
+            </h3>
+
+            <p class="text-secondary" style="font-size: var(--fs-xs);">
+              <%= task.description || 'No description provided.' %>
+            </p>
+
+            <div class="text-muted" style="font-size: 0.75rem;">
+              <p>
+                Assigned to:
+                <strong>
+                  <%= task.assignedTo
+                    ? task.assignedTo.fullName
+                    : 'Unassigned' %>
+                </strong>
+              </p>
+
+              <p>
+                Submitted: <%= formatDate(task.submittedAt) %>
+              </p>
+            </div>
+
+            <!-- Student Submission -->
+            <div class="card mt-3" style="background: var(--clr-bg-subtle);">
+              <h4 style="font-size: var(--fs-sm);">
+                Student Submission
+              </h4>
+
+              <% if (task.repositoryUrl) { %>
+                <p class="mt-2">
+                  <a
+                    href="<%= task.repositoryUrl %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View GitHub Repository
+                  </a>
+                </p>
+              <% } %>
+
+              <% if (task.deliverableUrl) { %>
+                <p class="mt-2">
+                  <a
+                    href="<%= task.deliverableUrl %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Deliverable
+                  </a>
+                </p>
+              <% } %>
+
+              <% if (task.submissionNotes) { %>
+                <div class="mt-3">
+                  <strong style="font-size: var(--fs-xs);">
+                    Completion Notes
+                  </strong>
+
+                  <p
+                    class="text-secondary mt-2"
+                    style="font-size: var(--fs-xs); white-space: pre-wrap;"
+                  ><%= task.submissionNotes %></p>
+                </div>
+              <% } %>
+            </div>
+
+            <!-- Alumni Review Actions -->
+            <% if (isOwner) { %>
+
+              <div class="mt-4">
+                <h4 style="font-size: var(--fs-sm);">
+                  Review Submission
+                </h4>
+
+                <!-- Approve -->
+                <form
+                  action="/alumni/projects/<%= projectId %>/tasks/<%= task._id %>/review"
+                  method="POST"
+                  class="mt-3"
+                >
+                  <input
+                    type="hidden"
+                    name="decision"
+                    value="approved"
+                  >
+
+                  <div class="form-group mb-3">
+                    <label for="approve-feedback-<%= task._id %>">
+                      Feedback (Optional)
+                    </label>
+
+                    <textarea
+                      id="approve-feedback-<%= task._id %>"
+                      name="feedback"
+                      class="form-control"
+                      rows="2"
+                      maxlength="3000"
+                      placeholder="Share feedback with the student."
+                    ></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">
+                    Approve Task
+                  </button>
+                </form>
+
+                <!-- Request Revision -->
+                <form
+                  action="/alumni/projects/<%= projectId %>/tasks/<%= task._id %>/review"
+                  method="POST"
+                  class="mt-4"
+                >
+                  <input
+                    type="hidden"
+                    name="decision"
+                    value="revision_requested"
+                  >
+
+                  <div class="form-group mb-3">
+                    <label for="revision-feedback-<%= task._id %>">
+                      Revision Feedback *
+                    </label>
+
+                    <textarea
+                      id="revision-feedback-<%= task._id %>"
+                      name="feedback"
+                      class="form-control"
+                      rows="3"
+                      maxlength="3000"
+                      placeholder="Explain what needs to be corrected or improved."
+                      required
+                    ></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-secondary">
+                    Request Revision
+                  </button>
+                </form>
+
+              </div>
+
+            <% } else { %>
+
+              <p class="text-muted mt-3" style="font-size: var(--fs-xs);">
+                Your submission is waiting for the project owner's review.
+              </p>
+
+            <% } %>
+
+          </div>
+
+        <% }) %>
+
+      </div>
+
+      <!-- COMPLETED -->
+      <div class="card" style="background: var(--clr-bg-subtle);">
+
+        <div class="d-flex justify-between align-center mb-4">
+          <strong>Completed</strong>
+          <span class="badge badge-approved"><%= completedTasks.length %></span>
+        </div>
+
+        <% if (completedTasks.length === 0) { %>
+          <p class="text-muted" style="font-size: var(--fs-sm);">
+            No completed tasks yet.
+          </p>
+        <% } %>
+
+        <% completedTasks.forEach(task => { %>
+
+          <div class="card mb-3" style="padding: var(--sp-4);">
+
+            <div class="d-flex justify-between align-center mb-2">
+              <span class="badge badge-approved">COMPLETED</span>
+            </div>
+
+            <h3 style="font-size: var(--fs-sm);">
+              <%= task.title %>
+            </h3>
+
+            <p class="text-secondary" style="font-size: var(--fs-xs);">
+              <%= task.description || 'No description provided.' %>
+            </p>
+
+            <div class="text-muted" style="font-size: 0.75rem;">
+              <p>
+                Assigned to:
+                <strong>
+                  <%= task.assignedTo
+                    ? task.assignedTo.fullName
+                    : 'Unassigned' %>
+                </strong>
+              </p>
+
+              <p>
+                Completed: <%= formatDate(task.completedAt) %>
+              </p>
+
+              <% if (task.repositoryUrl) { %>
+                <p>
+                  <a
+                    href="<%= task.repositoryUrl %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Submitted Repository
+                  </a>
+                </p>
+              <% } %>
+
+              <% if (task.deliverableUrl) { %>
+                <p>
+                  <a
+                    href="<%= task.deliverableUrl %>"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Deliverable
+                  </a>
+                </p>
+              <% } %>
+
+              <% if (task.reviewFeedback) { %>
+                <p class="mt-2">
+                  Review feedback: <%= task.reviewFeedback %>
+                </p>
+              <% } %>
+            </div>
+
+          </div>
+
+        <% }) %>
+
       </div>
 
     </div>
@@ -159,4 +1088,3 @@
 </section>
 
 <%- include('../partials/footer') %>
-

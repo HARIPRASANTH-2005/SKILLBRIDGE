@@ -1,126 +1,307 @@
+
 <%- include('../partials/head', { title: title }) %>
 <%- include('../partials/navbar') %>
 
-<!-- ══════════════════════════════════════════════════════════
-     REVIEWS & FEEDBACK — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
-══════════════════════════════════════════════════════════ -->
+<%
+  const safeReviews = Array.isArray(reviews) ? reviews : [];
+  const safeStats = stats || {};
+
+  const formatDate = (date) => {
+    if (!date) return 'Date unavailable';
+
+    return new Date(date).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const renderRating = (rating) => {
+    const value = Number(rating) || 0;
+    const rounded = Math.max(0, Math.min(5, Math.round(value)));
+
+    return '★'.repeat(rounded) + '☆'.repeat(5 - rounded);
+  };
+%>
 
 <section class="section" style="padding-top: var(--sp-12);">
   <div class="section-container" style="max-width: 960px;">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>Feedback &amp; Reviews</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
-        <h1>Verified Project Reviews &amp; Endorsements</h1>
-        <p>Authentic feedback from completed alumni-student collaborations on SkillBridge.</p>
+        <h1>Project Reviews &amp; Endorsements</h1>
+        <p>Authentic feedback from alumni who have worked with you on SkillBridge projects.</p>
       </div>
+
       <div>
-        <a href="/projects" class="btn btn-primary">Find More Projects</a>
+        <a href="/projects" class="btn btn-primary">
+          Find Projects
+        </a>
       </div>
     </div>
 
-    <!-- Rating Summary Metrics -->
-    <div class="metrics-grid mb-8">
-      <div class="metric-card">
-        <div class="metric-title">Average Endorsement</div>
-        <div class="metric-value">4.9 <span style="font-size: 1rem; color: var(--clr-text-muted);">/ 5.0</span></div>
-        <div class="metric-sub">Across verified deliverables</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-title">Code Quality Rating</div>
-        <div class="metric-value">98%</div>
-        <div class="metric-sub">Unit test &amp; linting compliance</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-title">Milestone Completion</div>
-        <div class="metric-value">94%</div>
-        <div class="metric-sub">Delivered within agreed scope</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-title">Institutional Standing</div>
-        <div class="metric-value">PSG Tech</div>
-        <div class="metric-sub">MCA Department Endorsement</div>
-      </div>
-    </div>
+    <% if (dbUnavailable) { %>
 
-    <!-- Review Cards Feed -->
-    <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+      <div class="card mb-8">
+        <h3>Reviews temporarily unavailable</h3>
+        <p class="text-secondary">
+          We cannot connect to the database right now.
+          Please try again later.
+        </p>
+      </div>
 
-      <!-- Review 1 -->
-      <div class="card">
-        <div class="d-flex justify-between align-center mb-3 flex-wrap gap-2">
-          <div>
-            <span class="badge badge-approved">VERIFIED DELIVERABLE</span>
-            <h3 style="font-size: var(--fs-lg); margin-top: 4px;">College Attendance Management API</h3>
+    <% } else { %>
+
+      <!-- Dynamic Summary Metrics -->
+      <div class="metrics-grid mb-8">
+
+        <div class="metric-card">
+          <div class="metric-title">Average Rating</div>
+
+          <div class="metric-value">
+            <%= safeStats.averageRating !== null
+              ? safeStats.averageRating
+              : '—' %>
+
+            <span style="font-size: 1rem; color: var(--clr-text-muted);">
+              / 5.0
+            </span>
           </div>
-          <div class="text-muted" style="font-size: var(--fs-xs);">Completed Oct 18, 2026</div>
+
+          <div class="metric-sub">Average alumni rating</div>
         </div>
 
-        <div style="background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4); margin-bottom: var(--sp-4);">
-          <div class="d-flex justify-between align-center mb-2">
+        <div class="metric-card">
+          <div class="metric-title">Total Reviews</div>
+
+          <div class="metric-value">
+            <%= safeStats.totalReviews || 0 %>
+          </div>
+
+          <div class="metric-sub">Received from alumni</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-title">Projects Reviewed</div>
+
+          <div class="metric-value">
+            <%= safeStats.projectsReviewed || 0 %>
+          </div>
+
+          <div class="metric-sub">Projects with feedback</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-title">Technical Skills</div>
+
+          <div class="metric-value">
+            <%= safeStats.technicalSkills !== null
+              ? safeStats.technicalSkills
+              : '—' %>
+
+            <span style="font-size: 1rem; color: var(--clr-text-muted);">
+              / 5
+            </span>
+          </div>
+
+          <div class="metric-sub">Average technical assessment</div>
+        </div>
+
+      </div>
+
+      <!-- Additional Skill Ratings -->
+      <% if (safeReviews.length > 0) { %>
+
+        <div class="card mb-8">
+          <h3 style="margin-bottom: var(--sp-3);">
+            Your Skill Assessment
+          </h3>
+
+          <div class="d-flex justify-between flex-wrap gap-3">
+
             <div>
-              <strong style="color: var(--clr-text);">Alumni Reviewer: Arvind Ramanathan</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">Class of 2017 · Lead Architect at Zoho</div>
+              <div class="text-muted" style="font-size: var(--fs-xs);">
+                Communication
+              </div>
+
+              <strong>
+                <%= safeStats.communication !== null
+                  ? safeStats.communication + ' / 5'
+                  : 'Not rated' %>
+              </strong>
             </div>
-            <div style="font-size: var(--fs-sm); font-weight: 700; color: var(--clr-text);">
-              Rating: ★★★★★ (5.0)
-            </div>
-          </div>
-          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.7;">
-            "Hari did a phenomenal job structuring the REST API with Express.js and PostgreSQL. He wrote comprehensive integration tests with Supertest and handled edge cases around concurrent teacher attendance marks with database transactions. Great communicator and very responsive to code review comments."
-          </p>
-        </div>
 
-        <div class="d-flex gap-2 flex-wrap">
-          <span class="tag">Node.js</span>
-          <span class="tag">PostgreSQL</span>
-          <span class="tag">Supertest</span>
-          <span class="tag">JWT Auth</span>
-        </div>
-      </div>
-
-      <!-- Review 2 -->
-      <div class="card">
-        <div class="d-flex justify-between align-center mb-3 flex-wrap gap-2">
-          <div>
-            <span class="badge badge-approved">VERIFIED DELIVERABLE</span>
-            <h3 style="font-size: var(--fs-lg); margin-top: 4px;">E-Commerce GraphQL Schema &amp; Prisma Migration</h3>
-          </div>
-          <div class="text-muted" style="font-size: var(--fs-xs);">Completed Oct 24, 2026</div>
-        </div>
-
-        <div style="background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md); padding: var(--sp-4); margin-bottom: var(--sp-4);">
-          <div class="d-flex justify-between align-center mb-2">
             <div>
-              <strong style="color: var(--clr-text);">Alumni Reviewer: Divya Swaminathan</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">Class of 2016 · Staff Software Engineer</div>
+              <div class="text-muted" style="font-size: var(--fs-xs);">
+                Teamwork
+              </div>
+
+              <strong>
+                <%= safeStats.teamwork !== null
+                  ? safeStats.teamwork + ' / 5'
+                  : 'Not rated' %>
+              </strong>
             </div>
-            <div style="font-size: var(--fs-sm); font-weight: 700; color: var(--clr-text);">
-              Rating: ★★★★★ (4.8)
-            </div>
+
           </div>
-          <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.7;">
-            "Clean schema separation and thoughtful relational model design with Prisma ORM. Successfully implemented pagination and relation resolution filters. Excited to see Milestone 2 completed!"
-          </p>
         </div>
 
-        <div class="d-flex gap-2 flex-wrap">
-          <span class="tag">GraphQL</span>
-          <span class="tag">Prisma ORM</span>
-          <span class="tag">PostgreSQL</span>
-        </div>
+      <% } %>
+
+      <!-- Dynamic Review Feed -->
+      <div style="margin-bottom: var(--sp-4);">
+        <h2>Feedback from Alumni</h2>
+
+        <p class="text-muted" style="font-size: var(--fs-sm);">
+          Reviews submitted after project completion.
+        </p>
       </div>
 
-    </div>
+      <% if (safeReviews.length > 0) { %>
+
+        <div class="d-flex flex-wrap gap-6" style="flex-direction: column;">
+
+          <% safeReviews.forEach(review => { %>
+
+            <article class="card">
+
+              <div class="d-flex justify-between align-center mb-3 flex-wrap gap-2">
+
+                <div>
+                  <span class="badge badge-approved">
+                    ALUMNI PROJECT REVIEW
+                  </span>
+
+                  <h3 style="font-size: var(--fs-lg); margin-top: var(--sp-1);">
+                    <%= review.projectId?.title || 'Project title unavailable' %>
+                  </h3>
+                </div>
+
+                <div class="text-muted" style="font-size: var(--fs-xs);">
+                  <%= formatDate(review.createdAt) %>
+                </div>
+
+              </div>
+
+              <div style="
+                background: var(--clr-bg-subtle);
+                border: 1px solid var(--clr-border);
+                border-radius: var(--radius-md);
+                padding: var(--sp-4);
+                margin-bottom: var(--sp-4);
+              ">
+
+                <div class="d-flex justify-between align-center mb-3 flex-wrap gap-2">
+
+                  <div>
+                    <strong style="color: var(--clr-text);">
+                      Alumni Reviewer:
+                      <%= review.reviewerId?.fullName || 'Alumni' %>
+                    </strong>
+
+                    <div class="text-muted" style="font-size: var(--fs-xs);">
+                      Project Mentor
+                    </div>
+                  </div>
+
+                  <div style="
+                    font-size: var(--fs-sm);
+                    font-weight: 700;
+                    color: var(--clr-text);
+                  ">
+
+                    <span style="color: #D99A18;">
+                      <%= renderRating(review.rating) %>
+                    </span>
+
+                    (<%= Number(review.rating).toFixed(1) %>/5)
+
+                  </div>
+
+                </div>
+
+                <p class="text-secondary" style="
+                  font-size: var(--fs-sm);
+                  line-height: 1.7;
+                  margin: 0;
+                  white-space: pre-line;
+                ">
+                  "<%= review.feedback || 'No written feedback provided.' %>"
+                </p>
+
+              </div>
+
+              <!-- Individual Skill Ratings -->
+              <div>
+                <h4 style="
+                  font-size: var(--fs-sm);
+                  margin-bottom: var(--sp-3);
+                ">
+                  Skill Assessment
+                </h4>
+
+                <div class="d-flex flex-wrap gap-3">
+
+                  <% if (review.technicalSkills != null) { %>
+                    <div class="tag">
+                      Technical Skills:
+                      <strong><%= review.technicalSkills %>/5</strong>
+                    </div>
+                  <% } %>
+
+                  <% if (review.communication != null) { %>
+                    <div class="tag">
+                      Communication:
+                      <strong><%= review.communication %>/5</strong>
+                    </div>
+                  <% } %>
+
+                  <% if (review.teamwork != null) { %>
+                    <div class="tag">
+                      Teamwork:
+                      <strong><%= review.teamwork %>/5</strong>
+                    </div>
+                  <% } %>
+
+                </div>
+              </div>
+
+            </article>
+
+          <% }) %>
+
+        </div>
+
+      <% } else { %>
+
+        <!-- Empty State -->
+        <div class="card" style="text-align: center; padding: var(--sp-8);">
+
+          <h3>No Reviews Yet</h3>
+
+          <p class="text-secondary" style="margin: var(--sp-3) 0;">
+            You haven't received any alumni project reviews yet.
+            Once an alumni mentor completes and reviews your project,
+            their rating and feedback will appear here.
+          </p>
+
+          <a href="/projects" class="btn btn-primary">
+            Explore Projects
+          </a>
+
+        </div>
+
+      <% } %>
+
+    <% } %>
 
   </div>
 </section>
 
 <%- include('../partials/footer') %>
-

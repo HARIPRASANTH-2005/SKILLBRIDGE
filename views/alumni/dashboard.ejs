@@ -1,61 +1,78 @@
+
 <%- include('../partials/head', { title: title }) %>
 <%- include('../partials/navbar') %>
 
-<!-- ══════════════════════════════════════════════════════════
-     ALUMNI DASHBOARD — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
-══════════════════════════════════════════════════════════ -->
+<%
+  const stats = dashboardStats || {
+    projectCount: 0,
+    proposalCount: 0,
+    pendingProposalCount: 0,
+    activeMenteeCount: 0,
+    reviewedTaskCount: 0
+  };
+
+  const projects = createdProjects || [];
+  const proposals = recentProposals || [];
+
+  const statusLabels = {
+    open: 'OPEN FOR APPLICANTS',
+    in_progress: 'IN PROGRESS',
+    completed: 'COMPLETED',
+    archived: 'ARCHIVED'
+  };
+%>
 
 <div class="dashboard-layout">
 
-  <!-- ── Sidebar ────────────────────────────────────────── -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Alumni navigation">
     <div>
       <div class="sidebar-heading">Alumni Portal</div>
-      <nav class="sidebar-nav" aria-label="Alumni navigation">
+
+      <nav class="sidebar-nav">
         <a href="/alumni/dashboard" class="sidebar-link active">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
           Overview
         </a>
+
         <a href="/projects/create" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Post Project
         </a>
+
         <a href="/alumni/proposals" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
           Review Proposals
-          <span class="sidebar-badge">2</span>
+          <% if (stats.pendingProposalCount > 0) { %>
+            <span class="sidebar-badge">
+              <%= stats.pendingProposalCount %>
+            </span>
+          <% } %>
         </a>
+
         <a href="/messages" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Mentee Messages
         </a>
-        <a href="/reviews" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+
+        <!-- <a href="/reviews" class="sidebar-link">
           Student Endorsements
-        </a>
+        </a> -->
+
         <a href="/alumni/profile" class="sidebar-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Alumni Profile
         </a>
       </nav>
     </div>
 
-    <div>
-      <div class="sidebar-heading">Alumni Community</div>
-      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
-        <div>
-          <strong style="font-size: var(--fs-xs);">PSG Tech MCA Alumni</strong>
-          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
-            Mentorship Cell · Giving back to the next generation
-          </div>
+    <div style="padding: 0 var(--sp-2);">
+      <div style="background: var(--clr-primary-light); border: 1px solid var(--clr-primary-border); border-radius: var(--radius-sm); padding: var(--sp-3);">
+        <strong style="font-size: var(--fs-xs); color: var(--clr-primary); display: block;">
+          MCA Alumni Cell
+        </strong>
+        <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+          Industry Mentorship Network
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- ── Main Dashboard Content ─────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
     <div class="breadcrumbs">
       <a href="/">Home</a>
@@ -67,136 +84,272 @@
 
     <div class="dashboard-header">
       <div>
-        <h1>Welcome Back, <%= currentUser && currentUser.fullName ? currentUser.fullName : 'Karthik Subramaniam' %></h1>
-        <p>Class of <%= currentUser && currentUser.graduationYear ? currentUser.graduationYear : '2019' %> · Senior Software Engineer · PSG Tech MCA Alumni</p>
+        <h1>
+          Welcome Back,
+          <%= currentUser?.fullName || 'Alumni' %>
+        </h1>
+
+        <p>
+          <%= currentUser?.profession || 'Alumni Workspace' %>
+          <% if (currentUser?.company) { %>
+            · <%= currentUser.company %>
+          <% } %>
+          <% if (currentUser?.graduationYear) { %>
+            · Class of <%= currentUser.graduationYear %>
+          <% } %>
+        </p>
       </div>
+
       <div class="d-flex gap-2">
-        <a href="/projects/create" class="btn btn-primary">+ Post New Project</a>
-        <a href="/alumni/proposals" class="btn btn-secondary">Review Proposals (2)</a>
+        <a href="/projects/create" class="btn btn-primary">
+          + Post New Project
+        </a>
+
+        <a href="/alumni/proposals" class="btn btn-secondary">
+          Review Proposals
+          <% if (stats.pendingProposalCount > 0) { %>
+            (<%= stats.pendingProposalCount %>)
+          <% } %>
+        </a>
       </div>
     </div>
 
-    <!-- Metrics Grid -->
+    <!-- Dynamic dashboard metrics -->
     <div class="metrics-grid">
+
       <div class="metric-card">
         <div class="metric-title">Posted Projects</div>
-        <div class="metric-value">3</div>
-        <div class="metric-sub">2 active · 1 completed</div>
+        <div class="metric-value"><%= stats.projectCount %></div>
+        <div class="metric-sub">Projects created by you</div>
       </div>
+
       <div class="metric-card">
         <div class="metric-title">Proposals Received</div>
-        <div class="metric-value">5</div>
-        <div class="metric-sub">2 awaiting review</div>
+        <div class="metric-value"><%= stats.proposalCount %></div>
+        <div class="metric-sub">
+          <%= stats.pendingProposalCount %> awaiting review
+        </div>
       </div>
+
       <div class="metric-card">
         <div class="metric-title">Selected Mentees</div>
-        <div class="metric-value">2</div>
-        <div class="metric-sub">Active project collaborators</div>
+        <div class="metric-value"><%= stats.activeMenteeCount %></div>
+        <div class="metric-sub">Active project members</div>
       </div>
+
       <div class="metric-card">
         <div class="metric-title">Milestones Reviewed</div>
-        <div class="metric-value">8</div>
-        <div class="metric-sub">Technical deliverables approved</div>
+        <div class="metric-value"><%= stats.reviewedTaskCount %></div>
+        <div class="metric-sub">Tasks approved by you</div>
       </div>
+
     </div>
 
-    <!-- Posted Projects Table -->
-    <div class="card mb-6">
-      <div class="d-flex justify-between align-center mb-4">
-        <div>
-          <h3 style="font-size: var(--fs-lg);">Your Posted Projects</h3>
-          <p class="text-secondary" style="font-size: var(--fs-xs);">Manage project scopes and review student applications</p>
-        </div>
-        <a href="/projects/create" class="btn btn-sm btn-secondary">+ Add Project</a>
-      </div>
-
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Project Title</th>
-              <th>Status</th>
-              <th>Applicants</th>
-              <th>Active Mentee</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <strong>Campus Placement Assessment Engine</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">Node.js · MongoDB · Docker</div>
-              </td>
-              <td><span class="badge badge-active">IN PROGRESS</span></td>
-              <td>3 Proposals</td>
-              <td>Hari Prasanth M (24MCA018)</td>
-              <td>
-                <div class="d-flex gap-2">
-                  <a href="/projects/1/tasks" class="btn btn-sm btn-secondary">Tasks</a>
-                  <a href="/messages" class="btn btn-sm btn-ghost">Chat</a>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Distributed Logging &amp; Observability Sidecar</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">Go / Python · OpenTelemetry · Prometheus</div>
-              </td>
-              <td><span class="badge badge-pending">OPEN FOR APPLICANTS</span></td>
-              <td>2 Pending Proposals</td>
-              <td><span class="text-muted">—</span></td>
-              <td>
-                <a href="/alumni/proposals" class="btn btn-sm btn-primary">Review Applicants</a>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Enterprise Role-Based Access Control Module</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">FastAPI · PostgreSQL · OAuth2</div>
-              </td>
-              <td><span class="badge badge-approved">COMPLETED</span></td>
-              <td>4 Proposals</td>
-              <td>Swetha R (22MCA035)</td>
-              <td>
-                <a href="/reviews" class="btn btn-sm btn-secondary">View Review</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Pending Proposals Quick Action -->
+    <!-- Projects from MongoDB -->
     <div class="card">
-      <div class="d-flex justify-between align-center mb-4">
-        <div>
-          <h3 style="font-size: var(--fs-lg);">Recent Proposals Awaiting Decision</h3>
-          <p class="text-secondary" style="font-size: var(--fs-xs);">Evaluate technical approach and accept promising candidates</p>
-        </div>
-        <a href="/alumni/proposals" class="link text-secondary" style="font-size: var(--fs-xs);">View All Proposals →</a>
-      </div>
 
-      <div class="d-flex flex-wrap gap-4" style="flex-direction: column;">
-        <div style="padding: var(--sp-4); background: var(--clr-bg-subtle); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
-          <div class="d-flex justify-between align-center mb-2 flex-wrap gap-2">
-            <div>
-              <strong style="font-size: var(--fs-sm);">Arunachalam V (24MCA009)</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">Applied for: Distributed Logging &amp; Observability Sidecar · 1st Year MCA</div>
-            </div>
-            <div class="d-flex gap-2">
-              <a href="/alumni/proposals" class="btn btn-sm btn-primary">Accept</a>
-              <a href="/alumni/proposals" class="btn btn-sm btn-secondary">Review Details</a>
-            </div>
-          </div>
-          <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6;">
-            "I have experience with Go routines and Prometheus exporters from my undergraduate capstone. I can deliver the OpenTelemetry exporter within 3 weeks."
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">Your Posted Projects</h3>
+          <p class="card-subtitle">
+            Manage your projects and student applications
           </p>
         </div>
+
+        <a href="/projects/create" class="btn btn-sm btn-secondary">
+          + Add Project
+        </a>
       </div>
+
+      <% if (projects.length > 0) { %>
+
+        <div class="table-responsive">
+          <table class="table">
+
+            <thead>
+              <tr>
+                <th>Project Title</th>
+                <th>Status</th>
+                <th>Applicants</th>
+                <th>Active Mentees</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% projects.forEach(project => { %>
+
+                <tr>
+                  <td>
+                    <strong><%= project.title %></strong>
+
+                    <% if (project.skills && project.skills.length > 0) { %>
+                      <div class="text-muted" style="font-size: var(--fs-xs);">
+                        <%= project.skills.join(' · ') %>
+                      </div>
+                    <% } %>
+                  </td>
+
+                  <td>
+                    <span class="badge
+                      <%= project.status === 'completed'
+                        ? 'badge-approved'
+                        : project.status === 'open'
+                          ? 'badge-pending'
+                          : project.status === 'archived'
+                            ? 'badge-secondary'
+                            : 'badge-active' %>">
+                      <%= statusLabels[project.status] || project.status %>
+                    </span>
+                  </td>
+
+                  <td>
+                    <%= project.applicantCount || 0 %>
+                  </td>
+
+                  <td>
+                    <%= project.activeMenteeCount || 0 %>
+                  </td>
+
+                  <td>
+                    <div class="d-flex gap-2">
+
+                      <a
+                        href="/projects/<%= project._id %>/tasks"
+                        class="btn btn-sm btn-secondary">
+                        Tasks
+                      </a>
+
+                      <a
+                        href="/alumni/proposals"
+                        class="btn btn-sm btn-ghost">
+                        Proposals
+                      </a>
+
+                    </div>
+                  </td>
+                </tr>
+
+              <% }); %>
+            </tbody>
+
+          </table>
+        </div>
+
+      <% } else { %>
+
+        <div style="padding: 35px 20px; text-align: center;">
+          <h3>No Projects Yet</h3>
+
+          <p class="text-muted">
+            You haven't created any projects yet.
+            Post your first project to start receiving student proposals.
+          </p>
+
+          <a href="/projects/create" class="btn btn-primary">
+            + Create Your First Project
+          </a>
+        </div>
+
+      <% } %>
+
     </div>
 
-  </main>
+    <!-- Actual pending proposals -->
+    <div class="card">
+
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">
+            Recent Proposals Awaiting Decision
+          </h3>
+
+          <p class="card-subtitle">
+            The latest pending student applications for your projects
+          </p>
+        </div>
+
+        <a href="/alumni/proposals" class="link" style="font-size: var(--fs-xs);">
+          View All Proposals →
+        </a>
+      </div>
+
+      <% if (proposals.length > 0) { %>
+
+        <div class="d-flex flex-column gap-3">
+
+          <% proposals.forEach(proposal => { %>
+
+            <div style="padding: var(--sp-4); background: var(--clr-surface-hover); border: 1px solid var(--clr-border); border-radius: var(--radius-md);">
+
+              <div class="d-flex justify-between align-center mb-2 flex-wrap gap-2">
+
+                <div>
+                  <strong style="font-size: var(--fs-sm);">
+                    <%= proposal.studentName %>
+                  </strong>
+
+                  <% if (proposal.studentRoll) { %>
+                    <span class="text-muted" style="font-size: var(--fs-xs);">
+                      (<%= proposal.studentRoll %>)
+                    </span>
+                  <% } %>
+
+                  <div class="text-muted" style="font-size: var(--fs-xs);">
+                    Applied for:
+                    <strong><%= proposal.projectTitle %></strong>
+                  </div>
+
+                  <% if (proposal.submittedAt) { %>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">
+                      Submitted:
+                      <%= new Date(proposal.submittedAt).toLocaleDateString('en-IN') %>
+                    </div>
+                  <% } %>
+                </div>
+
+                <a
+                  href="/alumni/proposals"
+                  class="btn btn-sm btn-primary">
+                  Review Details
+                </a>
+
+              </div>
+
+              <% if (proposal.message) { %>
+                <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: 0;">
+                  <%= proposal.message %>
+                </p>
+              <% } %>
+
+            </div>
+
+          <% }); %>
+
+        </div>
+
+      <% } else { %>
+
+        <div style="padding: 25px 15px; text-align: center;">
+          <h3>No Pending Proposals</h3>
+
+          <p class="text-muted">
+            There are currently no pending student proposals
+            for your projects.
+          </p>
+
+          <% if (stats.proposalCount > 0) { %>
+            <a href="/alumni/proposals" class="btn btn-secondary">
+              View Processed Proposals
+            </a>
+          <% } %>
+        </div>
+
+      <% } %>
+
+    </div>
+
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

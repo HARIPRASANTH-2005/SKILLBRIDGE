@@ -1,104 +1,162 @@
+
 <%- include('../partials/head', { title: title }) %>
 <%- include('../partials/navbar') %>
 
+<%
+  const dashboardStats = stats || {};
+  const applicants = Array.isArray(recentPending) ? recentPending : [];
+
+  const pendingCount = dashboardStats.pendingCount || 0;
+  const pendingStudents = dashboardStats.pendingStudents || 0;
+  const pendingAlumni = dashboardStats.pendingAlumni || 0;
+  const verifiedStudents = dashboardStats.verifiedStudents || 0;
+  const verifiedAlumni = dashboardStats.verifiedAlumni || 0;
+  const activeProjects = dashboardStats.activeProjects || 0;
+%>
+
 <!-- ══════════════════════════════════════════════════════════
-     ADMIN DASHBOARD — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
+     ADMIN CONSOLE DASHBOARD — SkillBridge
+     Modern Professional SaaS Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
 
   <!-- ── Sidebar ────────────────────────────────────────── -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Admin navigation">
     <div>
       <div class="sidebar-heading">Administration</div>
-      <nav class="sidebar-nav" aria-label="Admin navigation">
+
+      <nav class="sidebar-nav">
         <a href="/admin/dashboard" class="sidebar-link active">
-          <span>🛡️</span> Overview
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Overview
         </a>
+
         <a href="/admin/verifications" class="sidebar-link">
-          <span>⏳</span> Verifications Queue
-          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Verifications
+          <% if (pendingCount > 0) { %>
+            <span class="sidebar-badge"><%= pendingCount %></span>
+          <% } %>
         </a>
+
         <a href="/admin/users" class="sidebar-link">
-          <span>👥</span> User Directory
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          User Directory
         </a>
+
         <a href="/admin/projects" class="sidebar-link">
-          <span>📁</span> Moderation &amp; Projects
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          Moderation &amp; Projects
         </a>
       </nav>
     </div>
 
-    <div>
-      <div class="sidebar-heading">System Status</div>
-      <div class="doc-info-box" style="margin: 0; background: var(--clr-card);">
-        <div>
-          <strong style="font-size: var(--fs-xs);">Department Admin Cell</strong>
-          <div class="text-muted" style="font-size: 0.7rem; margin-top: 2px;">
-            PSG Tech MCA Platform<br />Production Node Active
-          </div>
+    <div style="padding: 0 var(--sp-2);">
+      <div style="background: var(--clr-primary-light); border: 1px solid var(--clr-primary-border); border-radius: var(--radius-sm); padding: var(--sp-3);">
+        <strong style="font-size: var(--fs-xs); color: var(--clr-primary); display: block;">Department Cell</strong>
+        <div class="text-muted" style="font-size: 11px; margin-top: 2px;">
+          Institutional Oversight
         </div>
       </div>
     </div>
   </aside>
 
   <!-- ── Main Admin Content ─────────────────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
     <div class="breadcrumbs">
       <a href="/">Home</a>
       <span>/</span>
       <a href="/admin/dashboard">Admin</a>
       <span>/</span>
-      <span>Dashboard</span>
+      <span>Overview</span>
     </div>
 
     <div class="dashboard-header">
       <div>
-        <h1>Department Administration Overview</h1>
+        <h1>Administration Overview</h1>
         <p>Institutional oversight for MCA student credentials, alumni verifications, and project integrity.</p>
       </div>
+
       <div>
-        <a href="/admin/verifications" class="btn btn-primary">Review Verification Queue (3) →</a>
+        <a href="/admin/verifications" class="btn btn-primary">
+          Review Queue (<%= pendingCount %>) →
+        </a>
       </div>
     </div>
+
+    <% if (dbUnavailable) { %>
+      <div class="alert alert-danger" role="alert">
+        Dashboard data could not be loaded because the database is unavailable.
+        Please try again later.
+      </div>
+    <% } %>
 
     <!-- Administrative Metrics Grid -->
     <div class="metrics-grid">
+
       <div class="metric-card">
         <div class="metric-title">Pending Verifications</div>
-        <div class="metric-value" style="color: var(--clr-warning-text);">3</div>
-        <div class="metric-sub">2 Students · 1 Alumni</div>
+        <div class="metric-value" style="color: var(--clr-warning-text);">
+          <%= pendingCount %>
+        </div>
+        <div class="metric-sub">
+          <%= pendingStudents %> Students · <%= pendingAlumni %> Alumni
+        </div>
       </div>
+
       <div class="metric-card">
         <div class="metric-title">Verified Students</div>
-        <div class="metric-value">124</div>
-        <div class="metric-sub">Current MCA I &amp; II Batches</div>
+        <div class="metric-value"><%= verifiedStudents %></div>
+        <div class="metric-sub">Approved student accounts</div>
       </div>
+
       <div class="metric-card">
         <div class="metric-title">Verified Alumni</div>
-        <div class="metric-value">86</div>
-        <div class="metric-sub">Active mentors across batches</div>
+        <div class="metric-value"><%= verifiedAlumni %></div>
+        <div class="metric-sub">Approved alumni accounts</div>
       </div>
+
       <div class="metric-card">
         <div class="metric-title">Active Projects</div>
-        <div class="metric-value">48</div>
-        <div class="metric-sub">Milestone collaboration in progress</div>
+        <div class="metric-value"><%= activeProjects %></div>
+        <div class="metric-sub">Open and in-progress projects</div>
       </div>
+
     </div>
 
     <!-- Pending Verification Table Preview -->
-    <div class="card mb-8">
-      <div class="d-flex justify-between align-center mb-4">
+    <div class="card">
+
+      <div class="card-header">
         <div>
-          <h3 style="font-size: var(--fs-lg);">Priority Verification Requests</h3>
-          <p class="text-secondary" style="font-size: var(--fs-xs);">Review institutional ID cards and degree provisional certificates</p>
+          <h3 class="card-title">Priority Verification Requests</h3>
+          <p class="card-subtitle">
+            Review institutional ID cards and degree provisional certificates
+          </p>
         </div>
-        <a href="/admin/verifications" class="btn btn-sm btn-secondary">Open Full Queue</a>
+
+        <a href="/admin/verifications" class="btn btn-sm btn-secondary">
+          Open Full Queue
+        </a>
       </div>
 
       <div class="table-responsive">
         <table class="table">
+
           <thead>
             <tr>
               <th>Applicant Name</th>
@@ -109,101 +167,89 @@
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
-            <tr>
-              <td>
-                <strong>Kavitha Murugan</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">kavitha.m@psgtech.ac.in</div>
-              </td>
-              <td><span class="tag">Student</span></td>
-              <td>24MCA031</td>
-              <td>
-                <span class="text-secondary" style="font-size: var(--fs-xs);">ID_Card_24MCA031.pdf</span>
-              </td>
-              <td>Today, 09:15 AM</td>
-              <td>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
-                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Venkatesh Narayanan</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">venkatesh.n@gmail.com</div>
-              </td>
-              <td><span class="tag">Alumni</span></td>
-              <td>16MCA014 (Class of 2019)</td>
-              <td>
-                <span class="text-secondary" style="font-size: var(--fs-xs);">PSG_MCA_Provisional.pdf</span>
-              </td>
-              <td>Yesterday</td>
-              <td>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
-                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <strong>Prashanth Balaji</strong>
-                <div class="text-muted" style="font-size: var(--fs-xs);">prashanth.b@psgtech.ac.in</div>
-              </td>
-              <td><span class="tag">Student</span></td>
-              <td>24MCA042</td>
-              <td>
-                <span class="text-secondary" style="font-size: var(--fs-xs);">Bonafide_Certificate.pdf</span>
-              </td>
-              <td>2 days ago</td>
-              <td>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm btn-primary">✓ Approve</button>
-                  <button type="button" class="btn btn-sm btn-danger">Reject</button>
-                </div>
-              </td>
-            </tr>
+
+            <% if (applicants.length > 0) { %>
+
+              <% applicants.forEach(applicant => { %>
+                <tr>
+
+                  <td>
+                    <strong><%= applicant.fullName || 'Name unavailable' %></strong>
+                    <div class="text-muted" style="font-size: var(--fs-xs);">
+                      <%= applicant.email || 'Email unavailable' %>
+                    </div>
+                  </td>
+
+                  <td>
+                    <span class="tag">
+                      <%= applicant.role === 'alumni' ? 'Alumni' : 'Student' %>
+                    </span>
+                  </td>
+
+                  <td>
+                    <%= applicant.rollNumber || '—' %>
+                  </td>
+
+                  <td>
+                    <% if (applicant.documentFilename) { %>
+                      <span class="text-secondary" style="font-size: var(--fs-xs);">
+                        <%= applicant.documentOriginalName || applicant.documentFilename %>
+                      </span>
+                    <% } else { %>
+                      <span class="text-muted">Not uploaded</span>
+                    <% } %>
+                  </td>
+
+                  <td>
+                    <% if (applicant.createdAt) { %>
+                      <%= new Date(applicant.createdAt).toLocaleString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      }) %>
+                    <% } else { %>
+                      —
+                    <% } %>
+                  </td>
+
+                  <td>
+                    <div class="d-flex gap-2">
+                      <a
+                        href="/admin/verifications/<%= applicant._id %>"
+                        class="btn btn-sm btn-primary"
+                      >
+                        Inspect &amp; Clear
+                      </a>
+                    </div>
+                  </td>
+
+                </tr>
+              <% }); %>
+
+            <% } else { %>
+
+              <tr>
+                <td colspan="6" style="text-align: center; padding: var(--sp-5);">
+                  <strong>No pending verification requests</strong>
+                  <div class="text-muted" style="font-size: var(--fs-xs); margin-top: 6px;">
+                    New student and alumni applications will appear here.
+                  </div>
+                </td>
+              </tr>
+
+            <% } %>
+
           </tbody>
+
         </table>
       </div>
     </div>
 
-    <!-- Quick Navigation to Admin Modules -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--sp-6);">
-      
-      <div class="card">
-        <div class="d-flex align-center gap-3 mb-3">
-          <div style="font-size: 1.5rem;">👥</div>
-          <div>
-            <h3 style="font-size: var(--fs-base);">User Management</h3>
-            <div class="text-muted" style="font-size: var(--fs-xs);">210 Registered Institutional Users</div>
-          </div>
-        </div>
-        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
-          Manage accounts, view roll number records, inspect submitted documents, and toggle user active/suspended states.
-        </p>
-        <a href="/admin/users" class="btn btn-sm btn-secondary w-100">Access User Directory →</a>
-      </div>
-
-      <div class="card">
-        <div class="d-flex align-center gap-3 mb-3">
-          <div style="font-size: 1.5rem;">📁</div>
-          <div>
-            <h3 style="font-size: var(--fs-base);">Project Oversight</h3>
-            <div class="text-muted" style="font-size: var(--fs-xs);">48 Published Projects</div>
-          </div>
-        </div>
-        <p class="text-secondary" style="font-size: var(--fs-xs); line-height: 1.6; margin-bottom: var(--sp-4);">
-          Moderate alumni postings, verify compliance with academic guidelines, and monitor student completion progress.
-        </p>
-        <a href="/admin/projects" class="btn btn-sm btn-secondary w-100">Manage Projects →</a>
-      </div>
-
-    </div>
-
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-

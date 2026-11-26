@@ -3,43 +3,46 @@
 
 <!-- ══════════════════════════════════════════════════════════
      ADMIN USER DIRECTORY — SkillBridge
-     Charcoal-Black & Slate-Gray Monochrome Interface
 ══════════════════════════════════════════════════════════ -->
 
 <div class="dashboard-layout">
 
-  <!-- ── Sidebar ────────────────────────────────────────── -->
   <aside class="sidebar">
     <div>
       <div class="sidebar-heading">Administration</div>
       <nav class="sidebar-nav" aria-label="Admin navigation">
         <a href="/admin/dashboard" class="sidebar-link">
-          <span>🛡️</span> Overview
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Overview
         </a>
         <a href="/admin/verifications" class="sidebar-link">
-          <span>⏳</span> Verifications Queue
-          <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);">3</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Verifications Queue
+          <% if (typeof pendingCount !== 'undefined' && pendingCount > 0) { %>
+            <span class="sidebar-badge" style="background: var(--clr-warning-bg); color: var(--clr-warning-text); border: 1px solid var(--clr-warning-border);"><%= pendingCount %></span>
+          <% } %>
         </a>
         <a href="/admin/users" class="sidebar-link active">
-          <span>👥</span> User Directory
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          User Directory
         </a>
         <a href="/admin/projects" class="sidebar-link">
-          <span>📁</span> Moderation &amp; Projects
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Projects &amp; Moderation
         </a>
       </nav>
     </div>
   </aside>
 
-  <!-- ── Main User Management Content ───────────────────── -->
-  <main class="dashboard-main">
+  <div class="dashboard-main">
 
-    <div class="breadcrumbs">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <a href="/">Home</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <a href="/admin/dashboard">Admin</a>
-      <span>/</span>
+      <span aria-hidden="true">/</span>
       <span>User Directory</span>
-    </div>
+    </nav>
 
     <div class="dashboard-header">
       <div>
@@ -47,133 +50,112 @@
         <p>Monitor verified students and alumni members across the PSG Tech MCA network.</p>
       </div>
       <div>
-        <a href="/admin/verifications" class="btn btn-secondary">Review Pending (3)</a>
+        <% if (typeof pendingCount !== 'undefined' && pendingCount > 0) { %>
+          <a href="/admin/verifications" class="btn btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Review Pending (<%= pendingCount %>)
+          </a>
+        <% } else { %>
+          <a href="/admin/verifications" class="btn btn-secondary">Verification Queue</a>
+        <% } %>
       </div>
     </div>
 
     <!-- Filter Bar -->
     <div class="card mb-6">
-      <div class="d-flex flex-wrap gap-4 align-center">
+      <form method="GET" action="/admin/users" class="d-flex flex-wrap gap-4 align-center">
         <div style="flex: 2; min-width: 240px;">
           <input
             type="text"
+            name="search"
             class="form-control"
             placeholder="Search by name, roll number, or institutional email..."
+            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+            aria-label="Search users"
           />
         </div>
         <div style="flex: 1; min-width: 140px;">
-          <select class="form-control">
+          <select name="role" class="form-control" aria-label="Filter by role">
             <option value="">All Roles</option>
-            <option value="student">MCA Students</option>
-            <option value="alumni">MCA Alumni</option>
+            <option value="student" <%= (typeof roleFilter !== 'undefined' && roleFilter === 'student') ? 'selected' : '' %>>MCA Students</option>
+            <option value="alumni" <%= (typeof roleFilter !== 'undefined' && roleFilter === 'alumni') ? 'selected' : '' %>>MCA Alumni</option>
           </select>
         </div>
         <div style="flex: 1; min-width: 140px;">
-          <select class="form-control">
+          <select name="status" class="form-control" aria-label="Filter by status">
             <option value="">All Statuses</option>
-            <option value="approved">Approved</option>
-            <option value="pending">Pending</option>
-            <option value="rejected">Rejected</option>
+            <option value="approved" <%= (typeof statusFilter !== 'undefined' && statusFilter === 'approved') ? 'selected' : '' %>>Approved</option>
+            <option value="pending" <%= (typeof statusFilter !== 'undefined' && statusFilter === 'pending') ? 'selected' : '' %>>Pending</option>
+            <option value="rejected" <%= (typeof statusFilter !== 'undefined' && statusFilter === 'rejected') ? 'selected' : '' %>>Rejected</option>
           </select>
         </div>
-        <button type="button" class="btn btn-primary">Filter</button>
-      </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Filter</button>
+          <a href="/admin/users" class="btn btn-secondary">Clear</a>
+        </div>
+      </form>
     </div>
 
     <!-- Users Table -->
-    <div class="table-responsive">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>User Details</th>
-            <th>Role</th>
-            <th>Roll Number</th>
-            <th>Batch / Year</th>
-            <th>Verification</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <strong>Hari Prasanth M</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">24mca018@psgtech.ac.in</div>
-            </td>
-            <td><span class="tag">Student</span></td>
-            <td><code>24MCA018</code></td>
-            <td>MCA I (2024–2026)</td>
-            <td><span class="badge badge-approved">APPROVED</span></td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/student/profile" class="btn btn-sm btn-secondary">View Profile</a>
-                <button type="button" class="btn btn-sm btn-ghost">Suspend</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Karthik Subramaniam</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">karthik.s@alumni.psgtech.ac.in</div>
-            </td>
-            <td><span class="tag">Alumni</span></td>
-            <td><code>17MCA042</code></td>
-            <td>Class of 2019</td>
-            <td><span class="badge badge-approved">APPROVED</span></td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/alumni/profile" class="btn btn-sm btn-secondary">View Profile</a>
-                <button type="button" class="btn btn-sm btn-ghost">Suspend</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Kavitha Murugan</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">kavitha.m@psgtech.ac.in</div>
-            </td>
-            <td><span class="tag">Student</span></td>
-            <td><code>24MCA031</code></td>
-            <td>MCA I (2024–2026)</td>
-            <td><span class="badge badge-pending">PENDING</span></td>
-            <td>
-              <a href="/admin/verifications" class="btn btn-sm btn-primary">Verify Application</a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Divya Swaminathan</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">divya.s@alumni.psgtech.ac.in</div>
-            </td>
-            <td><span class="tag">Alumni</span></td>
-            <td><code>13MCA021</code></td>
-            <td>Class of 2016</td>
-            <td><span class="badge badge-approved">APPROVED</span></td>
-            <td>
-              <div class="d-flex gap-2">
-                <a href="/alumni/profile" class="btn btn-sm btn-secondary">View Profile</a>
-                <button type="button" class="btn btn-sm btn-ghost">Suspend</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong>Venkatesh Narayanan</strong>
-              <div class="text-muted" style="font-size: var(--fs-xs);">venkatesh.n@gmail.com</div>
-            </td>
-            <td><span class="tag">Alumni</span></td>
-            <td><code>16MCA014</code></td>
-            <td>Class of 2019</td>
-            <td><span class="badge badge-pending">PENDING</span></td>
-            <td>
-              <a href="/admin/verifications" class="btn btn-sm btn-primary">Verify Application</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <% if (typeof users !== 'undefined' && users && users.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Roll Number</th>
+              <th>Batch / Year</th>
+              <th>Verification</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(user => { %>
+              <tr>
+                <td>
+                  <strong><%= user.fullName %></strong>
+                  <div class="text-muted" style="font-size: var(--fs-xs);"><%= user.email %></div>
+                </td>
+                <td><span class="tag" style="text-transform: capitalize;"><%= user.role %></span></td>
+                <td><code><%= user.rollNumber || '—' %></code></td>
+                <td>
+                  <% if (user.role === 'student') { %>
+                    MCA <%= user.currentYear === '1' ? 'I' : (user.currentYear === '2' ? 'II' : user.currentYear) %> (<%= user.admissionBatch || '—' %>)
+                  <% } else { %>
+                    Class of <%= user.graduationYear || '—' %>
+                  <% } %>
+                </td>
+                <td>
+                  <span class="badge <%= user.status === 'approved' ? 'badge-approved' : (user.status === 'rejected' ? 'badge-rejected' : 'badge-pending') %>">
+                    <%= (user.status || 'pending').toUpperCase() %>
+                  </span>
+                </td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <% if (user.status === 'pending') { %>
+                      <a href="/admin/verifications/<%= user._id %>" class="btn btn-sm btn-primary">Verify</a>
+                    <% } else { %>
+                    <a href="/admin/users/<%= user._id %>" class="btn btn-sm btn-secondary">Profile</a>
+                    <% } %>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="card text-center" style="padding: var(--sp-10) var(--sp-6);">
+        <h3 style="font-size: var(--fs-lg); margin-bottom: var(--sp-2);">No Users Found</h3>
+        <p class="text-secondary" style="font-size: var(--fs-sm); margin-bottom: var(--sp-4);">
+          No users match your current filter criteria.
+        </p>
+        <a href="/admin/users" class="btn btn-secondary">Clear Filters</a>
+      </div>
+    <% } %>
 
-  </main>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>
-
